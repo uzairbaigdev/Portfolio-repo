@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: rgb(41, 39, 39);
+        }
+        .parent {
+           width: 100%;
+            display: flex;
+            justify-content: center;
+            /* background-color: aqua; */
+            margin-top: 15vh;
+        }
+        .inp1 {
+            width: 300px;
+            height: 30px;
+            font-size: larger;
+        }
+        .div2 {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn1 {
+            width: 200px;
+            background-color: black;
+            color: white;
+        }
+        .div3 {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+       .child {
+        background-color: gray;
+        color: white;
+        width: 300px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: larger;
+       }
+       .parent0 {
+        /* background-color: aqua; */
+        display: flex;
+        justify-content: center;
+        color: white;
+        font-size: xx-large;
+       }
+       .child {
+   transition: background-color 0.3s ease;
+}
+</style>
+</head>
+<body>
+    <div class="parent0">
+        <h1>find out your percentage</h1>
+    </div>
+    <div class="parent">
+        <div class="div1">
+        <input class="inp1" type="number" name="inp1" id="inp1" placeholder="enter your obtained marks">
+        <input class="inp1" type="number" name="inp2" id="inp2" placeholder="enter your total marks">
+        </div>
+    </div>
+    <div class="div2">
+        <button class="btn1" onclick="percentage()">percentage</button>
+    </div>
+    <div class="div3">
+        <div class="child" id="output">percentage</div>
+    </div>
+    <script>
+function percentage() {
+   var inp1 = Number(document.getElementById("inp1").value);
+   var inp2 = Number(document.getElementById("inp2").value);
+   var output = document.getElementById("output");
+
+   if (inp1 > inp2 || inp1 < 0 || inp2 <= 0) {
+      alert("Enter correct input");
+      return;
+   }
+
+   var percent = (inp1 / inp2) * 100;
+   output.innerText = percent.toFixed(2) + "%";
+
+   // color logic
+   if (percent < 40) {
+      output.style.backgroundColor = "red";
+   } 
+   else if (percent >= 40 && percent < 80) {
+      output.style.backgroundColor = "yellow";
+      output.style.color = "black";
+   } 
+   else {
+      output.style.backgroundColor = "green";
+   }
+}
+
+    </script>
+</body>
+</html>

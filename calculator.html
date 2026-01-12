@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CalcPro X+</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #121212;
+  --panel: #1e1e1e;
+  --text: #ffffff;
+  --btn: #333;
+  --accent: #00ffcc;
+}
+
+.light {
+  --bg: #f2f2f2;
+  --panel: #ffffff;
+  --text: #111;
+  --btn: #ddd;
+  --accent: #007bff;
+}
+
+.neon {
+  --bg: #000;
+  --panel: #050505;
+  --text: #0f0;
+  --btn: #111;
+  --accent: #ff00ff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Segoe UI, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.app {
+  width: 390px;
+  background: var(--panel);
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 18px;
+}
+
+select {
+  background: var(--btn);
+  color: var(--text);
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.display {
+  background: black;
+  color: var(--accent);
+  font-size: 30px;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 15px 0;
+  text-align: right;
+  overflow-x: auto;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+button {
+  padding: 16px;
+  border-radius: 10px;
+  border: none;
+  font-size: 17px;
+  cursor: pointer;
+  background: var(--btn);
+  color: var(--text);
+  transition: 0.2s;
+}
+
+button:hover {
+  filter: brightness(1.2);
+}
+
+button.operator { background: var(--accent); color: #000; }
+button.equal { background: #28a745; color: #fff; grid-column: span 2; }
+button.clear { background: #dc3545; color: #fff; }
+button.back { background: #ffc107; color: #000; }
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.history-header button {
+  font-size: 12px;
+  padding: 5px 10px;
+  background: #dc3545;
+  color: white;
+  border-radius: 6px;
+}
+
+.history {
+  max-height: 120px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.history div {
+  padding: 6px;
+  border-bottom: 1px solid #444;
+  cursor: pointer;
+}
+
+.history div:hover {
+  background: rgba(255,255,255,0.08);
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+  <header>
+    <h1>CalcPro X+</h1>
+    <select onchange="changeTheme(this.value)">
+      <option value="">Dark</option>
+      <option value="light">Light</option>
+      <option value="neon">Neon</option>
+    </select>
+  </header>
+
+  <div class="display" id="display">0</div>
+
+  <div class="buttons">
+    <button class="clear" onclick="clearAll()">C</button>
+    <button class="back" onclick="backspace()">⌫</button>
+    <button onclick="insert('%')">%</button>
+    <button class="operator" onclick="insert('/')">÷</button>
+
+    <button onclick="insert('7')">7</button>
+    <button onclick="insert('8')">8</button>
+    <button onclick="insert('9')">9</button>
+    <button class="operator" onclick="insert('*')">×</button>
+
+    <button onclick="insert('4')">4</button>
+    <button onclick="insert('5')">5</button>
+    <button onclick="insert('6')">6</button>
+    <button class="operator" onclick="insert('-')">−</button>
+
+    <button onclick="insert('1')">1</button>
+    <button onclick="insert('2')">2</button>
+    <button onclick="insert('3')">3</button>
+    <button class="operator" onclick="insert('+')">+</button>
+
+    <button onclick="insert('0')">0</button>
+    <button onclick="insert('.')">.</button>
+    <button class="equal" onclick="calculate()">=</button>
+  </div>
+
+  <div class="history-header">
+    <span>History</span>
+    <button onclick="clearHistory()">Clear</button>
+  </div>
+
+  <div class="history" id="history"></div>
+</div>
+
+<script>
+let display = document.getElementById("display");
+let historyBox = document.getElementById("history");
+let history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+
+function insert(val) {
+  if (display.innerText === "Error") display.innerText = "0";
+  display.innerText = display.innerText === "0" ? val : display.innerText + val;
+}
+
+function clearAll() {
+  display.innerText = "0";
+}
+
+function backspace() {
+  display.innerText = display.innerText.length > 1
+    ? display.innerText.slice(0, -1)
+    : "0";
+}
+
+function calculate() {
+  try {
+    let exp = display.innerText.replace('%', '/100');
+    let result = eval(exp);
+    addHistory(exp + " = " + result);
+    display.innerText = result;
+  } catch {
+    display.innerText = "Error";
+  }
+}
+
+function addHistory(text) {
+  history.unshift(text);
+  history = history.slice(0, 20);
+  localStorage.setItem("calcHistory", JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  historyBox.innerHTML = "";
+  history.forEach(item => {
+    let div = document.createElement("div");
+    div.innerText = item;
+    div.onclick = () => display.innerText = item.split("=")[1].trim();
+    historyBox.appendChild(div);
+  });
+}
+
+function clearHistory() {
+  history = [];
+  localStorage.removeItem("calcHistory");
+  renderHistory();
+}
+
+function changeTheme(theme) {
+  document.body.className = theme;
+  localStorage.setItem("theme", theme);
+}
+
+document.addEventListener("keydown", e => {
+  if ("0123456789+-*/.%".includes(e.key)) insert(e.key);
+  if (e.key === "Enter") calculate();
+  if (e.key === "Backspace") backspace();
+});
+
+(function init() {
+  renderHistory();
+  document.body.className = localStorage.getItem("theme") || "";
+})();
+</script>
+
+</body>
+</html>
