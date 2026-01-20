@@ -5,76 +5,97 @@
   <title>My Projects</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: white;
+  background: radial-gradient(circle at top, #0b1220, #020617 70%);
+  color: #e5e7eb;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
+/* HEADER */
 header {
   text-align: center;
-  padding: 50px 20px;
+  padding: 80px 20px 50px;
 }
 
 header h1 {
-  font-size: 3rem;
+  font-size: 3.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #22d3ee, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 header p {
-  opacity: 0.8;
   margin-top: 10px;
+  color: #9ca3af;
 }
 
+/* GRID */
 .projects {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
-  padding: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 28px;
+  padding: 50px 70px;
 }
 
+/* CARD */
 .card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 15px;
-  padding: 25px;
-  text-align: center;
-  transition: 0.3s;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 26px;
   backdrop-filter: blur(10px);
+  transition: 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-10px) scale(1.05);
-  background: rgba(255,255,255,0.2);
+  transform: translateY(-8px) scale(1.03);
+  border-color: rgba(34,211,238,0.6);
+  box-shadow: 0 20px 40px rgba(34,211,238,0.15);
 }
 
+/* TITLE */
 .card h3 {
-  margin-bottom: 15px;
+  font-size: 1.3rem;
+  margin-bottom: 14px;
 }
 
+/* BUTTON */
 .card a {
   display: inline-block;
-  padding: 10px 20px;
-  background: #00c6ff;
-  color: black;
-  border-radius: 30px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #22d3ee, #a78bfa);
+  color: #020617;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  transition: 0.25s;
 }
 
 .card a:hover {
-  background: #00ffcc;
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(167,139,250,0.5);
 }
 
+/* FOOTER */
 footer {
   text-align: center;
-  padding: 20px;
-  opacity: 0.6;
+  padding: 26px;
+  color: #6b7280;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
 }
+
+
 
   </style>
 </head>
@@ -92,9 +113,9 @@ footer {
     <!-- TOTAL 50 PROJECTS -->
     
     <div class="card"><h3>Project 1</h3><a href="./calculator.html">View Project</a></div>
-    <div class="card"><h3>Project 2</h3><a href="./find percentage.html">View Project</a></div>
+    <div class="card"><h3>Project 2</h3><a href="./percentage calculator.html">View Project</a></div>
     <div class="card"><h3>Project 3</h3><a href="./calculator no2.html">View Project</a></div>
-    <div class="card"><h3>Project 4</h3><a href=".">View Project</a></div>
+    <div class="card"><h3>Project 4</h3><a href="./Bank account.html">View Project</a></div>
     <div class="card"><h3>Project 5</h3><a href=".">View Project</a></div>
 
     <div class="card"><h3>Project 6</h3><a href=".">View Project</a></div>

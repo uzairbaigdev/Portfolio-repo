@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stylish Counter</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+
+    .card {
+      background: #1f1f2e;
+      padding: 30px 25px;
+      border-radius: 16px;
+      width: 300px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      margin-bottom: 15px;
+      background: #2b2b3d;
+      color: #fff;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .add { background: #00c896; color: #003f2f; }
+    .sub { background: #ff5c5c; color: #3a0000; }
+    .total { background: #4d79ff; color: #00114d; }
+
+    h1 {
+      font-size: 48px;
+      margin: 0;
+      color: #00e6ff;
+      text-shadow: 0 0 10px rgba(0,230,255,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Bank account</h2>
+    <input type="number" id="inp1" placeholder="Enter a number" />
+
+    <div class="buttons">
+      <button class="add" onclick="showadd()">Add</button>
+      <button class="sub" onclick="showsubtract()">Subtract</button>
+      <button class="total" onclick="showtotal()">Total</button>
+    </div>
+
+    <h1 id="h1">0</h1>
+  </div>
+
+  <script>
+    var amount = 5000;
+function showadd() {
+    var inp = Number(document.getElementById("inp1").value)
+    if(inp < 500) {
+        alert("please enter atleast 500rs")
+        return ;
+    }
+     amount = amount+inp
+    h1.innerText = "successfully add"
+}
+function showsubtract() {
+    var inp = Number(document.getElementById("inp1").value)
+    if(inp < 500) {
+        alert("please get atleast 500rs")
+        return ;
+    }
+    if(inp > amount) {
+        alert("this amount of money does not exist in your account")
+        return ;
+    }
+    var h1 = document.getElementById("h1");
+    amount = amount-inp
+    h1.innerText = "successfully subtract"
+}
+function showtotal() {
+   var inp = Number(document.getElementById("inp1").value)
+    var h1 = document.getElementById("h1");
+     h1.innerText = amount+"RS";
+}
+  </script>
+</body>
+</html>
