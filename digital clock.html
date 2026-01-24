@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+             background-color: rgba(135, 206, 235, 0.5)
+        }
+        .parent {
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+            }
+        .child1 {
+            width: 350px;
+            height: 80px;
+            border: 1px solid black;
+            border-radius: 30px 30px 30px 30px;
+        }
+        .child2 {
+            width: 100%;
+            height: 50%;
+            /* border: 1px solid black; */
+              display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .child3 {
+              width: 100%;
+            height: 50%;
+            /* border: 1px solid black; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .name {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="child1">
+   <div class="child2">
+    <span class="name">DATE:</span>
+<span class="month" id="month"></span>
+<span>:</span>
+<span class="name">DAY:</span>
+<span class="day" id="day"></span>
+<span>:</span>
+<span class="name">YEAR:</span>
+<span class="year" id="year"></span>
+   </div>
+   <div class="child3">
+    <span class="hours" id="hours"></span>
+    <span>:</span>
+    <span class="minutes" id="minutes"></span>
+    <span>:</span>
+    <span class="seconds" id="seconds"></span>
+   </div>
+        </div>
+    </div>
+    <script>
+        function month() {
+    var date = new Date()
+    var monthnum = date.getMonth()
+   var monthname = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"]
+var completemonth = monthname[monthnum] 
+var date = new Date()
+var completedate = date.getDate()
+var complete = completedate+" "+completemonth        
+var monthplace = document.getElementById("month");
+monthplace.innerText = complete
+
+}
+month();
+function day() {
+    var date = new Date()
+    var daysnum = date.getDay()
+    var daysname = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
+    var completeday = daysname[daysnum]
+    var dayplace = document.getElementById("day");
+    dayplace.innerText = completeday
+}
+day()
+function year() {
+    var date = new Date()
+    var year = date.getFullYear()
+    var yearplace = document.getElementById("year")
+    yearplace.innerText = year
+}
+year()
+function hours() {
+    var date = new Date()
+    var hoursnum = date .getHours();
+var hoursplace = document.getElementById("hours");
+hoursplace.innerText = hoursnum
+if(hoursnum == 0) {
+    hoursplace.innerText = 12+"AM"
+}
+else if(hoursnum == 12) {
+    hoursplace.innerText = 12+"PM"
+}
+else if (hoursnum >= 1 && hoursnum <= 11) {
+    hoursplace.innerText = hoursnum;
+}
+else {
+    var sub = hoursnum-12;
+    hoursplace.innerText = sub+"PM"
+}
+}
+hours()
+function minutes() {
+    var date = new Date()
+    var min = date.getMinutes()
+    var minplace = document.getElementById("minutes")
+    if(min < 10) {
+        minplace.innerText = "0"+min;
+    }
+   else {
+     minplace.innerText = min
+   }
+    }
+minutes()
+setInterval(minutes,1000*60)
+function seconds() {
+    var date = new Date()
+    var sec = date.getSeconds()
+    var secplace = document.getElementById("seconds")
+    if(sec < 10) {
+        secplace.innerText = "0"+sec
+    }
+    else {
+        secplace.innerText = sec
+    }
+}
+seconds()
+setInterval(seconds,1000)
+    </script>
+</body>
+</html>
