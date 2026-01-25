@@ -6,7 +6,7 @@
     <title>Document</title>
     <style>
         body{
-             background-color: rgba(135, 206, 235, 0.5)
+             background-color: rgba(4, 99, 243, 0.9);
         }
         .parent {
             display: flex;
@@ -14,8 +14,8 @@
             margin-top: 100px;
             }
         .child1 {
-            width: 350px;
-            height: 80px;
+            width: 650px;
+            height: 200px;
             border: 1px solid black;
             border-radius: 30px 30px 30px 30px;
         }
@@ -26,6 +26,8 @@
               display: flex;
             justify-content: center;
             align-items: center;
+            font-size: xx-large;
+            font-weight: bolder;
         }
         .child3 {
               width: 100%;
@@ -34,9 +36,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: xx-large;
+            font-weight: bolder;
         }
         .name {
             color: blue;
+        }
+        .child4 {
+            font-size: large;
         }
     </style>
 </head>
@@ -59,6 +66,10 @@
     <span class="minutes" id="minutes"></span>
     <span>:</span>
     <span class="seconds" id="seconds"></span>
+<div class="child4">
+        <span>:</span>
+    <span class="milli" id="milli"></span>
+</div>
    </div>
         </div>
     </div>
@@ -112,6 +123,7 @@ else {
 }
 }
 hours()
+setInterval(minutes,1000*60*60)
 function minutes() {
     var date = new Date()
     var min = date.getMinutes()
@@ -124,7 +136,7 @@ function minutes() {
    }
     }
 minutes()
-setInterval(minutes,1000*60)
+setInterval(minutes,1000)
 function seconds() {
     var date = new Date()
     var sec = date.getSeconds()
@@ -138,6 +150,14 @@ function seconds() {
 }
 seconds()
 setInterval(seconds,1000)
+function millisecond() {
+    var date = new Date()
+    var milli = date.getMilliseconds()
+    var milliplace = document.getElementById("milli");
+    milliplace.innerText = milli
+}
+millisecond()
+setInterval(millisecond,1)
     </script>
 </body>
 </html>
