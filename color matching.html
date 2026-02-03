@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+body {
+    background-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.div1 {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: darkslategray; 
+    border-top-style: solid;
+    border-top-width: 4px;
+    border-top-color: white;
+    border-bottom-style: solid;
+    border-bottom-width: 4px;
+    border-bottom-color: white;
+}
+
+.child1 {
+    width: 180px;
+    height: 180px;
+    border-style: solid;
+    border-width: 4px;
+    border-color: white;
+    border-radius: 16px;
+    margin-right: 20px;
+    background-color: red; 
+    transition: all 0.3s;
+}
+
+.child1:hover {
+    transform: scale(1.05);
+    border-color: yellow; 
+}
+
+.child2 {
+    width: 160px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    border-style: solid;
+    border-width: 3px;
+    border-color: white;
+    border-radius: 12px;
+    background-color: blue; 
+    transition: all 0.3s;
+}
+
+.child2:hover {
+    background-color: green; 
+    transform: scale(1.05);
+}
+
+.div2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.box {
+    width: 140px;
+    height: 140px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: white;
+    border-radius: 12px;
+    margin: 10px;
+    background-color: green; /* initial color */
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.box:hover {
+    transform: scale(1.1);
+    border-color: yellow;
+}
+ </style>
+</head>
+<body>
+  <div class="div1">
+    <div class="child1" id="child1"></div>
+    <div class="child2" id="child2">score:0</div>
+  </div>
+  <div class="div2" id="div2"></div>
+  <script>
+    var colors = ["red","blue","gray","brown","green","purple","orange","yellow","golden","silver","aqua"]
+var child1 = document.getElementById("child1")
+var random = Math.floor(Math.random()*colors.length)
+    child1.style.backgroundColor = colors[random]
+    var child2 = document.getElementById("child2")
+    var num = 1
+// child2.innerText += num
+    for(var i=1; i<=50; i++) {
+    var div2 = document.getElementById("div2")
+    var divelm = document.createElement("div")
+    div2.appendChild(divelm)
+    divelm.className = "box"
+    var random = Math.floor(Math.random()*colors.length)
+    divelm.style.backgroundColor = colors[random]
+    divelm.addEventListener("click", usingclick);
+
+}
+
+  function usingclick(event) {
+      if(child1.style.backgroundColor == event.target.style.backgroundColor) {
+child2.innerText = "score:"+num++
+   var newRandom = Math.floor(Math.random() * colors.length);
+  child1.style.backgroundColor = colors[newRandom]
+  var newcolors = ["yellow","green","red","blue","silver","brown","golden","orange","purple","brown","gray","aqua"]
+   event.target.style.backgroundColor = newcolors[newRandom]
+        }
+    }
+   
+  </script>
+</body>
+</html>
