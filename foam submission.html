@@ -44,6 +44,7 @@ body {
     display: flex;
     gap: 25px;
     margin-bottom: 25px;
+    margin-top: 10px;
 }
 
 /* INPUT FIELDS */
@@ -82,6 +83,9 @@ button:hover {
 .error {
     color: red;
     display: none;
+}
+.warning {
+    color: red;
 }
 /* RESPONSIVE DESIGN */
 
@@ -134,6 +138,8 @@ button:hover {
     <input type="text" name="city" id="city" placeholder="enter your city">
     <input type="text" name="course" id="course" placeholder="enter your course name">
 </div>
+<h1 class="warning">WARNING</h1>
+<p>your course spelling and pattern should be like written in below</p>
 <div class="child1">
     <button onclick="submit()">submit</button>
     <p class="error" id="error">enter correct input</p>
@@ -163,13 +169,21 @@ function submit() {
    error.style.display = "inline"
         return ; 
     }
-    else if(courseinp === "web and app development" || courseinp === "python" || courseinp === "graphic designing") {
+    else if(courseinp === "web and app development" || courseinp === "python programming" || courseinp === "graphic designing") {
         stddata.push(data)
         alert("your foam is succesfully submited")
    error.style.display = "none"
+document.getElementById("name").value = "";
+document.getElementById("age").value = "";
+document.getElementById("city").value = "";
+document.getElementById("course").value = "";
 }
     else {
         alert("this course is not available yet")
+        document.getElementById("name").value = "";
+document.getElementById("age").value = "";
+document.getElementById("city").value = "";
+document.getElementById("course").value = "";
         return ;
     }
     console.log(stddata)
