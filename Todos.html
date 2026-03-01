@@ -21,7 +21,7 @@
     padding: 12px 15px;
     border: 1px solid white;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 15px;
     transition: 0.3s ease;
 }
 
@@ -72,6 +72,8 @@ button {
     <div id="main"></div>
     <script>
         let todos = []
+        let reset = document.createElement("button")
+        reset.style.display = "none"
 let main = document.getElementById("main")
 let update = document.getElementById("Update")
 update.style.display = "none"
@@ -87,7 +89,8 @@ if(todosstore.trim().length < 1) {
 }
   let todosobj = {   // pusing input in the foam of objects
         text: todosstore,
-        id:date.getTime()+Math.floor(Math.random()*1000)
+        id:date.getTime()+Math.floor(Math.random()*1000),
+        iscompleted: false 
     }
     todos.push(todosobj)
 console.log(todos)
@@ -119,10 +122,31 @@ change.onclick = function () {
     addbtn.style.display = "inline"
     update.style.display = "none"
       todosinp.value = todosobj.text
-   }
+      todosinp.value = "";
+    }
 }
 change.innerText = "Change"
 divelm.appendChild(change)
+//working on done buttton
+let donebtn = document.createElement("button")
+donebtn.innerText = "done"
+divelm.appendChild(donebtn)
+donebtn.onclick = function () {
+    divelm.style.color = "green"
+    todosobj.iscompleted = true
+    donebtn.style.display = "none"
+    //working on reset button
+    reset.style.display = "inline"
+    reset.innerText = "Reset"
+    divelm.appendChild(reset)
+    reset.onclick = function () {
+           divelm.style.color = "black"
+           todosobj.iscompleted = false
+           donebtn.style.display = "inline"
+           reset.style.display = "none"
+    }
+}
+
 
 todosinp.value = "";
 }
