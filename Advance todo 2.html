@@ -234,6 +234,7 @@ changebtn.onclick = function () {
         alert("first off done then click change")
         return;
     }
+    donebtn.style.display = "none";
     addbtn.style.display = "none";
     updatebtn.style.display = "inline"
     nameinp.value = todoobj.name;
@@ -250,6 +251,7 @@ divelm.appendChild(changebtn);
 divelm.appendChild(donebtn);
     updatebtn.style.display = "none";
     addbtn.style.display = "inline"
+    donebtn.style.display = "inline"
 nameinp.value = "";
 ageinp.value = "";
 cityinp.value = "";
