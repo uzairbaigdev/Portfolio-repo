@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo list with local storage</title>
+    <style>
+        body {
+           background-color: rgb(226, 226, 226);
+        }
+        nav {
+           width: 100%;
+           height: 150px;
+           background-color: rgb(1, 1, 37);
+           color: white;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           font-size: 70px;
+        }
+        #main {
+            width: fit-content;
+            height: fit-content;
+            background-color: white;
+            margin-left: 35%;
+            margin-top: 30px;
+            border-radius: 20px;
+            padding: 100px;
+        }
+        #child1 {
+            width: 100%;
+            height: 50%;
+            /* background-color: aqua; */
+            display: flex;
+            /* flex-direction: column; */
+            justify-content: center;
+            align-items: center;
+            }
+         #todoinp {
+            height: fit-content;
+            width: 200px;
+            font-size: large;
+         }   
+         #addbtn {
+            height: fit-content;
+            width: fit-content;
+            font-size: large;
+            color: white;
+            background-color: green;
+         }
+         #child2 {
+            width: 100%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: center; */
+            align-items: center;
+         }
+         .box {
+            width: fit-content;
+            height: fit-content;
+            border: 2px solid black;
+            padding: 10px;
+            margin-top: 10px;
+         }
+         .deletebtn {
+            height: fit-content;
+            width: fit-content;
+            font-size: large;
+            color: white;
+            background-color: red;
+            margin-left: 10px;
+         }
+         .changebtn {
+            height: fit-content;
+            width: fit-content;
+            font-size: large;
+            color: white;
+            background-color: brown;
+            margin-left: 10px;
+         }
+         #updatebtn {
+            height: fit-content;
+            width: fit-content;
+            font-size: large;
+            color: white;
+            background-color: green;
+            display: none;
+         }
+         .donebtn {
+            height: fit-content;
+            width: fit-content;
+            font-size: large;
+            color: white;
+            background-color: gray;
+            margin-left: 10px;
+         }
+         .notdonebtn {
+            height: fit-content;
+            width: fit-content;
+            font-size: large;
+            color: white;
+            background-color: gray;
+            margin-left: 10px;
+         }
+    </style>
+</head>
+<body>
+    <nav>Todo list</nav>
+    <div id="main">
+        <div id="child1">
+            <input type="text" name="Todos" id="todoinp" placeholder="enter todo">
+            <button id="addbtn" onclick="add()">Add</button>  
+            <button id="updatebtn" onclick="update()">update</button>           
+        </div>
+        <div id="child2"></div>
+    </div>
+    <script>
+        let Todos = [];
+let todoinp = document.getElementById("todoinp");
+let child2 = document.getElementById("child2");
+let addbtn = document.getElementById("addbtn");
+let updatebtn = document.getElementById("updatebtn");
+
+//working on local storage
+function getData() {
+let getlocalstoragedata = window.localStorage.getItem("Todos");
+if(getlocalstoragedata !== null) {
+    let parsedata = JSON.parse(getlocalstoragedata);
+    // console.log(parsedata);
+Todos = parsedata;
+//working on DOM
+for(let i=0; i < Todos.length; i++) {    
+let divelm = document.createElement("div");
+divelm.className = "box";
+child2.appendChild(divelm);
+divelm.innerText = Todos[i].text;
+//working on deleting button
+let deletebtn = document.createElement("button");
+deletebtn.innerText = "Delete";
+deletebtn.className = "deletebtn";
+divelm.appendChild(deletebtn);
+deletebtn.onclick = function () {
+    divelm.remove();
+    Todos.splice(i,1);
+    localStorage.setItem("Todos",JSON.stringify(Todos));
+}
+//working on change button
+let changebtn = document.createElement("button");
+changebtn.innerText = "Change";
+changebtn.className = "changebtn";
+divelm.appendChild(changebtn);
+changebtn.onclick = function () {
+    todoinp.value = Todos[i].text;
+    addbtn.style.display = "none";
+    changebtn.style.display = "none";
+    deletebtn.style.display = "none";
+    updatebtn.style.display = "inline";
+//working on update button
+updatebtn.onclick = function () {
+    if(todoinp.value === "") {
+        alert("enter todo");
+        return;
+    }
+    Todos[i].text = todoinp.value;
+    divelm.innerText = todoinp.value;
+divelm.appendChild(deletebtn);
+divelm.appendChild(changebtn);
+divelm.appendChild(donebtn);
+updatebtn.style.display = "none";
+addbtn.style.display = "inline";
+deletebtn.style.display = "inline";
+changebtn.style.display = "inline";
+localStorage.setItem("Todos",JSON.stringify(Todos));
+todoinp.value = "";    
+}     }    
+//working on done button
+let donebtn = document.createElement("button");
+donebtn.innerText = "Done";
+donebtn.className = "donebtn";
+divelm.appendChild(donebtn);
+donebtn.onclick = function () {
+    Todos[i].iscomplete = true;
+    divelm.style.backgroundColor = "lightgreen";
+    notdonebtn.style.display = "inline"
+    donebtn.style.display = "none";
+    localStorage.setItem("Todos",JSON.stringify(Todos));    
+    }
+//working on not done button
+let notdonebtn = document.createElement("button");
+notdonebtn.innerText = "NotDone";
+divelm.appendChild(notdonebtn);
+notdonebtn.className = "notdonebtn"
+notdonebtn.style.display = "none"
+notdonebtn.onclick = function () {
+     Todos[i].iscomplete = false;
+     divelm.style.backgroundColor = "white";
+     donebtn.style.display = "inline";
+     notdonebtn.style.display = "none";
+localStorage.setItem("Todos",JSON.stringify(Todos));    
+}
+if(Todos[i].iscomplete === true) {
+    divelm.style.backgroundColor = "lightgreen";
+    donebtn.style.display = "none";
+    notdonebtn.style.display = "inline";
+}
+
+}   }
+}
+getData();
+
+//working on adding and temporary function
+function add() {
+    if(todoinp.value === "") {
+        alert("enter todo");
+        return;
+    }
+//pushing data in the form of objects
+let todoobj = {
+    text:todoinp.value,
+    iscomplete:false,
+    ID:Math.floor(Math.random()*999999999999)
+}    
+Todos.push(todoobj);
+// console.log(Todos);
+//sending data to local storage
+let stringLocalstorage = JSON.stringify(Todos);
+window.localStorage.setItem("Todos",stringLocalstorage);
+//working on DOM
+let divelm = document.createElement("div");
+divelm.innerText = todoinp.value;
+divelm.className = "box";
+child2.appendChild(divelm);
+//working on deleting button
+let deletebtn = document.createElement("button");
+deletebtn.innerText = "Delete"
+deletebtn.className = "deletebtn";
+divelm.appendChild(deletebtn);
+deletebtn.onclick = function () {
+    divelm.remove();
+    for(let i=0; i < Todos.length; i++) {
+        Todos.splice(i,1);
+    }
+localStorage.setItem("Todos",JSON.stringify(Todos));
+}
+//working on change button
+let changebtn = document.createElement("button");
+changebtn.innerText = "Change";
+changebtn.className = "changebtn";
+divelm.appendChild(changebtn);
+changebtn.onclick = function () {
+    addbtn.style.display = "none";
+    changebtn.style.display = "none";
+    deletebtn.style.display = "none";
+    updatebtn.style.display = "inline";
+todoinp.value = todoobj.text;
+//working on update button
+updatebtn.onclick = function () {
+    if(todoinp.value === "") {
+        alert("enter todo");
+        return;
+    }
+    addbtn.style.display = "inline";
+    changebtn.style.display = "inline";
+    deletebtn.style.display = "inline";
+    updatebtn.style.display = "none";
+    divelm.innerText = todoinp.value;
+    divelm.appendChild(deletebtn);
+    divelm.appendChild(changebtn);
+    divelm.appendChild(donebtn);y
+todoobj.text = todoinp.value;   
+localStorage.setItem("Todos",JSON.stringify(Todos));
+    todoinp.value = "";
+}     }
+//working on done button
+let donebtn = document.createElement("button");
+donebtn.innerText = "Done";
+donebtn.className = "donebtn";
+divelm.appendChild(donebtn);
+donebtn.onclick = function () {
+    divelm.style.backgroundColor = "lightgreen";
+    todoobj.iscomplete = true;
+    donebtn.style.display = "none";
+localStorage.setItem("Todos",JSON.stringify(Todos));    
+//working on not done button
+let notdonebtn = document.createElement("button");
+notdonebtn.innerText = "NotDone";
+notdonebtn.className = "notdonebtn";
+divelm.appendChild(notdonebtn);
+notdonebtn.onclick = function () {
+    divelm.style.backgroundColor = "white";
+    donebtn.style.display = "inline";
+    notdonebtn.style.display = "none";
+    todoobj.iscomplete = false;
+localStorage.setItem("Todos",JSON.stringify(Todos));    
+}    }
+todoinp.value = "";
+}
+    </script>
+</body>
+</html>
