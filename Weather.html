@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather App</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Card */
+#main {
+    width: 350px;
+    max-width: 90%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Heading */
+#main h1 {
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Input */
+#cityname {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #ffffff;
+    color: #333;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #f1f1f1;
+}
+
+/* Result Box */
+#child1 {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    #main {
+        padding: 25px 15px;
+    }
+
+    #main h1 {
+        font-size: 22px;
+    }
+
+    #child1 {
+        font-size: 16px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="main">
+    <h1>🌤 Weather App</h1>
+
+    <input type="text" id="cityname" placeholder="Enter city name">
+
+    <button onclick="show()">Check Weather</button>
+
+    <div id="child1"></div>
+</div>
+
+<script>
+    //weather API fetching
+let cityname = document.getElementById("cityname");
+let child1 = document.getElementById("child1");
+let show = async()=> {
+   if(cityname.value.length < 3) {
+      alert("enter correct city name");
+      return;
+   }
+  try{
+   child1.innerHTML = "";
+//working on lan and lat API   
+   let Lat_and_lan = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${cityname.value}`)
+   Lat_and_lan = await Lat_and_lan.json();
+   console.log(Lat_and_lan)
+   // console.log("latitude"+" "+Lat_and_lan.results[0].latitude)
+   // console.log("longitude"+" "+Lat_and_lan.results[0].longitude)
+//working on weather API   
+   let weatherAPI = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${Lat_and_lan.results[0].latitude}&longitude=${Lat_and_lan.results[0].longitude}&current_weather=true`);
+   weatherAPI = await weatherAPI.json();
+   console.log(weatherAPI);
+   child1.innerHTML = `<p>Temperature:${weatherAPI.current_weather.temperature}${weatherAPI.current_weather_units.temperature}</p>`
+  }catch(error) {
+   console.log(error);
+  }
+}
+
+
+
+
+//lat and lan API
+// https://geocoding-api.open-meteo.com/v1/search?name=Karachi
+//weather API
+// https://api.open-meteo.com/v1/forecast?latitude=24.8607&longitude=67.0011&current_weather=true
+</script>
+
+</body>
+</html>
