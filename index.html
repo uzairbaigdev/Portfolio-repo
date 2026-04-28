@@ -1,180 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Projects</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uzair Portfolio</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
-  background: radial-gradient(circle at top, #0b1220, #020617 70%);
-  color: #e5e7eb;
-  font-family: 'Space Grotesk', sans-serif;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: #e2e8f0;
 }
 
-/* HEADER */
-header {
+/* HERO */
+.hero {
   text-align: center;
-  padding: 80px 20px 50px;
+  padding: 90px 20px;
+  background: radial-gradient(circle, rgba(56,189,248,0.15), transparent);
 }
 
-header h1 {
-  font-size: 3.4rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  background: linear-gradient(90deg, #22d3ee, #a78bfa);
+.hero img {
+  width: clamp(120px, 20vw, 170px);
+  border-radius: 50%;
+  border: 4px solid #38bdf8;
+  box-shadow: 0 0 25px rgba(56,189,248,0.6);
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-header p {
+.hero p {
   margin-top: 10px;
-  color: #9ca3af;
+  color: #94a3b8;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
-/* GRID */
+/* SECTION */
+.section {
+  padding: 70px 80px;
+}
+
+.section h2 {
+  margin-bottom: 25px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: #38bdf8;
+}
+
+/* SKILLS */
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skills span {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(56,189,248,0.3);
+  padding: 10px 18px;
+  margin: 6px;
+  border-radius: 999px;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.skills span:hover {
+  background: #38bdf8;
+  color: black;
+}
+
+/* PROJECTS */
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 28px;
-  padding: 50px 70px;
+  gap: 25px;
 }
 
-/* CARD */
 .card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  padding: 26px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  padding: 20px;
   backdrop-filter: blur(10px);
-  transition: 0.25s ease;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.03);
-  border-color: rgba(34,211,238,0.6);
-  box-shadow: 0 20px 40px rgba(34,211,238,0.15);
+  transform: translateY(-10px) scale(1.03);
+  border: 1px solid #38bdf8;
+  box-shadow: 0 20px 40px rgba(56,189,248,0.3);
 }
 
-/* TITLE */
 .card h3 {
-  font-size: 1.3rem;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
 }
 
-/* BUTTON */
 .card a {
   display: inline-block;
-  padding: 10px 22px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #22d3ee, #a78bfa);
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
   color: #020617;
   text-decoration: none;
   font-weight: 600;
-  transition: 0.25s;
+  font-size: 0.85rem;
+  transition: 0.3s;
 }
 
 .card a:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 25px rgba(167,139,250,0.5);
+}
+
+/* CONTACT */
+.contact p {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+/* GITHUB */
+.github {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.github:hover {
+  text-decoration: underline;
 }
 
 /* FOOTER */
 footer {
   text-align: center;
-  padding: 26px;
-  color: #6b7280;
-  font-size: 0.85rem;
+  padding: 20px;
+  color: #64748b;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
+/* ========================= */
+/* 📲 TABLET */
+/* ========================= */
+@media (max-width: 768px) {
 
+  .section {
+    padding: 50px 25px;
+  }
 
-  </style>
+  .hero {
+    padding: 70px 15px;
+  }
+
+  .projects {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+}
+
+/* ========================= */
+/* 📱 MOBILE */
+/* ========================= */
+@media (max-width: 480px) {
+
+  .section {
+    padding: 40px 15px;
+  }
+
+  .hero {
+    padding: 60px 10px;
+  }
+
+  .projects {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+  }
+
+  .card a {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+}
+</style>
 </head>
+
 <body>
 
-  <header>
-    <h1>🚀Projects</h1>
-    <p>Explore all my work in one place</p>
-  </header>
+<section class="hero">
+  <img src="./WhatsApp Image 2026-03-30 at 19.27.34.jpeg">
+  <h1>Mirza Uzair Baig</h1>
+  <p>Frontend Developer | Web Development Learner</p>
+</section>
 
-  <main class="projects">
-    <!-- PROJECT CARDS -->
-    
-    <!-- COPY THIS CARD AND CHANGE TITLE -->
-    <!-- TOTAL 50 PROJECTS -->
-    
-    <div class="card"><h3>Advance Calculator</h3><a href="./calculator.html">View Project</a></div>
-    <div class="card"><h3>Percentage Calculator</h3><a href="./percentage calculator.html">View Project</a></div>
-    <div class="card"><h3>Calculator</h3><a href="./calculator no2.html">View Project</a></div>
-    <div class="card"><h3>Bank account</h3><a href="./Bank account.html">View Project</a></div>
-    <div class="card"><h3>Digital clock</h3><a href="./TIME.html">View Project</a></div>
+<section class="section">
+  <h2>About Me</h2>
+  <p>
+    I am a passionate frontend developer focused on building modern, responsive and interactive web applications.
+    I enjoy turning ideas into real-world projects with clean UI and smooth performance.
+  </p>
+</section>
 
-    <div class="card"><h3>Digital clock 2</h3><a href="./digital clock.html">View Project</a></div>
-    <div class="card"><h3>Color matching game</h3><a href="./color matching.html">View Project</a></div>
-    <div class="card"><h3>Todo list</h3><a href="./Todos.html">View Project</a></div>
-    <div class="card"><h3>Form input</h3><a href="./foam submission.html">View Project</a></div>
-    <div class="card"><h3>Digital clock 3</h3><a href="./professional clock.html">View Project</a></div>
+<section class="section">
+  <h2>Skills</h2>
+  <div class="skills">
+    <span>HTML</span>
+    <span>CSS</span>
+    <span>JavaScript</span>
+    <span>DOM</span>
+    <span>LocalStorage</span>
+    <span>API Fetching</span>
+  </div>
+</section>
 
-    <div class="card"><h3>Todo list 2</h3><a href="./Advance todos.html">View Project</a></div>
-    <div class="card"><h3>Table generator</h3><a href="./Table generator.html">View Project</a></div>
-    <div class="card"><h3>Form input 2</h3><a href="./course foam submission.html">View Project</a></div>
-    <div class="card"><h3>Form input 3</h3><a href="./IT courses foam.html">View Project</a></div>
-    <div class="card"><h3>Form input 4</h3><a href="./IT courses foam 2.html">View Project</a></div>
+<section class="section">
+  <h2>All Projects</h2>
 
-    <div class="card"><h3>Bank Balance</h3><a href="./Bank Balance.html">View Project</a></div>
-    <div class="card"><h3>Todo list 3</h3><a href="./Advance todo 2.html">View Project</a></div>
-    <div class="card"><h3>Data handeling</h3><a href="./Data Handling.html">View Project</a></div>
-    <div class="card"><h3>Todo with localstorage</h3><a href="./Todo list with local storage.html">View Project</a></div>
-    <div class="card"><h3>Weather</h3><a href="./Weather.html">View Project</a></div>
+  <div class="projects">
 
-    <!-- <div class="card"><h3>Project 21</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 22</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 23</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 24</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 25</h3><a href=".">View Project</a></div> -->
+    <div class="card"><h3>Advance Calculator</h3><a href="./calculator.html">View</a></div>
+    <div class="card"><h3>Percentage Calculator</h3><a href="./percentage calculator.html">View</a></div>
+    <div class="card"><h3>Calculator</h3><a href="./calculator no2.html">View</a></div>
+    <div class="card"><h3>Bank account</h3><a href="./Bank account.html">View</a></div>
+    <div class="card"><h3>Digital clock</h3><a href="./TIME.html">View</a></div>
 
-    <!-- <div class="card"><h3>Project 26</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 27</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 28</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 29</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 30</h3><a href=".">View Project</a></div> -->
+    <div class="card"><h3>Digital clock 2</h3><a href="./digital clock.html">View</a></div>
+    <div class="card"><h3>Color matching game</h3><a href="./color matching.html">View</a></div>
+    <div class="card"><h3>Todo list</h3><a href="./Todos.html">View</a></div>
+    <div class="card"><h3>Form input</h3><a href="./foam submission.html">View</a></div>
+    <div class="card"><h3>Digital clock 3</h3><a href="./professional clock.html">View</a></div>
 
-    <!-- <div class="card"><h3>Project 31</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 32</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 33</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 34</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 35</h3><a href=".">View Project</a></div> -->
+    <div class="card"><h3>Todo list 2</h3><a href="./Advance todos.html">View</a></div>
+    <div class="card"><h3>Table generator</h3><a href="./Table generator.html">View</a></div>
+    <div class="card"><h3>Form input 2</h3><a href="./course foam submission.html">View</a></div>
+    <div class="card"><h3>Form input 3</h3><a href="./IT courses foam.html">View</a></div>
+    <div class="card"><h3>Form input 4</h3><a href="./IT courses foam 2.html">View</a></div>
 
-    <!-- <div class="card"><h3>Project 36</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 37</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 38</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 39</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 40</h3><a href=".">View Project</a></div> -->
+    <div class="card"><h3>Bank Balance</h3><a href="./Bank Balance.html">View</a></div>
+    <div class="card"><h3>Todo list 3</h3><a href="./Advance todo 2.html">View</a></div>
+    <div class="card"><h3>Data handling</h3><a href="./Data Handling.html">View</a></div>
+    <div class="card"><h3>Todo with localstorage</h3><a href="./Todo list with local storage.html">View</a></div>
+    <div class="card"><h3>Weather</h3><a href="./Weather.html">View</a></div>
 
-    <!-- <div class="card"><h3>Project 41</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 42</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 43</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 44</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 45</h3><a href=".">View Project</a></div> -->
+  </div>
+</section>
 
-    <!-- <div class="card"><h3>Project 46</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 47</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 48</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 49</h3><a href=".">View Project</a></div> -->
-    <!-- <div class="card"><h3>Project 50</h3><a href=".">View Project</a></div> -->
-</main>
+<section class="section contact">
+  <h2>Contact</h2>
+  <p>📞 03072274835</p>
+  <p>📧 mirzauzair448@gmail.com</p>
+  <p>💻 GitHub: 
+    <a class="github" href="https://github.com/baiguzair362-arch" target="_blank">
+      baiguzair362-arch
+    </a>
+  </p>
+</section>
+
 <footer>
-    <p>© 2026 | Built by Uzair</p>
-  </footer>
-<script src="script.js"></script>
+  <p>© 2026 | Built by Uzair</p>
+</footer>
+
 </body>
 </html>
