@@ -1,9 +1,7 @@
 # ⚡ Mirza Uzair Baig — Portfolio Website
 
 <p align="center">
-
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=FF0000&center=true&vCenter=true&width=850&lines=Modern+Frontend+Portfolio+Website;Built+With+HTML+CSS+JavaScript;Responsive+%26+Professional+UI;Firebase+Integrated+Projects;Currently+Learning+Full+Stack+Development" />
-
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=FF0000&center=true&vCenter=true&width=850&lines=Modern+Frontend+Portfolio+Website;Built+With+HTML+CSS+JavaScript;Responsive+%26+Professional+UI;Firebase+Integrated+Projects;Currently+Learning+Full+Stack+Development" />
 </p>
 
 ---
@@ -38,9 +36,7 @@ The goal of this portfolio is to create a clean, responsive, and professional we
 # 🛠️ Technologies Used
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=html,css,javascript,firebase,git,github,vscode" />
-
+  <img src="https://skillicons.dev/icons?i=html,css,javascript,firebase,git,github,vscode" />
 </p>
 
 ---
@@ -72,9 +68,7 @@ Currently improving skills in:
 # 📸 Portfolio Preview
 
 <p align="center">
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=ff0000&height=220&section=header&text=Portfolio%20Website&fontSize=40&fontColor=ffffff"/>
-
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=ff0000&height=220&section=header&text=Portfolio%20Website&fontSize=40&fontColor=ffffff"/>
 </p>
 
 ---
@@ -90,13 +84,62 @@ cd Portfolio-repo
 
 # Run Project
 Open index.html in browser
-🌐 Connect With Me
-<p align="center"> <a href="mailto:mirzauzair448@gmail.com"> <img src="https://img.shields.io/badge/Gmail-red?style=for-the-badge&logo=gmail&logoColor=white"/> </a> <a href="https://github.com/uzairBaig395"> <img src="https://img.shields.io/badge/GitHub-black?style=for-the-badge&logo=github&logoColor=white"/> </a> <a href="https://www.linkedin.com/in/uzair-baig"> <img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white"/> </a> </p> <p align="center">
+```
 
-📧 Email: mirzauzair448@gmail.com
+---
 
-📱 Phone: 03072274835
-💻 GitHub: github.com/uzairBaig395
+# 🌐 Connect With Me
+
+<p align="center">
+
+<a href="mailto:mirzauzair448@gmail.com">
+<img src="https://img.shields.io/badge/Gmail-red?style=for-the-badge&logo=gmail&logoColor=white"/>
+</a>
+
+<a href="https://github.com/uzairBaig395">
+<img src="https://img.shields.io/badge/GitHub-black?style=for-the-badge&logo=github&logoColor=white"/>
+</a>
+
+<a href="https://www.linkedin.com/in/uzair-baig">
+<img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white"/>
+</a>
+
+</p>
+
+<p align="center">
+
+📧 Email: mirzauzair448@gmail.com  
+📱 Phone: 03072274835  
+💻 GitHub: github.com/uzairBaig395  
 🔗 LinkedIn: linkedin.com/in/uzair-baig
 
+</p>
+
+---
+
+# 📈 Future Improvements
+
+- Add More Advanced Animations
+- Deploy Live Portfolio
+- Add Backend Features
+- Improve UI/UX
+- Add Dark/Light Theme
+- Integrate More Real-World Projects
+
+---
+
+# ⭐ Support
+
+If you like this portfolio project, give it a ⭐ on GitHub.
+
+---
+
+# ⚡ Developer Quote
+
+> “Great developers are built through consistency, curiosity, and continuous learning.”
+
+---
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=ff0000&height=120&section=footer"/>
 </p>
