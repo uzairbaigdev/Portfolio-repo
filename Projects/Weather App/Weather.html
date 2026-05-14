@@ -119,6 +119,7 @@ let show = async()=> {
   try{
    child1.innerHTML = "";
 //working on lan and lat API   
+   child1.innerText = "Loading..."
    let Lat_and_lan = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${cityname.value}`)
    Lat_and_lan = await Lat_and_lan.json();
    console.log(Lat_and_lan)
@@ -129,6 +130,7 @@ let show = async()=> {
    weatherAPI = await weatherAPI.json();
    console.log(weatherAPI);
    child1.innerHTML = `<p>Temperature:${weatherAPI.current_weather.temperature}${weatherAPI.current_weather_units.temperature}</p>`
+   cityname.value = "";
   }catch(error) {
    console.log(error);
   }
