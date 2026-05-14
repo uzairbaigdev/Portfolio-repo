@@ -90,3 +90,13 @@ cd Portfolio-repo
 
 # Run Project
 Open index.html in browser
+🌐 Connect With Me
+<p align="center"> <a href="mailto:mirzauzair448@gmail.com"> <img src="https://img.shields.io/badge/Gmail-red?style=for-the-badge&logo=gmail&logoColor=white"/> </a> <a href="https://github.com/uzairBaig395"> <img src="https://img.shields.io/badge/GitHub-black?style=for-the-badge&logo=github&logoColor=white"/> </a> <a href="https://www.linkedin.com/in/uzair-baig"> <img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white"/> </a> </p> <p align="center">
+
+📧 Email: mirzauzair448@gmail.com
+
+📱 Phone: 03072274835
+💻 GitHub: github.com/uzairBaig395
+🔗 LinkedIn: linkedin.com/in/uzair-baig
+
+</p>
