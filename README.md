@@ -100,7 +100,7 @@ Open index.html in browser
 <img src="https://img.shields.io/badge/GitHub-black?style=for-the-badge&logo=github&logoColor=white"/>
 </a>
 
-<a href="https://www.linkedin.com/in/uzair-baig">
+<a href="https://www.linkedin.com/in/uzair-baig-1699563ab/" target="_blank">
 <img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white"/>
 </a>
 
@@ -111,7 +111,7 @@ Open index.html in browser
 📧 Email: mirzauzair448@gmail.com  
 📱 Phone: 03072274835  
 💻 GitHub: github.com/uzairBaig395  
-🔗 LinkedIn: linkedin.com/in/uzair-baig
+🔗 LinkedIn: linkedin.com/in/uzair-baig-1699563ab
 
 </p>
 
