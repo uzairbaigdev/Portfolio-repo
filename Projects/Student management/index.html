@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+   </head>
+   <style>
+    body {
+        background:#0f172a;
+        color:white;
+    }
+    #main1 {
+        /* margin-left: 30%; */
+        width: 100%;
+        margin-top: 70px;
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center; */
+        align-items: center;
+        /* background-color: aqua; */
+    }
+    #searchstudent {
+    width: 600px;
+    padding: 14px 20px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 2px solid #38bdf8;
+    outline: none;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    color: white;
+    box-shadow:
+        0 0 10px rgba(56, 189, 248, 0.4),
+        0 0 20px rgba(56, 189, 248, 0.2);
+    transition: 0.3s ease;
+    }
+    #searchname {
+        width: fit-content;
+        height: fit-content;
+        color: white;
+        background-color: green;
+        font-size: larger;
+        padding: 5px;
+    }
+    #main2{
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    #child1 {
+        width: fit-content;
+        height: fit-content;
+        /* background-color: aqu/ */
+        padding: 50px;
+        border: 2px solid #38bdf8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .addinputs {
+    width: 600px;
+    padding: 14px 20px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 2px solid #38bdf8;
+    outline: none;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    color: white;
+    box-shadow:
+        0 0 10px rgba(56, 189, 248, 0.4),
+        0 0 20px rgba(56, 189, 248, 0.2);
+    transition: 0.3s ease;
+    margin-top: 20px;
+    }
+    #addbtn {
+        width: fit-content;
+        height: fit-content;
+        color: white;
+        background-color: green;
+        font-size: larger;
+        padding: 5px;
+    }
+    #main3 {
+        display: flex;
+        justify-content: center;
+    }
+    #child2 {
+        width: fit-content;
+        height: fit-content;
+        /* background-color: aqu/ */
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* margin-top: 5px; */
+    }
+.box {
+    width: 650px;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-left: 6px solid #38bdf8;
+    border-radius: 16px;
+    padding: 18px 25px;
+    margin-top: 18px;
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.3),
+        0 0 12px rgba(56, 189, 248, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.box:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.4),
+        0 0 20px rgba(56, 189, 248, 0.5);
+}
+.box::after {
+    content: "🎓";
+    font-size: 50px;
+}
+.deletebtn {
+    color: white;
+    background-color: red;
+    width: fit-content;
+    height: fit-content;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.editbtn {
+    color: white;
+    background-color: blue;
+    width: fit-content;
+    height: fit-content;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+#updatebtn {
+     width: fit-content;
+        height: fit-content;
+        color: white;
+        background-color: green;
+        font-size: larger;
+        padding: 5px;
+        display: none;
+}
+@media screen and (max-width: 768px) {
+
+    body {
+        padding: 10px;
+    }
+
+    #main1 {
+        margin-top: 30px;
+        padding: 10px;
+    }
+
+    #searchstudent {
+        width: 90%;
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    #searchname {
+        margin-top: 10px;
+        width: 120px;
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    #main2 {
+        width: 100%;
+        padding: 10px;
+    }
+
+    #child1 {
+        width: 90%;
+        padding: 25px 15px;
+    }
+
+    .addinputs {
+        width: 100%;
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    #addbtn,
+    #updatebtn {
+        margin-top: 15px;
+        width: 120px;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    #child2 {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .box {
+        width: 90%;
+        font-size: 16px;
+        padding: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .box::after {
+        font-size: 35px;
+        align-self: flex-end;
+    }
+
+    .deletebtn,
+    .editbtn {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+}
+
+
+/* Extra small devices */
+
+@media screen and (max-width: 480px) {
+
+    #searchstudent {
+        width: 95%;
+        font-size: 14px;
+    }
+
+    .addinputs {
+        font-size: 14px;
+    }
+
+    .box {
+        width: 95%;
+        font-size: 14px;
+    }
+
+    .deletebtn,
+    .editbtn {
+        width: 100%;
+    }
+}
+   </style>
+<body>
+   <div id="main1">
+    <input type="text" name="search-student" id="searchstudent" placeholder="search student the best match will show">
+    <button id="searchname">Search</button>
+   </div>
+   <div id="main2">
+    <div id="child1">
+        <input type="text" name="nameinp" id="nameinp" placeholder="enter your name" class="addinputs">
+        <input type="number" name="ageinp" id="ageinp" placeholder="enter your age" class="addinputs">
+        <input type="text" name="courseinp" id="courseinp" placeholder="enter your course" class="addinputs">
+        <button id="addbtn">Add</button>
+        <button id="updatebtn">Update</button>
+    </div>
+   </div>
+   <div id="main3">
+    <div id="child2"></div>
+   </div>
+   <script type="module" src="app.js"></script>
+</body>
+</html>
