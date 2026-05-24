@@ -3,280 +3,578 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Uzair Portfolio</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+<title>Mirza Uzair Baig | Frontend Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #060910;
+  --bg2: #0d1117;
+  --sky: #38bdf8;
+  --violet: #818cf8;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
 }
+
+html { scroll-behavior: smooth; }
 
 body {
-  background: linear-gradient(135deg, #0f172a, #020617);
-  color: #e2e8f0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
 }
 
-/* HERO */
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 60px;
+  background: rgba(6,9,16,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 1.2rem;
+  background: linear-gradient(90deg, var(--sky), var(--violet));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.9rem; font-weight: 500; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--sky); }
+
+.nav-cta {
+  padding: 8px 22px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--sky), var(--violet));
+  color: #060910; font-weight: 700; font-size: 0.85rem;
+  text-decoration: none; transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ── HERO ── */
 .hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   text-align: center;
-  padding: 90px 20px;
-  background: radial-gradient(circle, rgba(56,189,248,0.15), transparent);
+  padding: 120px 20px 80px;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero img {
-  width: clamp(120px, 20vw, 170px);
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(56,189,248,0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.hero-avatar {
+  width: clamp(110px, 18vw, 155px);
   border-radius: 50%;
-  border: 4px solid #38bdf8;
-  box-shadow: 0 0 25px rgba(56,189,248,0.6);
-  margin-bottom: 20px;
+  border: 3px solid var(--sky);
+  box-shadow: 0 0 40px rgba(56,189,248,0.4);
+  margin-bottom: 28px;
+  animation: floatAvatar 4s ease-in-out infinite;
+}
+
+@keyframes floatAvatar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero-tag {
+  display: inline-block;
+  padding: 5px 16px; border-radius: 999px;
+  border: 1px solid rgba(56,189,248,0.4);
+  font-size: 0.78rem; color: var(--sky);
+  margin-bottom: 18px; letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .hero h1 {
-  font-size: clamp(1.8rem, 5vw, 3rem);
-  background: linear-gradient(90deg, #38bdf8, #818cf8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 800; line-height: 1.1;
+  background: linear-gradient(90deg, #e2e8f0 30%, var(--sky) 70%, var(--violet));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
 }
 
 .hero p {
-  margin-top: 10px;
-  color: #94a3b8;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  color: var(--muted); font-size: clamp(0.95rem, 2vw, 1.1rem);
+  max-width: 480px; line-height: 1.7;
 }
 
-/* SECTION */
+.hero-btns {
+  display: flex; gap: 14px; margin-top: 36px;
+  flex-wrap: wrap; justify-content: center;
+}
+
+.btn-primary {
+  padding: 13px 30px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--sky), var(--violet));
+  color: #060910; font-weight: 700; font-size: 0.9rem;
+  text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 20px rgba(56,189,248,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(56,189,248,0.45); }
+
+.btn-outline {
+  padding: 13px 30px; border-radius: 999px;
+  border: 1px solid rgba(56,189,248,0.5);
+  color: var(--sky); font-size: 0.9rem; font-weight: 500;
+  text-decoration: none; transition: background 0.2s, transform 0.2s;
+}
+.btn-outline:hover { background: rgba(56,189,248,0.08); transform: translateY(-2px); }
+
+/* ── SECTIONS ── */
 .section {
-  padding: 70px 80px;
+  padding: 90px 60px;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.75rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--sky);
+  margin-bottom: 10px;
 }
 
 .section h2 {
-  margin-bottom: 25px;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  color: #38bdf8;
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 700; margin-bottom: 40px;
+  color: var(--text);
 }
 
-/* SKILLS */
-.skills {
-  display: flex;
-  flex-wrap: wrap;
+/* ── ABOUT ── */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
 }
 
-.skills span {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(56,189,248,0.3);
-  padding: 10px 18px;
-  margin: 6px;
-  border-radius: 999px;
-  transition: 0.3s;
-  font-size: 0.9rem;
+.about-text p {
+  color: #94a3b8; line-height: 1.8; font-size: 1rem; margin-bottom: 14px;
 }
 
-.skills span:hover {
-  background: #38bdf8;
-  color: black;
+.about-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
 }
 
-/* PROJECTS */
-.projects {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 25px;
-}
-
-.card {
-  background: rgba(255,255,255,0.05);
-  border-radius: 15px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.08);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-10px) scale(1.03);
-  border: 1px solid #38bdf8;
-  box-shadow: 0 20px 40px rgba(56,189,248,0.3);
-}
-
-.card h3 {
-  margin-bottom: 10px;
-  font-size: 1.1rem;
-}
-
-.card a {
-  display: inline-block;
-  padding: 8px 18px;
-  border-radius: 20px;
-  background: linear-gradient(90deg, #38bdf8, #818cf8);
-  color: #020617;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85rem;
-  transition: 0.3s;
-}
-
-.card a:hover {
-  transform: scale(1.1);
-}
-
-/* CONTACT */
-.contact p {
-  margin: 10px 0;
-  font-size: 1rem;
-}
-
-/* GITHUB */
-.github {
-  color: #38bdf8;
-  text-decoration: none;
-}
-
-.github:hover {
-  text-decoration: underline;
-}
-
-/* FOOTER */
-footer {
+.stat-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px;
   text-align: center;
-  padding: 20px;
-  color: #64748b;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  transition: border-color 0.3s;
+}
+.stat-box:hover { border-color: var(--sky); }
+
+.stat-box .num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem; font-weight: 800;
+  background: linear-gradient(90deg, var(--sky), var(--violet));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-box .label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+/* ── SKILLS ── */
+.skills-grid {
+  display: flex; flex-wrap: wrap; gap: 10px;
 }
 
-/* ========================= */
-/* 📲 TABLET */
-/* ========================= */
-@media (max-width: 768px) {
-
-  .section {
-    padding: 50px 25px;
-  }
-
-  .hero {
-    padding: 70px 15px;
-  }
-
-  .projects {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-
+.skill-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 10px 20px; border-radius: 999px;
+  font-size: 0.88rem; font-weight: 500;
+  transition: all 0.25s; cursor: default;
+}
+.skill-pill:hover {
+  background: rgba(56,189,248,0.1);
+  border-color: var(--sky); color: var(--sky);
+  transform: translateY(-2px);
 }
 
-/* ========================= */
-/* 📱 MOBILE */
-/* ========================= */
+/* ── PROJECTS ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 22px;
+}
+
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px; padding: 26px;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--sky), var(--violet));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56,189,248,0.3);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.project-card:hover::before { transform: scaleX(1); }
+
+.project-tag {
+  display: inline-block;
+  font-size: 0.7rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--sky);
+  background: rgba(56,189,248,0.1);
+  padding: 3px 10px; border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.project-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.project-card p {
+  font-size: 0.85rem; color: #94a3b8;
+  line-height: 1.65; margin-bottom: 18px;
+}
+
+.project-techs {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px;
+}
+
+.tech-badge {
+  font-size: 0.72rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 4px;
+  color: var(--muted);
+}
+
+.project-link {
+  display: inline-block;
+  padding: 9px 22px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--sky), var(--violet));
+  color: #060910; font-weight: 700; font-size: 0.82rem;
+  text-decoration: none; transition: opacity 0.2s, transform 0.2s;
+}
+.project-link:hover { opacity: 0.85; transform: scale(1.04); }
+
+/* ── CONTACT (NO FORM) ── */
+.contact-wrapper {
+  display: grid; grid-template-columns: 1fr; gap: 50px; align-items: start;
+  justify-items: center;
+}
+
+.contact-info {
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.contact-info p {
+  color: #94a3b8; line-height: 1.8; margin-bottom: 30px;
+}
+
+.contact-links { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 14px; 
+  align-items: center;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.contact-item {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px;
+  text-decoration: none; color: var(--text);
+  font-size: 0.9rem; transition: border-color 0.2s, transform 0.2s;
+  width: 100%;
+}
+.contact-item:hover { border-color: var(--sky); transform: translateX(4px); }
+
+.contact-item .icon {
+  font-size: 1.3rem; width: 36px; text-align: center;
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center; padding: 30px 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* ── HAMBURGER ── */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; flex-direction: column; position: absolute;
+    top: 65px; left: 0; right: 0; background: rgba(6,9,16,0.97);
+    padding: 20px 24px; gap: 18px; border-bottom: 1px solid var(--border); }
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex; }
+  .nav-cta { display: none; }
+  .section { padding: 70px 24px; }
+  .about-grid { grid-template-columns: 1fr; gap: 30px; }
+  .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
+}
+
 @media (max-width: 480px) {
-
-  .section {
-    padding: 40px 15px;
-  }
-
-  .hero {
-    padding: 60px 10px;
-  }
-
-  .projects {
-    grid-template-columns: 1fr;
-  }
-
-  .card {
-    padding: 16px;
-  }
-
-  .card h3 {
-    font-size: 1rem;
-  }
-
-  .card a {
-    font-size: 0.8rem;
-    padding: 6px 12px;
-  }
-
+  .section { padding: 60px 16px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
+  .hero-btns { flex-direction: column; align-items: center; }
+  .contact-links { max-width: 100%; }
 }
+
+/* ── FADE IN ── */
+.fade-in {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
-
 <body>
 
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">UzairBaig</span>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:mirzauzair448@gmail.com" class="nav-cta">Hire Me</a>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
 <section class="hero">
-  <img src="./Images/uzair.jpg.jpeg">
+  <img class="hero-avatar" src="./Images/uzair.jpg.jpeg" alt="Mirza Uzair Baig">
+  <span class="hero-tag">Available for work</span>
   <h1>Mirza Uzair Baig</h1>
-  <p>Frontend Developer | Web Development Learner</p>
+  <p>Frontend Developer crafting modern, responsive web apps with JavaScript & Firebase.</p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn-primary">View My Work</a>
+    <a href="#contact" class="btn-outline">Get In Touch</a>
+  </div>
 </section>
 
-<section class="section">
+<!-- ABOUT -->
+<section class="section fade-in" id="about">
+  <p class="section-label">Who I am</p>
   <h2>About Me</h2>
-  <p>
-    I am a passionate frontend developer focused on building modern, responsive and interactive web applications.
-    I enjoy turning ideas into real-world projects with clean UI and smooth performance and currently i am learning full-stack Development.
-  </p>
-</section>
-
-<section class="section">
-  <h2>Skills</h2>
-  <div class="skills">
-    <span>HTML</span>
-    <span>CSS</span>
-    <span>JavaScript</span>
-    <span>DOM</span>
-    <span>LocalStorage</span>
-    <span>API Fetching</span>
-    <span>FireBase</span>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>I'm a self-taught frontend developer from Karachi, passionate about building modern and interactive web applications with clean UI and smooth performance.</p>
+      <p>Currently leveling up into full-stack development — learning REST APIs, Node.js, and backend architecture to complement my frontend skills.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box"><div class="num">23+</div><div class="label">Projects Built</div></div>
+      <div class="stat-box"><div class="num">7+</div><div class="label">Skills Learned</div></div>
+      <div class="stat-box"><div class="num">1+</div><div class="label">Year Learning</div></div>
+      <div class="stat-box"><div class="num">100%</div><div class="label">Self-Taught</div></div>
+    </div>
   </div>
 </section>
 
-<section class="section">
-  <h2>All Projects</h2>
-
-  <div class="projects">
-
-    <div class="card"><h3>Advance Calculator</h3><a href="./Projects/Calcultaor/calculator.html">View</a></div>
-    <div class="card"><h3>Percentage Calculator</h3><a href="./Projects/Percentage calculator/percentage calculator.html">View</a></div>
-    <div class="card"><h3>Calculator</h3><a href="./Projects/Calculator 2/calculator no2.html">View</a></div>
-    <div class="card"><h3>Bank account</h3><a href="./Projects/Bank account/Bank account.html">View</a></div>
-    <div class="card"><h3>Digital clock</h3><a href="./Projects/Digital Clock/digital clock.html">View</a></div>
-
-    <div class="card"><h3>Digital clock 2</h3><a href="./Projects/Professional Clock/professional clock.html">View</a></div>
-    <div class="card"><h3>Color matching game</h3><a href="./Projects/Color matching/color matching.html">View</a></div>
-    <div class="card"><h3>Todo list</h3><a href="./Projects/Todos/Todos.html">View</a></div>
-    <div class="card"><h3>Form input</h3><a href="./Projects/Foam submission/foam submission.html">View</a></div>
-    <div class="card"><h3>Digital clock 3</h3><a href="./Projects/Time/TIME.html">View</a></div>
-
-    <div class="card"><h3>Todo list 2</h3><a href="./Projects/Advance Todos/Advance todos.html">View</a></div>
-    <div class="card"><h3>Table generator</h3><a href="./Projects/Table Generator/Table generator.html">View</a></div>
-    <div class="card"><h3>Form input 2</h3><a href="./Projects/Course foam submission/course foam submission.html">View</a></div>
-    <div class="card"><h3>Form input 3</h3><a href="./Projects/IT Course Foam/IT courses foam.html">View</a></div>
-    <div class="card"><h3>Form input 4</h3><a href="./Projects/IT Course Foam 2/IT courses foam 2.html">View</a></div>
-
-    <div class="card"><h3>Bank Balance</h3><a href="./Projects/Bank balance/Bank Balance.html">View</a></div>
-    <div class="card"><h3>Todo list 3</h3><a href="./Projects/Advance Todo 2/Advance todo 2.html">View</a></div>
-    <div class="card"><h3>Data handling</h3><a href="./Projects/Data Handeling/Data Handling.html">View</a></div>
-    <div class="card"><h3>Todo with localstorage</h3><a href="./Projects/Todo list with local storage/Todo list with local storage.html">View</a></div>
-    <div class="card"><h3>Weather</h3><a href="./Projects/Weather App/Weather.html">View</a></div>
-    <div class="card"><h3>Theories</h3><a href="./Projects/Theory/theory.html">View</a></div>
-    <div class="card"><h3>Todolist with Firebase</h3><a href="./Projects/Todo list with firebase/Todolist with Firebase.html">View</a></div>
-    <div class="card"><h3>Student management</h3><a href="./Projects/Student management/index.html">View</a></div>
+<!-- SKILLS -->
+<section class="section fade-in" id="skills">
+  <p class="section-label">What I use</p>
+  <h2>Skills & Tools</h2>
+  <div class="skills-grid">
+    <div class="skill-pill">🌐 HTML5</div>
+    <div class="skill-pill">🎨 CSS3</div>
+    <div class="skill-pill">⚡ JavaScript</div>
+    <div class="skill-pill">🔁 DOM Manipulation</div>
+    <div class="skill-pill">💾 LocalStorage</div>
+    <div class="skill-pill">🌤️ API Fetching</div>
+    <div class="skill-pill">🔥 Firebase</div>
+    <div class="skill-pill">📱 Responsive Design</div>
+    <div class="skill-pill">🐙 Git & GitHub</div>
   </div>
 </section>
 
-<section class="section contact">
-  <h2>Contact</h2>
-  <p>📞 03072274835</p>
-  <p>📧 mirzauzair448@gmail.com</p>
-  <p>💻 GitHub: 
-    <a class="github" href="https://github.com/uzairBaig395" target="_blank">
-     uzairBaig395
-    </a>
-  </p>
+<!-- PROJECTS -->
+<section class="section fade-in" id="projects">
+  <p class="section-label">What I've built</p>
+  <h2>Featured Projects</h2>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <span class="project-tag">Firebase</span>
+      <h3>Todo App with Firebase</h3>
+      <p>A full-featured todo app with real-time Firestore database sync. Add, delete and manage tasks stored live in the cloud.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">Firebase</span>
+        <span class="tech-badge">Firestore</span>
+        <span class="tech-badge">HTML/CSS</span>
+      </div>
+      <a class="project-link" href="./Projects/Todo list with firebase/Todolist with Firebase.html" target="_blank">View Project →</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">API</span>
+      <h3>Weather App</h3>
+      <p>Live weather application fetching real-time data from a weather API. Search any city and see current temperature, humidity, and conditions.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">REST API</span>
+        <span class="tech-badge">Fetch</span>
+        <span class="tech-badge">HTML/CSS</span>
+      </div>
+      <a class="project-link" href="./Projects/Weather App/Weather.html" target="_blank">View Project →</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">App</span>
+      <h3>Student Management System</h3>
+      <p>Manage student records with add, edit, delete and search functionality. Data persists across sessions using LocalStorage.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">LocalStorage</span>
+        <span class="tech-badge">DOM</span>
+        <span class="tech-badge">HTML/CSS</span>
+      </div>
+      <a class="project-link" href="./Projects/Student management/index.html" target="_blank">View Project →</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">LocalStorage</span>
+      <h3>Todo with LocalStorage</h3>
+      <p>A persistent todo list that saves all tasks in the browser — tasks remain even after page refresh.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">LocalStorage</span>
+        <span class="tech-badge">DOM</span>
+      </div>
+      <a class="project-link" href="./Projects/Todo list with local storage/Todo list with local storage.html" target="_blank">View Project →</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">Tool</span>
+      <h3>Advanced Calculator</h3>
+      <p>A fully-featured calculator with keyboard support, operation history, and clean UI handling all arithmetic operations.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">DOM</span>
+        <span class="tech-badge">HTML/CSS</span>
+      </div>
+      <a class="project-link" href="./Projects/Calcultaor/calculator.html" target="_blank">View Project →</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">Game</span>
+      <h3>Color Matching Game</h3>
+      <p>An interactive browser game where you match colors against a timer. Tests logic and DOM event handling skills.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">DOM</span>
+        <span class="tech-badge">Game Logic</span>
+      </div>
+      <a class="project-link" href="./Projects/Color matching/color matching.html" target="_blank">View Project →</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">Finance</span>
+      <h3>Bank Balance Tracker</h3>
+      <p>Track deposits and withdrawals with a running balance display. Clean UI for managing personal finance data.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">DOM</span>
+        <span class="tech-badge">LocalStorage</span>
+      </div>
+      <a class="project-link" href="./Projects/Bank balance/Bank Balance.html" target="_blank">View Project →</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">Tool</span>
+      <h3>Table Generator</h3>
+      <p>Dynamically generate HTML tables of any size by entering rows and columns. Great for data display use cases.</p>
+      <div class="project-techs">
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">DOM</span>
+        <span class="tech-badge">HTML/CSS</span>
+      </div>
+      <a class="project-link" href="./Projects/Table Generator/Table generator.html" target="_blank">View Project →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT - NO FORM, ONLY SOCIAL LINKS -->
+<section class="section fade-in" id="contact">
+  <p class="section-label">Let's talk</p>
+  <h2>Get In Touch</h2>
+  <div class="contact-wrapper">
+    <div class="contact-info">
+      <p>I'm open to frontend developer roles, freelance projects, and collaboration. Feel free to reach out!</p>
+      <div class="contact-links">
+        <a class="contact-item" href="mailto:mirzauzair448@gmail.com">
+          <span class="icon">📧</span>
+          <span>mirzauzair448@gmail.com</span>
+        </a>
+        <a class="contact-item" href="https://github.com/uzairBaig395" target="_blank">
+          <span class="icon">🐙</span>
+          <span>github.com/uzairBaig395</span>
+        </a>
+        <a class="contact-item" href="https://www.linkedin.com/in/uzair-baig-1699563ab/" target="_blank">
+          <span class="icon">💼</span>
+          <span>LinkedIn Profile</span>
+        </a>
+        <a class="contact-item" href="https://www.facebook.com/profile.php?id=61584799112383" target="_blank">
+          <span class="icon">📘</span>
+          <span>Facebook Profile</span>
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <footer>
-  <p>© 2026 | Built by Uzair</p>
+  <p>© <span id="year"></span> Mirza Uzair Baig — Built with ❤️ from Karachi</p>
 </footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
