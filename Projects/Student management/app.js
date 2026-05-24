@@ -83,6 +83,8 @@ divelm.appendChild(editbtn);
 editbtn.onclick = ()=> {
 addbtn.style.display = "none";
 updatebtn.style.display = "inline";
+deletebtn.style.display = "none";
+editbtn.style.display = "none";
 nameinp.value = num.name;
 ageinp.value = num.age;
 courseinp.value = num.course
@@ -99,6 +101,8 @@ try {
 }
 updatebtn.style.display = "none";
 addbtn.style.display = "inline";
+editbtn.style.display = "inline";
+deletebtn.style.display ="inline";
 nameinp.value = "";
 ageinp.value = "";
 courseinp.value = "";
