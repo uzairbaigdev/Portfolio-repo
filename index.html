@@ -77,13 +77,22 @@ nav {
   background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(56,189,248,0.12), transparent 70%);
   pointer-events: none;
 }
-
 .hero-avatar {
-  width: clamp(110px, 18vw, 155px);
+  width: clamp(120px, 18vw, 170px);
+  height: clamp(120px, 18vw, 170px);
+
   border-radius: 50%;
   border: 3px solid var(--sky);
-  box-shadow: 0 0 40px rgba(56,189,248,0.4);
+
+  object-fit: contain;
+  background: #0d1117;
+
+  padding: 4px;
+
+  box-shadow: 0 0 40px rgba(56,189,248,0.45);
+
   margin-bottom: 28px;
+
   animation: floatAvatar 4s ease-in-out infinite;
 }
 
@@ -377,7 +386,7 @@ footer {
 
 <!-- HERO -->
 <section class="hero">
-  <img class="hero-avatar" src="./Images/uzair.jpg.jpeg" alt="Mirza Uzair Baig">
+  <img class="hero-avatar" src="./Images/uzairbaig.jpg.jpeg" alt="Mirza Uzair Baig">
   <span class="hero-tag">Available for work</span>
   <h1>Mirza Uzair Baig</h1>
   <p>Frontend Developer crafting modern, responsive web apps with JavaScript & Firebase.</p>
