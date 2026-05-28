@@ -107,6 +107,100 @@
 
     #toastNotification { transition: transform 0.4s ease, opacity 0.4s ease; }
     #projectModal { animation: fadeIn 0.25s forwards; }
+
+    /* ── Mobile fixes ── */
+    @media (max-width: 640px) {
+      .ambient-blob { opacity: 0.07; }
+
+      /* Hero code card: shrink on small screens */
+      #home .lg\\:col-span-5 .max-w-\\[400px\\] { max-width: 100% !important; }
+      #home .lg\\:col-span-5 { margin-top: 2rem; }
+
+      /* Floating astronaut badge — keep inside viewport */
+      #home .absolute.-bottom-6 {
+        bottom: -1rem !important;
+        left: 0.5rem !important;
+        right: auto;
+      }
+
+      /* Prevent wide text overflow */
+      .font-display { word-break: break-word; }
+
+      /* Portfolio filter buttons wrap nicely */
+      #portfolioFilters { gap: 0.5rem; }
+      #portfolioFilters button { font-size: 0.65rem; padding: 0.4rem 0.75rem; }
+
+      /* Contact social links full-width on mobile */
+      #contact .lg\\:col-span-5 a { padding: 0.875rem 1rem; }
+
+      /* Toast stays in viewport */
+      #toastNotification { right: 0.75rem; left: 0.75rem; max-width: calc(100vw - 1.5rem); }
+
+      /* Modal padding tighter on small screens */
+      #projectModal > div { margin: 0.5rem; border-radius: 1.25rem; }
+
+      /* Marquee font size */
+      .animate-marquee { font-size: 0.85rem !important; }
+    }
+
+    /* ── Space Science Section ── */
+    .space-section { position: relative; overflow: hidden; }
+    .space-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(56,189,248,0.06) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 40% at 80% 100%, rgba(129,140,248,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    @keyframes orbit {
+      0% { transform: rotate(0deg) translateX(38px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(38px) rotate(-360deg); }
+    }
+    @keyframes orbitSlow {
+      0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+    }
+    .orbit-dot { animation: orbit 4s linear infinite; }
+    .orbit-dot-slow { animation: orbitSlow 7s linear infinite; }
+
+    @keyframes twinkle {
+      0%,100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+    .star { animation: twinkle var(--dur, 3s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
+
+    @keyframes rocket-fly {
+      0%,100% { transform: translateY(0) rotate(-45deg); }
+      50% { transform: translateY(-8px) rotate(-45deg); }
+    }
+    .rocket-float { animation: rocket-fly 3s ease-in-out infinite; }
+
+    .space-card {
+      background: rgba(13,17,23,0.7);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(56,189,248,0.12);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .space-card:hover {
+      border-color: rgba(56,189,248,0.3);
+      box-shadow: 0 0 30px rgba(56,189,248,0.08);
+    }
+
+    .progress-bar-animated {
+      animation: growBar 1.4s ease forwards;
+      width: 0;
+    }
+    @keyframes growBar {
+      to { width: var(--target-width); }
+    }
+    .progress-animated { animation-play-state: paused; }
+    .progress-animated.run { animation-play-state: running; }
+
+    @media (max-width: 640px) {
+      .space-grid { grid-template-columns: 1fr !important; }
+      .space-topics { grid-template-columns: 1fr 1fr !important; }
+    }
   </style>
 </head>
 <body class="text-slate-100 antialiased selection:bg-sky selection:text-obsidian">
@@ -135,6 +229,7 @@
         <a href="#about"    class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">About</a>
         <a href="#skills"   class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">Skills</a>
         <a href="#projects" class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">Projects</a>
+        <a href="#space"    class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline flex items-center space-x-1"><span>🚀</span><span>Space</span></a>
         <a href="#contact"  class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">Contact</a>
       </nav>
 
@@ -155,6 +250,7 @@
         <a href="#about"    class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-user text-slate-500 w-5 text-sm"></i><span>About Me</span></a>
         <a href="#skills"   class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-gears text-slate-500 w-5 text-sm"></i><span>Skills & Tools</span></a>
         <a href="#projects" class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-laptop-code text-slate-500 w-5 text-sm"></i><span>Projects</span></a>
+        <a href="#space"    class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><span class="w-5 text-center text-sm">🚀</span><span>Space Science</span></a>
         <a href="#contact"  class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-paper-plane text-slate-500 w-5 text-sm"></i><span>Get In Touch</span></a>
         <div class="pt-4 border-t border-slate-800 flex flex-col space-y-4">
           <div class="flex space-x-3 justify-center">
@@ -214,7 +310,7 @@
           </div>
         </div>
 
-        <div class="lg:col-span-5 relative flex items-center justify-center">
+        <div class="lg:col-span-5 relative flex items-center justify-center pb-10 sm:pb-0">
           <div class="relative w-full max-w-[400px] aspect-square rounded-3xl bg-gradient-to-tr from-violet/30 via-midnight to-sky/30 p-[1.5px] shadow-2xl">
             <div class="w-full h-full bg-midnight rounded-[22px] overflow-hidden p-6 sm:p-8 flex flex-col justify-between relative">
               <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -244,7 +340,7 @@
               </div>
             </div>
           </div>
-          <div class="absolute -bottom-6 -left-4 sm:-left-10 glass-card rounded-2xl p-3.5 flex items-center space-x-3 shadow-xl border border-slate-800" style="animation: floatAvatar 6s ease-in-out infinite;">
+          <div class="absolute -bottom-6 left-2 sm:-left-10 glass-card rounded-2xl p-3.5 flex items-center space-x-3 shadow-xl border border-slate-800 z-10" style="animation: floatAvatar 6s ease-in-out infinite;">
             <div class="w-10 h-10 rounded-xl bg-sky/10 flex items-center justify-center text-sky text-lg">
               <i class="fa-solid fa-user-astronaut"></i>
             </div>
@@ -436,7 +532,7 @@
   <section id="projects" class="py-24 md:py-32 relative fade-in-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div class="max-w-xl">
           <span class="text-xs font-mono uppercase tracking-widest text-sky font-bold">Showcase</span>
           <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display mt-2">Featured Projects</h2>
@@ -687,6 +783,220 @@
       </div>
     </div>
   </section>
+
+  <!-- ══════════════════════════════════════════
+       SPACE SCIENCE EXPLORER SECTION
+  ══════════════════════════════════════════ -->
+  <section id="space" class="py-24 md:py-32 relative fade-in-up space-section">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+      <!-- Starfield bg -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div class="star absolute w-1 h-1 rounded-full bg-sky"    style="top:8%;left:6%;--dur:2.2s;--delay:0s"></div>
+        <div class="star absolute w-1.5 h-1.5 rounded-full bg-white/50" style="top:18%;left:22%;--dur:3.4s;--delay:0.6s"></div>
+        <div class="star absolute w-1 h-1 rounded-full bg-violet" style="top:12%;right:15%;--dur:2.7s;--delay:1.1s"></div>
+        <div class="star absolute w-1 h-1 rounded-full bg-sky"    style="top:55%;left:4%;--dur:4.1s;--delay:0.4s"></div>
+        <div class="star absolute w-1.5 h-1.5 rounded-full bg-white/30" style="top:72%;right:8%;--dur:2.5s;--delay:1.5s"></div>
+        <div class="star absolute w-1 h-1 rounded-full bg-cyan-400" style="bottom:18%;left:42%;--dur:3.2s;--delay:0.9s"></div>
+        <div class="star absolute w-1 h-1 rounded-full bg-violet" style="bottom:28%;right:28%;--dur:2.8s;--delay:1.9s"></div>
+        <div class="star absolute w-1 h-1 rounded-full bg-white/40" style="top:38%;right:42%;--dur:3.7s;--delay:0.2s"></div>
+      </div>
+
+      <!-- Header -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-violet/10 border border-violet/20 mb-5">
+          <span class="text-base" style="display:inline-block;animation:floatAvatar 3s ease-in-out infinite">&#x1F30C;</span>
+          <span class="text-xs font-mono uppercase tracking-widest text-violet font-bold">Beyond The Observable Universe</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
+          My Mission: <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet via-sky to-cyan-300">Multi-Planetary</span><br class="hidden sm:block"> Humanity
+        </h2>
+        <p class="mt-5 text-slate-400 text-base sm:text-lg leading-relaxed font-light max-w-2xl mx-auto">
+          My dream is to make humanity a <strong class="text-white">multi-level species</strong> &#8212; not bound to one planet, one dimension, or one understanding of reality. I go deep into the most fundamental questions the universe has ever posed.
+        </p>
+      </div>
+
+      <!-- Wormhole Goal Banner -->
+      <div class="mb-10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-sky/20" style="background:linear-gradient(135deg,rgba(56,189,248,.07) 0%,rgba(129,140,248,.10) 50%,rgba(6,9,16,.9) 100%)">
+        <div class="absolute top-0 right-0 opacity-5 text-[9rem] sm:text-[12rem] select-none pointer-events-none leading-none" style="line-height:1">&#x1F573;</div>
+        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center gap-5">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky to-violet flex items-center justify-center text-2xl shrink-0">&#x1F573;</div>
+          <div>
+            <div class="text-[10px] font-mono uppercase tracking-widest text-sky font-bold mb-1">Ultimate Research Goal</div>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-white font-display mb-2">Discover &amp; Engineer Wormholes</h3>
+            <p class="text-sm text-slate-300 font-light leading-relaxed max-w-2xl">
+              A wormhole &#8212; the Einstein&#8211;Rosen bridge &#8212; is a theoretical tunnel through the spacetime fabric connecting two distant points in the universe, or even two separate universes. Predicted by general relativity, a <em>traversable</em> wormhole would require exotic matter with negative energy density to hold it open. I deeply study Kip Thorne&#8217;s traversable wormhole models, the energy conditions that permit or forbid them, and how quantum field theory near a wormhole throat might stabilise the structure. This physics is the foundation of true interstellar travel for humanity.
+            </p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-sky/10 border border-sky/20 text-sky">Einstein&#8211;Rosen Bridge</span>
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-violet/10 border border-violet/20 text-violet">Exotic Matter</span>
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-sky/10 border border-sky/20 text-sky">Traversable Wormholes</span>
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">Kip Thorne</span>
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-violet/10 border border-violet/20 text-violet">Negative Energy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bars -->
+      <div class="space-card rounded-2xl p-6 mb-8">
+        <div class="flex items-center space-x-2 mb-6">
+          <i class="fa-solid fa-brain text-violet text-sm"></i>
+          <h3 class="text-sm font-mono uppercase tracking-widest text-violet font-bold">Deep Exploration Progress</h3>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5" id="spaceProgressBars">
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Wormhole Theory &amp; Physics</span><span class="text-sky font-bold">85%</span></div>
+            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-sky to-cyan-300 rounded-full progress-animated progress-bar-animated" style="--target-width:85%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Spacetime &amp; Special/General Relativity</span><span class="text-violet font-bold">92%</span></div>
+            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-violet to-purple-400 rounded-full progress-animated progress-bar-animated" style="--target-width:92%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Gravity &amp; Curved Spacetime Geometry</span><span class="text-sky font-bold">88%</span></div>
+            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-sky to-cyan-300 rounded-full progress-animated progress-bar-animated" style="--target-width:88%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Multiverse &amp; Many-Worlds Theory</span><span class="text-cyan-400 font-bold">78%</span></div>
+            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-cyan-400 to-sky rounded-full progress-animated progress-bar-animated" style="--target-width:78%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Higher Dimensions &amp; String Theory</span><span class="text-violet font-bold">74%</span></div>
+            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-violet to-purple-400 rounded-full progress-animated progress-bar-animated" style="--target-width:74%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Quantum Gravity &amp; Planck Scale Physics</span><span class="text-sky font-bold">70%</span></div>
+            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-sky to-cyan-300 rounded-full progress-animated progress-bar-animated" style="--target-width:70%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Topic Deep-Dive Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+
+        <!-- Spacetime -->
+        <div class="space-card rounded-2xl p-5 sm:p-6">
+          <div class="flex items-start space-x-4 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-sky/10 flex items-center justify-center text-2xl shrink-0">&#x23F3;</div>
+            <div>
+              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #1</div>
+              <h4 class="text-base font-bold text-white font-display">How Spacetime Works</h4>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
+            Spacetime is the four-dimensional fabric of reality &#8212; three dimensions of space fused inseparably with time, as Einstein revealed in Special Relativity (1905) and General Relativity (1915). Mass and energy don&#8217;t simply exist <em>inside</em> spacetime &#8212; they <strong class="text-slate-200">warp and curve it</strong>. That curvature is gravity itself. Time is not absolute: a clock on Earth ticks measurably slower than one orbiting in weak gravity (gravitational time dilation, confirmed by GPS satellites every day). I study spacetime geodesics &#8212; the curved paths objects follow through warped spacetime &#8212; the light cone structure that defines causality, and the extreme spacetime topology near singularities where wormhole geometry becomes possible.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">4D Continuum</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Time Dilation</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Geodesics</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Lorentz Transform</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Light Cones</span>
+          </div>
+        </div>
+
+        <!-- Gravity -->
+        <div class="space-card rounded-2xl p-5 sm:p-6">
+          <div class="flex items-start space-x-4 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-violet/10 flex items-center justify-center text-2xl shrink-0">&#x1F300;</div>
+            <div>
+              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #2</div>
+              <h4 class="text-base font-bold text-white font-display">How Gravity Really Works</h4>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
+            Gravity is not a force being transmitted through space &#8212; it is the <strong class="text-slate-200">shape of spacetime itself</strong>. Massive objects create curvature, and other objects simply follow the straightest possible path (geodesic) through that curved geometry, which <em>looks</em> like attraction. I deeply explore gravitational waves &#8212; ripples in spacetime fabric detected by LIGO in 2015, confirming Einstein&#8217;s 100-year-old prediction &#8212; the Kerr metric describing rotating black holes and their frame-dragging effect, and the deepest open problem in physics: reconciling gravity with quantum mechanics. Theories like loop quantum gravity and string theory attempt this unification, and the answer likely holds the key to stable wormholes.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">General Relativity</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Gravitational Waves</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Kerr Metric</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Loop Quantum Gravity</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">LIGO</span>
+          </div>
+        </div>
+
+        <!-- Multiverse -->
+        <div class="space-card rounded-2xl p-5 sm:p-6">
+          <div class="flex items-start space-x-4 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/10 flex items-center justify-center text-2xl shrink-0">&#x1F52E;</div>
+            <div>
+              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #3</div>
+              <h4 class="text-base font-bold text-white font-display">Is the Multiverse Real?</h4>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
+            The multiverse is not science fiction &#8212; it emerges independently from several serious physics frameworks. <strong class="text-slate-200">Eternal Inflation</strong> theory predicts our Big Bang was one bubble nucleating in an endless inflationary sea, producing countless causally disconnected universes. Hugh Everett&#8217;s Many-Worlds Interpretation of quantum mechanics says every quantum event branches reality into parallel histories &#8212; every outcome happens, in a different branch. String theory&#8217;s landscape predicts ~10<sup>500</sup> possible universes each with different physical constants. I study CMB anomalies that could be signatures of bubble universe collisions, the fine-tuning problem (why are physical constants so perfectly set for life?), and whether wormholes could theoretically serve as bridges between branches of the multiverse.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Many-Worlds (Everett)</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Eternal Inflation</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">String Landscape</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">CMB Anomalies</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Fine-Tuning Problem</span>
+          </div>
+        </div>
+
+        <!-- Dimensions -->
+        <div class="space-card rounded-2xl p-5 sm:p-6">
+          <div class="flex items-start space-x-4 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-sky/10 flex items-center justify-center text-2xl shrink-0">&#x1F9CA;</div>
+            <div>
+              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #4</div>
+              <h4 class="text-base font-bold text-white font-display">How Dimensions Work</h4>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
+            We experience three spatial dimensions, but theoretical physics is certain more exist. In 1921, Kaluza proposed a 5th dimension to unify gravity and electromagnetism &#8212; it worked mathematically. Modern <strong class="text-slate-200">String Theory demands 10 dimensions</strong>; M-Theory requires 11. The extra dimensions are compactified at the Planck length (~10&#8315;&#179;&#8309; m), curled so tightly they are undetectable with current instruments. These hidden dimensions aren&#8217;t empty &#8212; they determine the physical constants of our universe. I study the Randall&#8211;Sundrum braneworld model, where our universe is a 4D membrane floating in a higher-dimensional bulk, and how extra dimensions could stabilise traversable wormhole geometry &#8212; directly connecting dimensional physics to my wormhole engineering goal.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Kaluza&#8211;Klein</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">String Theory (10D)</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">M-Theory (11D)</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Braneworld</span>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Compactification</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Thinkers -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div class="space-card rounded-2xl p-5 text-center">
+          <div class="text-2xl mb-2">&#x1F9E0;</div>
+          <div class="text-sm font-bold text-white font-display mb-1">Albert Einstein</div>
+          <div class="text-[9px] font-mono text-slate-500 leading-relaxed">General Relativity &middot; Spacetime Curvature &middot; Einstein&#8211;Rosen Bridge</div>
+        </div>
+        <div class="space-card rounded-2xl p-5 text-center">
+          <div class="text-2xl mb-2">&#x1F52D;</div>
+          <div class="text-sm font-bold text-white font-display mb-1">Kip Thorne</div>
+          <div class="text-[9px] font-mono text-slate-500 leading-relaxed">Traversable Wormholes &middot; Gravitational Waves &middot; Nobel Prize 2017</div>
+        </div>
+        <div class="space-card rounded-2xl p-5 text-center">
+          <div class="text-2xl mb-2">&#x1F4D0;</div>
+          <div class="text-sm font-bold text-white font-display mb-1">Stephen Hawking</div>
+          <div class="text-[9px] font-mono text-slate-500 leading-relaxed">Black Hole Radiation &middot; Imaginary Time &middot; Chronology Protection</div>
+        </div>
+      </div>
+
+      <!-- Manifesto -->
+      <div class="rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-violet/20 relative overflow-hidden" style="background:linear-gradient(135deg,rgba(129,140,248,.08) 0%,rgba(56,189,248,.05) 60%,transparent 100%)">
+        <div class="absolute -bottom-8 -right-8 text-[8rem] opacity-5 select-none pointer-events-none">&#x1F30C;</div>
+        <div class="relative z-10 flex flex-col sm:flex-row sm:items-start gap-5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet to-sky flex items-center justify-center text-midnight font-extrabold text-lg shrink-0 font-display">&#x221E;</div>
+          <div>
+            <h4 class="text-base sm:text-lg font-extrabold text-white font-display mb-2">A Multi-Planetary, Multi-Dimensional Future</h4>
+            <p class="text-sm text-slate-300 font-light leading-relaxed">
+              I don&#8217;t believe in chains &#8212; not chains of one gravity well, not chains of one planet, not chains of three dimensions. My vision is a humanity that masters the <strong class="text-white">fundamental geometry of the cosmos</strong>, builds traversable wormholes, and becomes a civilisation spanning not just planets but dimensions of existence. Every line of code I write today, every concept I explore tonight, is one step closer to that future. <span class="text-violet font-semibold">This is not ambition. This is a responsibility to our species.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- ══════════════════════════════════════════ -->
 
   <section id="contact" class="py-24 md:py-32 bg-midnight/40 border-t border-slate-900 relative fade-in-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -999,6 +1309,18 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-in-up').forEach(section => observer.observe(section));
+
+    // Space Science progress bar trigger
+    const spaceBars = document.querySelectorAll('#spaceProgressBars .progress-animated');
+    const spaceObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          spaceBars.forEach(bar => bar.classList.add('run'));
+        }
+      });
+    }, { threshold: 0.3 });
+    const spaceSection = document.getElementById('space');
+    if (spaceSection) spaceObserver.observe(spaceSection);
 
     // Portfolio Grid Sorter Filter Engine
     function filterProjects(category) {
