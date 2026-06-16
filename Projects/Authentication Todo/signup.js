@@ -1,5 +1,5 @@
-import { getAuth, createUserWithEmailAndPassword,auth,onAuthStateChanged } from "./firebaseConfig.js";
-import { requireAuth } from "./auth-guard.js";
+import { getAuth, createUserWithEmailAndPassword,auth,collection, addDoc,db } from "./firebaseConfig.js";
+import {redirectIfLoggedIn } from "./auth-guard.js";
 // getting elements
 const emailinp = document.getElementById("email-inp");
 const passwordinp = document.getElementById("password-inp");
@@ -11,11 +11,11 @@ const FillInputsError = document.getElementById("fill-inputs-error");
 const emailInpError = document.getElementById("email-error");
 const passwordInpError = document.getElementById("password-error");
 const emailInUseError = document.getElementById("email-in-use");
+let user = null;
 
-requireAuth();
-
+redirectIfLoggedIn();
 // registration function
-const registration = () => {
+const registration = async() => {
 
 FillInputsError.style.display = "none"; 
 emailInpError.style.display = "none"; 
@@ -49,17 +49,19 @@ Loading.style.display = "block";
   }
 
     // working on registration
-    const auth = getAuth();
     createUserWithEmailAndPassword(auth, emailinp.value, passwordinp.value)
         .then((userCredential) => {
             // Signed up 
-            const user = userCredential.user;
+            user = userCredential.user;
             console.log(user);
-          // restarting everything 
+            adduser().then(()=> {
+            // restarting everything 
             accountsuccess.style.display = "block";
             emailinp.value = "";
             passwordinp.value = "";
             window.location.replace("./todo.html")
+            })
+          
         })
         .catch((error) => {
             Loading.style.display = "none";
@@ -75,3 +77,28 @@ Loading.style.display = "block";
 }
 
 resgister.addEventListener("click", () => registration());
+
+
+//add user data to firestore after registration
+const adduser = async () => {
+  try {
+    const docRef = await addDoc(collection(db, "users"), {
+      email: user.email,
+      uid: user.uid,
+      createdAt: new Date(),
+    });
+
+    console.log("Document written with ID:", docRef.id);
+
+    const userData = {
+      docId: docRef.id,
+    };
+
+    localStorage.setItem("userData", JSON.stringify(userData));
+
+    return docRef;
+  } catch (error) {
+    console.log("Error =>", error);
+    throw error;
+  }
+};

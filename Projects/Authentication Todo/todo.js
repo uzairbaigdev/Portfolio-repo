@@ -1,6 +1,6 @@
   import { db } from "./firebaseConfig.js";
   import { collection, addDoc, getDocs, deleteDoc,
-  doc , query,  orderBy,setDoc, getAuth, onAuthStateChanged,auth,signOut} from "./firebaseConfig.js";
+  doc , query,  orderBy,setDoc, getAuth, onAuthStateChanged,auth,signOut,deleteUser} from "./firebaseConfig.js";
   import { requireGuest } from "./auth-guard.js";
 
   let Todos = [];
@@ -9,6 +9,10 @@
   const child2 = document.getElementById("child2");
   const updatebtn = document.getElementById("updatebtn");
   const logoutbtn = document.getElementById("logoutbtn");
+  const accountDeleteBtn = document.getElementById("delete-account-trigger");
+  const deleteBox = document.getElementById("delete-modal-overlay");
+  const cancelBtn = document.getElementById("modal-cancel-btn");
+  const deleteAccountbtn = document.getElementById("modal-delete-btn")
 
 requireGuest();
 
@@ -172,3 +176,33 @@ child2.appendChild(divelm);
 
 }
 )}
+
+//working on account deleting 
+accountDeleteBtn.onclick = () => {
+    deleteBox.style.display = "block";
+}  
+cancelBtn.onclick = () => {
+    deleteBox.style.display = "none";
+}
+deleteAccountbtn.onclick = async () => {
+  try {
+    await deleteUserData(); // delete firestore document first
+
+    const user = auth.currentUser;
+    await deleteUser(user); // then delete auth account
+
+    console.log("User and Firestore data deleted");
+    localStorage.removeItem("userData");
+  } catch (error) {
+    console.log(error);
+  }
+};
+//working on deleting user data from the database 
+const deleteUserData = async ()=> {
+  try {
+    const userID = JSON.parse(window.localStorage.getItem("userData"));
+  await deleteDoc(doc(db, "users", userID.docId));    
+  } catch (error) {
+    console.log(error);
+  }
+}

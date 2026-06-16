@@ -11,6 +11,14 @@ export function requireAuth() {
 });
 }
 
+export function redirectIfLoggedIn() {
+  auth.authStateReady().then(() => {
+    if (auth.currentUser) {
+      window.location.replace("./todo.html");
+    }
+  });
+}
+
 export function requireGuest() {
 onAuthStateChanged(auth, (user) => {
   if (!user) {

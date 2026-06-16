@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
 import {getFirestore,collection,addDoc,getDocs,deleteDoc,doc,query,orderBy,setDoc
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import {getAuth,createUserWithEmailAndPassword,onAuthStateChanged,signOut,
-signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+signInWithEmailAndPassword,deleteUser} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA9g2cmq0mQx517NBcQMLenbTwtsg9l8u0",
@@ -28,5 +28,5 @@ const db = getFirestore(app); // Get the Firestore instance
 
 export { db, collection, addDoc, getDocs, deleteDoc, doc ,
 query,  orderBy,setDoc,getAuth, createUserWithEmailAndPassword,auth,onAuthStateChanged,signOut,
-signInWithEmailAndPassword }; // Export the Firestore database instance
+signInWithEmailAndPassword,deleteUser }; // Export the Firestore database instance
 
