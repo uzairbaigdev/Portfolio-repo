@@ -41,8 +41,6 @@ const adduser = async (loggedInUser) => {
     });
 
     console.log("Document written with ID:", docRef.id);
-
-    // 🚀 FIX: Store BOTH uid and docId so todo.js can read them properly!
     const userData = {
       uid: loggedInUser.uid,
       docId: docRef.id
@@ -90,8 +88,7 @@ const userlogin = () => {
 
       const user = userCredential.user;
       console.log(user);
-      
-      // 🚀 FIX: Fetch the user's Firestore docId and store credentials in localStorage
+    
       const docId = await getUserDocId(user.uid);
       const userData = {
         uid: user.uid,
@@ -127,7 +124,6 @@ const googleSignIn = () => {
         await adduser(user);
         window.location.replace("./todo.html");
       } else {
-        // 🚀 FIX: Existing user signs in, grab their stored Firestore docId and set localStorage
         const docId = await getUserDocId(user.uid);
         const userData = {
           uid: user.uid,

@@ -6,89 +6,304 @@
 <title>Weather App</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --midnight: #0b1e3d;
+    --sky-deep: #16407a;
+    --sky-mid: #2f7fc1;
+    --sky-light: #7fc4ec;
+    --glass: rgba(255, 255, 255, 0.10);
+    --glass-border: rgba(255, 255, 255, 0.28);
+    --text-primary: #f5f9ff;
+    --text-muted: rgba(245, 249, 255, 0.62);
+    --amber: #ffc55c;
+    --error: #ff8a80;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    height: 100vh;
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: radial-gradient(circle at 80% -10%, #2f7fc1 0%, transparent 45%),
+                linear-gradient(160deg, var(--midnight) 0%, var(--sky-deep) 55%, var(--sky-mid) 100%);
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
 }
 
-/* Main Card */
+/* ---- Ambient sky decoration (pure CSS, no JS) ---- */
+.sky-decor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.sun-glow {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 197, 92, 0.55), rgba(255, 197, 92, 0) 70%);
+    filter: blur(2px);
+    animation: pulse 7s ease-in-out infinite;
+}
+
+.cloud {
+    position: absolute;
+    width: 180px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 100px;
+    filter: blur(0.5px);
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+    position: absolute;
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 90px;
+    height: 90px;
+    top: -45px;
+    left: 18px;
+}
+
+.cloud::after {
+    width: 70px;
+    height: 70px;
+    top: -32px;
+    left: 95px;
+}
+
+.cloud-1 { top: 12%; left: -10%; animation: drift 38s linear infinite; }
+.cloud-2 { top: 68%; left: -20%; width: 240px; height: 70px; opacity: 0.7; animation: drift 52s linear infinite; animation-delay: -10s; }
+.cloud-3 { top: 38%; left: -15%; width: 140px; height: 44px; opacity: 0.5; animation: drift 46s linear infinite; animation-delay: -22s; }
+
+@keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(140vw); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* ---- Card ---- */
 #main {
-    width: 350px;
-    max-width: 90%;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 30px 20px;
-    text-align: center;
-    color: white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 1;
+    width: 380px;
+    max-width: 100%;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 36px 28px 30px;
+    color: var(--text-primary);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Heading */
-#main h1 {
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.app-header .icon {
+    width: 38px;
+    height: 38px;
+    flex: none;
+}
+
+.app-header h1 {
+    font-family: 'Outfit', sans-serif;
     font-weight: 600;
-    margin-bottom: 20px;
+    font-size: 22px;
+    letter-spacing: 0.2px;
 }
 
-/* Input */
+.app-header .eyebrow {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+/* Search row */
+.search-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.input-wrap {
+    position: relative;
+    flex: 1;
+}
+
+.input-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    opacity: 0.55;
+    pointer-events: none;
+}
+
 #cityname {
     width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
+    padding: 13px 14px 13px 38px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
     outline: none;
-    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.10);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
+    transition: border-color 0.2s, background 0.2s;
 }
 
-/* Button */
+#cityname::placeholder {
+    color: var(--text-muted);
+}
+
+#cityname:focus {
+    border-color: var(--sky-light);
+    background: rgba(255, 255, 255, 0.16);
+}
+
 button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
+    flex: none;
+    padding: 0 20px;
+    border-radius: 12px;
     border: none;
-    background: #ffffff;
-    color: #333;
+    background: linear-gradient(135deg, var(--amber), #ff9f5c);
+    color: #1c1303;
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
+    font-size: 14px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 18px -6px rgba(255, 165, 60, 0.55);
 }
 
 button:hover {
-    background: #f1f1f1;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px -6px rgba(255, 165, 60, 0.7);
 }
 
-/* Result Box */
-#child1 {
-    margin-top: 20px;
-    font-size: 18px;
+button:active {
+    transform: translateY(0);
+}
+
+button:focus-visible,
+#cityname:focus-visible {
+    outline: 2px solid var(--sky-light);
+    outline-offset: 2px;
+}
+
+/* Status messages */
+#fill-error,
+#correct-city,
+#result-error {
+    display: none;
+    margin-top: 12px;
+    font-size: 12.5px;
     font-weight: 500;
+    color: var(--error);
+    background: rgba(255, 138, 128, 0.12);
+    border: 1px solid rgba(255, 138, 128, 0.25);
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+/* Result area */
+#child1 {
+    margin-top: 22px;
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    text-align: center;
+}
+
+#child1:empty {
+    display: none;
+}
+
+#child1 p {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    color: var(--text-primary);
+    padding: 18px 14px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+}
+
+#child1 p::before {
+    content: "🌡";
+    display: block;
+    font-size: 30px;
+    margin-bottom: 6px;
+}
+
+footer.credit {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
     #main {
-        padding: 25px 15px;
+        padding: 28px 20px 24px;
+        border-radius: 22px;
     }
 
-    #main h1 {
-        font-size: 22px;
+    .app-header h1 {
+        font-size: 19px;
     }
 
-    #child1 {
-        font-size: 16px;
+    .search-row {
+        flex-wrap: wrap;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px 0;
     }
 }
 </style>
@@ -97,32 +312,84 @@ button:hover {
 
 <body>
 
+<div class="sky-decor" aria-hidden="true">
+    <div class="sun-glow"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+</div>
+
 <div id="main">
-    <h1>🌤 Weather App</h1>
+    <div class="app-header">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="9" r="4.2" fill="#ffc55c"/>
+            <path d="M16.5 18.5H7a3.6 3.6 0 0 1-.6-7.15A4.6 4.6 0 0 1 15 10.4a3.9 3.9 0 0 1 1.5 8.1Z" fill="#f5f9ff" fill-opacity="0.9"/>
+        </svg>
+        <div>
+            <span class="eyebrow">Current conditions</span>
+            <h1>Weather</h1>
+        </div>
+    </div>
 
-    <input type="text" id="cityname" placeholder="Enter city name">
+    <div class="search-row">
+        <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/>
+                <path d="M20 20L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input type="text" id="cityname" placeholder="Enter city name">
+        </div>
+        <button onclick="show()">Check</button>
+    </div>
 
-    <button onclick="show()">Check Weather</button>
+    <p id="fill-error">Please enter a city name.</p>
+    <p id="correct-city">City name must be at least 2 characters.</p>
+    <p id="result-error">No matching city found. Try another search.</p>
 
     <div id="child1"></div>
+
+    <footer class="credit">Data via Open&#8209;Meteo</footer>
 </div>
 
 <script>
-    //weather API fetching
-let cityname = document.getElementById("cityname");
-let child1 = document.getElementById("child1");
+
+const cityname = document.getElementById("cityname");
+const child1 = document.getElementById("child1");
+const fillError = document.getElementById("fill-error");
+const cityError = document.getElementById("correct-city");
+const resultError = document.getElementById("result-error");
+
+//weather API fetching
 let show = async()=> {
-   if(cityname.value.length < 3) {
-      alert("enter correct city name");
+    child1.innerText = "";
+    if(cityname.value < 1) {
+      resultError.style.display = "none";
+      cityError.style.display = "none";  
+      fillError.style.display = "block";
+      return;
+    }
+   else if(cityname.value.length < 2) {
+      fillError.style.display = "none";
+      resultError.style.display = "none";
+      cityError.style.display = "block";
       return;
    }
   try{
+   fillError.style.display = "none";
+   cityError.style.display = "none";
+   resultError.style.display = "none";
    child1.innerHTML = "";
 //working on lan and lat API   
    child1.innerText = "Loading..."
    let Lat_and_lan = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${cityname.value}`)
    Lat_and_lan = await Lat_and_lan.json();
    console.log(Lat_and_lan)
+   const checkingObj = [Lat_and_lan.results];
+   if(checkingObj[0] == null) {
+    child1.innerText = "";
+    resultError.style.display = "block";
+    return;
+   }
    // console.log("latitude"+" "+Lat_and_lan.results[0].latitude)
    // console.log("longitude"+" "+Lat_and_lan.results[0].longitude)
 //working on weather API   
@@ -136,13 +403,6 @@ let show = async()=> {
   }
 }
 
-
-
-
-//lat and lan API
-// https://geocoding-api.open-meteo.com/v1/search?name=Karachi
-//weather API
-// https://api.open-meteo.com/v1/forecast?latitude=24.8607&longitude=67.0011&current_weather=true
 </script>
 
 </body>
