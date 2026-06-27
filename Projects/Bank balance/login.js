@@ -6,8 +6,8 @@ import {
   signInWithEmailAndPassword, 
   GoogleAuthProvider,     
   provider,               
-  signInWithRedirect,     // Changed from signInWithPopup
-  getRedirectResult,       // Added to handle the mobile redirect response
+  signInWithRedirect,     
+  getRedirectResult,       
   getAdditionalUserInfo,  
   db,                     
   collection,             
@@ -66,7 +66,6 @@ const handleRedirectResult = async () => {
   }
 };
 
-// Initialize the redirect listener immediately when page loads
 handleRedirectResult();
 
 // Helper function to add user credentials to database (same as signup)
