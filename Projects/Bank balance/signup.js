@@ -50,7 +50,7 @@ const handleRedirectResult = async () => {
       }
       
       loadingLayer.classList.remove("is-active");
-      window.location.replace("./Bank%20balance.html");
+      window.location.replace("./Bank%20balance.html"); // Fixed space format
     }
   } catch (error) {
     loadingLayer.classList.remove("is-active");
@@ -90,7 +90,7 @@ const signup = async () => {
     passwordinp.value = "";
     
     // Change the page
-    window.location.replace("./Bank balance.html");
+    window.location.replace("./Bank%20balance.html"); // Fixed space format
 
   } catch (error) {
     loadingLayer.classList.remove("is-active");    
