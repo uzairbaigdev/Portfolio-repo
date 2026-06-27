@@ -50,7 +50,7 @@ const handleRedirectResult = async () => {
       }
       
       loadingLayer.classList.remove("is-active");
-      window.location.replace("./Bank balance.html");
+      window.location.replace("./Bank%20balance.html");
     }
   } catch (error) {
     loadingLayer.classList.remove("is-active");
