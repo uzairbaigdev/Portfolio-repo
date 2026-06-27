@@ -4,13 +4,14 @@ import {
   doc, 
   getAuth, 
   signInWithEmailAndPassword, 
-  GoogleAuthProvider,     // Added
-  provider,               // Added (assumed exported from config)
-  signInWithPopup,        // Added
-  getAdditionalUserInfo,  // Added
-  db,                     // Added
-  collection,             // Added
-  addDoc                  // Added
+  GoogleAuthProvider,     
+  provider,               
+  signInWithRedirect,     // Changed from signInWithPopup
+  getRedirectResult,       // Added to handle the mobile redirect response
+  getAdditionalUserInfo,  
+  db,                     
+  collection,             
+  addDoc                  
 } from "./firebaseConfig.js";
 import { redirectIfAuthenticated } from "./authGuard.js";
 
@@ -21,7 +22,7 @@ redirectIfAuthenticated();
 const emailinp = document.getElementById("email");
 const passwordinp = document.getElementById("password");
 const loginbtn = document.getElementById("loginbtn");
-const googleBtn = document.getElementById("googlebtn"); // Added Google button element
+const googleBtn = document.getElementById("googlebtn"); 
 
 // getting errors
 const emptyError = document.getElementById("err-empty");
@@ -38,6 +39,35 @@ const resetErrors = () => {
   passwordError.style.display = "none";
   notFoundError.style.display = "none";
 };
+
+// Check if user is returning from Google Redirect Sign-In
+const handleRedirectResult = async () => {
+  try {
+    const result = await getRedirectResult(auth);
+    if (result) {
+      loadingLayer.classList.add("is-active"); 
+      const user = result.user;
+      
+      // Check if the user signed up via Google for the very first time here
+      const details = getAdditionalUserInfo(result);
+      if (details.isNewUser) {
+        await addUserCredential(user.uid, user.email);
+      } else {
+        // Returning user: Just store their UID so the dashboard can load their balance
+        window.localStorage.setItem("userUID", user.uid);
+      }
+      
+      loadingLayer.classList.remove("is-active");
+      window.location.replace("./Bank balance.html");
+    }
+  } catch (error) {
+    loadingLayer.classList.remove("is-active");
+    console.error("Redirect Result Error:", error.code, error.message);
+  }
+};
+
+// Initialize the redirect listener immediately when page loads
+handleRedirectResult();
 
 // Helper function to add user credentials to database (same as signup)
 const addUserCredential = async (userUID, useremail) => {
@@ -99,20 +129,8 @@ const GoogleLogin = async () => {
   resetErrors();
   loadingLayer.classList.add("is-active"); 
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    
-    // Check if the user signed up via Google for the very first time here
-    const details = getAdditionalUserInfo(result);
-    if (details.isNewUser) {
-      await addUserCredential(user.uid, user.email);
-    } else {
-      // Returning user: Just store their UID so the dashboard can load their balance
-      window.localStorage.setItem("userUID", user.uid);
-    }
-    
-    loadingLayer.classList.remove("is-active");
-    window.location.replace("./Bank balance.html");
+    // Triggers redirect instead of a popup window
+    await signInWithRedirect(auth, provider);
   } catch (error) {
     loadingLayer.classList.remove("is-active");
     console.error("Google Auth Error:", error.code, error.message);
@@ -120,4 +138,4 @@ const GoogleLogin = async () => {
 };
 
 loginbtn.addEventListener("click", () => userLogIn());
-googleBtn.addEventListener("click", () => GoogleLogin()); // Bound Google function to your button
+googleBtn.addEventListener("click", () => GoogleLogin());

@@ -16,18 +16,18 @@ export function redirectIfAuthenticated() {
 }
 
 // Rename this one to use on your private dashboard pages (like Bank balance.html)
-export function requireAuth() {
-  try {
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        // If NO user is found, kick them back to login
-        window.location.replace("./login.html");
-      }
-    });
-  } catch (error) {
-    console.error("Auth Guard Error:", error);
-  }
-}
+// export function requireAuth() {
+//   try {
+//     auth.onAuthStateChanged((user) => {
+//       if (!user) {
+//         // If NO user is found, kick them back to login
+//         window.location.replace("./login.html");
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Auth Guard Error:", error);
+//   }
+// }
 
 
 export function requireGuest() {

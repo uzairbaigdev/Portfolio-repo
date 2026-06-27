@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore,collection, addDoc, doc, getDocs,query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword ,onAuthStateChanged,signOut,signInWithEmailAndPassword,
-GoogleAuthProvider,signInWithPopup,getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+GoogleAuthProvider,signInWithPopup,getAdditionalUserInfo, signInWithRedirect, 
+getRedirectResult} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://support.google.com/firebase/answer/7015592
@@ -26,4 +27,4 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 export { db,collection, addDoc, doc, getDocs,auth,getAuth, createUserWithEmailAndPassword,onAuthStateChanged
 ,signOut,signInWithEmailAndPassword,GoogleAuthProvider,provider,signInWithPopup,getAdditionalUserInfo,query, where
-};
+,signInWithRedirect,getRedirectResult};

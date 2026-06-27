@@ -1,5 +1,15 @@
-import { auth, createUserWithEmailAndPassword,collection, addDoc,db,GoogleAuthProvider,provider,
-signInWithPopup,getAdditionalUserInfo} from "./firebaseConfig.js";
+import { 
+  auth, 
+  createUserWithEmailAndPassword, 
+  collection, 
+  addDoc, 
+  db, 
+  GoogleAuthProvider, 
+  provider,
+  signInWithRedirect, 
+  getRedirectResult,   
+  getAdditionalUserInfo 
+} from "./firebaseConfig.js";
 import { redirectIfAuthenticated } from "./authGuard.js";
 
 const emailinp = document.getElementById("email");
@@ -7,11 +17,13 @@ const passwordinp = document.getElementById("password");
 const submitbtn = document.getElementById("submitbtn");
 const loadingLayer = document.getElementById("loading-layer"); 
 const googleBtn = document.getElementById("google-btn");
-//errors element 
+
+// Errors elements 
 const emptyError = document.getElementById('err-empty');
 const invalidError = document.getElementById("err-invalid");
 const passwordError = document.getElementById("err-length");
 const emailError = document.getElementById("err-exists");
+
 redirectIfAuthenticated();
 
 const clearErrors = () => {
@@ -20,6 +32,34 @@ const clearErrors = () => {
   passwordError.style.display = "none";
   emailError.style.display = "none";
 };
+
+// Check if user is returning from Google Redirect Sign-In
+const handleRedirectResult = async () => {
+  try {
+    const result = await getRedirectResult(auth);
+    if (result) {
+      loadingLayer.classList.add("is-active"); 
+      const user = result.user;
+      
+      // Checking if the user is completely new
+      const details = getAdditionalUserInfo(result);
+      if (details.isNewUser) {
+        await addUserCredential(user.uid, user.email);
+      } else {
+        window.localStorage.setItem("userUID", user.uid);
+      }
+      
+      loadingLayer.classList.remove("is-active");
+      window.location.replace("./Bank balance.html");
+    }
+  } catch (error) {
+    loadingLayer.classList.remove("is-active");
+    console.error("Redirect Result Error:", error.code, error.message);
+  }
+};
+
+// Initialize the redirect listener immediately when page loads
+handleRedirectResult();
 
 const signup = async () => {
   clearErrors();
@@ -48,7 +88,8 @@ const signup = async () => {
     loadingLayer.classList.remove("is-active"); 
     emailinp.value = "";
     passwordinp.value = "";
-    //change the page
+    
+    // Change the page
     window.location.replace("./Bank balance.html");
 
   } catch (error) {
@@ -61,9 +102,10 @@ const signup = async () => {
     }
   }
 };
+
 submitbtn.addEventListener("click", () => signup());
 
-//working on adding user credentials to database
+// Working on adding user credentials to database
 const addUserCredential = async (userUID, useremail) => {
   try {
     const docRef = await addDoc(collection(db, "Users"), {
@@ -72,30 +114,22 @@ const addUserCredential = async (userUID, useremail) => {
       createdAt: new Date()
     });
     console.log("Document written with ID: ", docRef.id);
-//pushing user UID to localstorage
-window.localStorage.setItem("userUID",userUID);    
+    
+    // Pushing user UID to localstorage
+    window.localStorage.setItem("userUID", userUID);    
   } catch (error) {
     console.error("Error adding document: ", error);
     throw error; 
   }
 };
 
-//working with google 
+// Working with Google 
 const GoogleProvider = async () => {
   clearErrors();
   loadingLayer.classList.add("is-active"); 
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    // Checking if the user is completely new
-    const details = getAdditionalUserInfo(result);
-    if (details.isNewUser) {
-      await addUserCredential(user.uid, user.email);
-    }else {
-      window.localStorage.setItem("userUID", user.uid);
-    }
-    loadingLayer.classList.remove("is-active");
-    window.location.replace("./Bank balance.html");
+    // Triggers redirect instead of a popup window
+    await signInWithRedirect(auth, provider);
   } catch (error) {
     loadingLayer.classList.remove("is-active");
     console.error("Google Auth Error:", error.code, error.message);
