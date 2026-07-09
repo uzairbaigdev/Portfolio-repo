@@ -848,11 +848,31 @@
       // Live Runtime Layout and Theme Management Switching Logic
       const themeToggleBtn = document.getElementById('themeToggleBtn');
       const rootHtml = document.documentElement;
-      
+      const THEME_STORAGE_KEY = 'chatapp-theme';
+      const prefersDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+      function applyTheme(theme) {
+          rootHtml.setAttribute('data-theme', theme);
+      }
+
+      // On load: use a saved manual preference if one exists, otherwise follow the device setting
+      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+      applyTheme(savedTheme ? savedTheme : (prefersDarkQuery.matches ? 'dark' : 'light'));
+
+      // If the device theme changes while the app is open, follow it automatically —
+      // but only as long as the user hasn't manually chosen a theme via the toggle button
+      prefersDarkQuery.addEventListener('change', (e) => {
+          if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+              applyTheme(e.matches ? 'dark' : 'light');
+          }
+      });
+
       themeToggleBtn.addEventListener('click', () => {
           const currentTheme = rootHtml.getAttribute('data-theme');
           const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-          rootHtml.setAttribute('data-theme', nextTheme);
+          applyTheme(nextTheme);
+          // Manual toggle overrides device preference from now on
+          localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
       });
 
       window.addEventListener('DOMContentLoaded', () => {
