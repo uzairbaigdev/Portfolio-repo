@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | ChatApp Enterprise</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --primary-hover: #1e293b;
+            --brand: #6366f1;
+            --brand-hover: #4f46e5;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --bg-page: #fafafa;
+            --bg-card: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Split screen layout for high-end feel */
+        .auth-split {
+            display: flex;
+            width: 100%;
+        }
+
+        .auth-sidebar {
+            flex: 1;
+            background-color: var(--primary);
+            background-image: radial-gradient(circle at top left, #312e81 0%, #0f172a 70%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px;
+            color: #ffffff;
+        }
+
+        @media (max-width: 960px) {
+            .auth-sidebar { display: none; }
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-footer {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .auth-content {
+            width: 100%;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 64px;
+            background: var(--bg-card);
+        }
+
+        @media (max-width: 560px) {
+            .auth-content { padding: 32px 24px; }
+        }
+
+        .auth-header {
+            margin-bottom: 32px;
+        }
+
+        .auth-header h1 {
+            color: var(--text-main);
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 11px 16px;
+            background-color: #ffffff;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-google:hover {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .btn-google svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .divider::before { margin-right: 16px; }
+        .divider::after { margin-left: 16px; }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #ffffff;
+            color: var(--text-main);
+            transition: all 0.15s ease;
+        }
+
+        .form-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Error Box Container wrapper */
+        .error-container {
+            margin-bottom: 16px;
+        }
+
+        /* Error Message Styling (Hidden by default) */
+        .input-error-msg {
+            color: #b91c1c;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 4px;
+            display: none; /* Keep hidden until triggered by JS */
+        }
+
+        /* Border accent configuration class for invalid fields */
+        .form-input.input-invalid {
+            border-color: #fca5a5;
+            background-color: #fef2f2;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 11px;
+            background-color: var(--brand);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--brand-hover);
+        }
+
+        .btn-submit:disabled {
+            background-color: #a5b4fc;
+            cursor: not-allowed;
+        }
+
+        .auth-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--brand);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-split">
+        <div class="auth-sidebar">
+            <div class="brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>ChatApp Portal</span>
+            </div>
+            <div>
+                <h2 style="font-size: 32px; font-weight: 700; line-height: 1.2; margin-bottom: 16px;">Secure, real-time collaboration.</h2>
+                <p style="color: #94a3b8; font-size: 16px;">Connect with your team using enterprise-grade infrastructure built for speed and security.</p>
+            </div>
+            <div class="sidebar-footer">
+                &copy; 2026 ChatApp Inc. All rights reserved.
+            </div>
+        </div>
+
+        <div class="auth-content">
+            <div class="auth-header">
+                <h1>Get started</h1>
+                <p>Create your account to start messaging.</p>
+            </div>
+
+            <button class="btn-google" id="googleBtn">
+                <svg viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M12.24 10.285V13.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l2.427-2.334C17.955 2.192 15.34 1 12.24 1 6.033 1 1 6.033 1 12.24s5.033 11.24 11.24 11.24c6.478 0 10.793-4.537 10.793-10.986 0-.746-.08-1.32-.176-1.709H12.24z"/>
+                </svg>
+                Sign up with Google
+            </button>
+
+            <div class="divider">or use email</div>
+
+            <div id="signupForm">
+                <div class="form-group">
+                    <label class="form-label" for="name">Full name</label>
+                    <input type="text" class="form-input" id="name" placeholder="e.g. Alex Morgan" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Work email</label>
+                    <input type="email" class="form-input" id="email" placeholder="name@company.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" class="form-input" id="password" placeholder="Minimum 8 characters" required>
+                </div>
+
+                <div class="error-container">
+                    <p id="error-empty" class="input-error-msg">full fill all inputs</p>
+                    <p id="error-name-invalid" class="input-error-msg">name is not valid</p>
+                    <p id="error-email-invalid" class="input-error-msg">email is not valid</p>
+                    <p id="error-password-length" class="input-error-msg">password must contain atleast 8 characters</p>
+                    <p id="error-email-exists" class="input-error-msg">email is already exist</p>
+                </div>
+
+                <button id="signupbtn" type="button" class="btn-submit">Create account</button>
+            </div>
+
+            <div class="auth-footer">
+                Already have an account? <a href="./login.html">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./signup.js"></script>
+</body>
+</html>

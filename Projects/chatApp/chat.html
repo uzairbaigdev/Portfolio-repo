@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WhatsApp</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* --- WhatsApp Authentic Color Design Tokens --- */
+        :root[data-theme="light"] {
+            --bg-app: #e1e9eb;
+            --bg-stripe: #00a884;
+            --main-bg: #ffffff;
+            --panel-bg: #f0f2f5;
+            --search-bg: #f0f2f5;
+            --search-input-bg: #ffffff;
+            --border-line: #e9edef;
+            
+            --text-main: #111b21;
+            --text-muted: #667781;
+            --text-placeholder: #8696a0;
+            
+            --teal: #00a884;
+            --teal-deep: #008069;
+            --bubble-incoming: #ffffff;
+            --bubble-outgoing: #d9fdd3;
+            --chat-bg: #efeae2;
+            --chat-pattern-opacity: 0.4;
+            
+            --danger: #ea0038;
+            --shadow-bubble: 0 1px 0.5px rgba(11,20,26,.13);
+        }
+
+        :root[data-theme="dark"] {
+            --bg-app: #0c1317;
+            --bg-stripe: #00a884;
+            --main-bg: #111b21;
+            --panel-bg: #202c33;
+            --search-bg: #111b21;
+            --search-input-bg: #202c33;
+            --border-line: #222e35;
+            
+            --text-main: #e9edef;
+            --text-muted: #8696a0;
+            --text-placeholder: #667781;
+            
+            --teal: #00a884;
+            --teal-deep: #005c4b;
+            --bubble-incoming: #202c33;
+            --bubble-outgoing: #005c4b;
+            --chat-bg: #0b141a;
+            --chat-pattern-opacity: 0.06;
+            
+            --danger: #f15c5c;
+            --shadow-bubble: 0 1px 0.5px rgba(0,0,0,.13);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Segoe UI, Helvetica Neue, Helvetica, Lucida Grande, Arial, Ubuntu, Cantarell, Fira Sans, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Top decorative stripe found on desktop WhatsApp Web */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 127px;
+            background-color: var(--bg-stripe);
+            z-index: 1;
+        }
+
+        /* --- Global Structural Workspace Layout --- */
+        .main {
+            width: 100%;
+            max-width: 1600px;
+            height: calc(100vh - 38px);
+            height: calc(100dvh - 38px);
+            display: flex;
+            background-color: var(--main-bg);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        /* --- Left Sidebar System --- */
+        #contacts {
+            height: 100%;
+            width: 30%;
+            min-width: 340px;
+            max-width: 450px;
+            background-color: var(--main-bg);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-line);
+            position: relative;
+            z-index: 10;
+        }
+
+        .contacts-header {
+            height: 60px;
+            background-color: var(--panel-bg);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.15s ease;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(134, 150, 160, 0.15);
+            color: var(--text-main);
+        }
+
+        .avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--text-placeholder);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--panel-bg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .avatar-placeholder i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .search-container {
+            padding: 7px 12px;
+            background-color: var(--main-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-line);
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background-color: var(--search-bg);
+            border-radius: 8px;
+            padding: 0 12px;
+        }
+
+        .search-wrapper i {
+            color: var(--text-muted);
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .search-box {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 7px 0;
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .search-box::placeholder {
+            color: var(--text-placeholder);
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            padding: 4px 0 2px 0;
+        }
+
+        .chip {
+            background-color: var(--panel-bg);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .chip.active {
+            background-color: var(--teal-deep);
+            color: var(--main-bg);
+        }
+
+        /* --- Real WhatsApp Chat List Items --- */
+        .contacts-list {
+            flex: 1;
+            overflow-y: auto;
+            background-color: var(--main-bg);
+        }
+
+        .userelm {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0 16px;
+            height: 72px;
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .userelm::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: calc(100% - 72px);
+            height: 1px;
+            background-color: var(--border-line);
+        }
+
+        .userelm:hover {
+            background-color: var(--panel-bg);
+        }
+
+        .contact-info {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .userelm h5 {
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 22px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .contact-avatar {
+            width: 49px;
+            height: 49px;
+            border-radius: 50%;
+            background-color: #dfe5e7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Floating Contact Locator FAB */
+        .bottom-left-search-action {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--teal);
+            color: var(--main-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+            cursor: pointer;
+            z-index: 15;
+            border: none;
+        }
+
+        /* --- Sliding Panels Base Infrastructure --- */
+        .search-overlay-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--main-bg);
+            z-index: 25;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(-100%);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        #contacts.search-mode-active .search-overlay-view {
+            transform: translateX(0);
+        }
+
+        .search-overlay-header {
+            height: 60px;
+            background-color: var(--panel-bg);
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-overlay-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: var(--search-input-bg);
+            border-radius: 8px;
+            padding: 0 12px;
+        }
+
+        .search-overlay-input {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 6px 0;
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .search-results-container {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .search-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        /* --- Full View Overlays (Modal Layer) --- */
+        .full-page-search-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--main-bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.25s ease-out;
+        }
+
+        .full-page-search-view.active {
+            transform: translateY(0);
+        }
+
+        .fps-header {
+            height: 60px;
+            background-color: var(--panel-bg);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .fps-header-content {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .fps-search-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: var(--search-input-bg);
+            border-radius: 8px;
+            padding: 4px 16px;
+        }
+
+        .fps-input {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 8px 0;
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+            margin-left: 14px;
+        }
+
+        .fps-results-container {
+            flex: 1;
+            overflow-y: auto;
+            background-color: var(--panel-bg);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .fps-results-content {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--main-bg);
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            padding: 10px 0;
+            height: fit-content;
+            min-height: 150px;
+        }
+
+        /* --- Right Sidebar Workspace: Messaging Frame --- */
+        #chats {
+            height: 100%;
+            width: 70%;
+            background-color: var(--chat-bg);
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            opacity: var(--chat-pattern-opacity);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Re-enabling explicit flex layout logic independently of layout rules */
+        #chats { opacity: 1; } 
+
+        .chat-header {
+            height: 60px;
+            background-color: var(--panel-bg);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+            border-bottom: 1px solid var(--border-line);
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* --- WhatsApp Native Dropdown Engine --- */
+        .dropdown-menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            right: 4px;
+            top: 100%;
+            background-color: var(--main-bg);
+            min-width: 150px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            padding: 6px 0;
+            z-index: 100;
+            transition: opacity 0.1s ease;
+        }
+
+        .dropdown-content a {
+            color: var(--text-main);
+            padding: 10px 24px;
+            text-decoration: none;
+            display: block;
+            font-size: 14.5px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--panel-bg);
+        }
+
+        .dropdown-menu-container:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-back-btn {
+            display: none;
+        }
+
+        #logoutbtn:hover { color: var(--danger); }
+
+        #chatbox {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 7%;
+            display: flex;
+            flex-direction: column;
+            gap: 2px; /* Traditional stacked text spacing */
+        }
+
+        /* --- Real WhatsApp Message Bubbles Tail Design --- */
+        .message {
+            max-width: 65%;
+            padding: 6px 9px 8px 9px;
+            font-size: 14.2px;
+            line-height: 19px;
+            color: var(--text-main);
+            position: relative;
+            box-shadow: var(--shadow-bubble);
+            word-wrap: break-word;
+            margin-bottom: 2px;
+        }
+
+        .incoming {
+            background-color: var(--bubble-incoming);
+            align-self: flex-start;
+            border-radius: 0px 7.5px 7.5px 7.5px;
+        }
+        
+        .incoming.tail::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -8px;
+            width: 0;
+            height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 13px solid transparent;
+            border-right: 10px solid var(--bubble-incoming);
+        }
+
+        .outgoing {
+            background-color: var(--bubble-outgoing);
+            align-self: flex-end;
+            border-radius: 7.5px 0px 7.5px 7.5px;
+        }
+
+        .outgoing.tail::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -8px;
+            width: 0;
+            height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 13px solid transparent;
+            border-left: 10px solid var(--bubble-outgoing);
+        }
+
+        /* --- Input Action Command Bar --- */
+        .input-area {
+            padding: 5px 10px;
+            background-color: var(--panel-bg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 62px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: var(--search-input-bg);
+            border-radius: 8px;
+            padding: 0 12px;
+            height: 42px;
+        }
+
+        #chatinp {
+            width: 100%;
+            border: none;
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+            background: transparent;
+        }
+
+        #chatinp::placeholder {
+            color: var(--text-placeholder);
+        }
+
+        #sendbtn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(11, 20, 26, 0.2);
+        }
+
+        /* Loading Spinner Animation styles */
+        .btn-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: inline-block;
+        }
+        .btn-spinner-light {
+            border-top-color: #ffffff;
+            border-right-color: #ffffff;
+        }
+        .btn-spinner-dark {
+            border-top-color: var(--text-main);
+            border-right-color: var(--text-main);
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Adaptive Mobile Real-World Layout System --- */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            body::before { display: none; }
+
+            .main {
+                height: 100vh;
+                height: 100dvh;
+                border-radius: 0;
+            }
+
+            #contacts {
+                width: 100%;
+                min-width: 100%;
+                max-width: 100%;
+                border-right: none;
+                transition: transform 0.22s ease-in-out;
+            }
+
+            #chats {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 30;
+                transform: translateX(100%);
+                transition: transform 0.22s ease-in-out;
+            }
+
+            .main.view-chat #contacts {
+                transform: translateX(-100%);
+            }
+
+            .main.view-chat #chats {
+                transform: translateX(0);
+            }
+
+            .mobile-back-btn {
+                display: flex;
+            }
+            
+            #chatbox {
+                padding: 12px 14px;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+  <div class="main" id="appShell">
+    
+    <div id="contacts">
+        <div class="contacts-header">
+            <div class="profile-container">
+                <div class="avatar-placeholder">
+                    <i data-lucide="user"></i>
+                </div>
+                <h3 id="userProfile" style="display: block;">Profile Reference</h3>
+            </div>
+            
+            <div class="header-actions">
+                <button class="icon-btn" id="themeToggleBtn" title="Toggle Theme">
+                    <i data-lucide="sun-moon" style="width: 20px; height: 20px;"></i>
+                </button>
+                <div class="dropdown-menu-container">
+                    <button class="icon-btn" id="menuActionsBtn">
+                        <i data-lucide="more-vertical" style="width: 20px; height: 20px;"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#" id="requestOptionBtn">Request</a>
+                    </div>
+                </div>
+                <button class="icon-btn" id="logoutbtn">
+                    <i data-lucide="log-out" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <div class="search-wrapper" id="searchTriggerBox" style="cursor: pointer;">
+                <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                <input type="text" class="search-box" placeholder="Search or start new chat" readonly style="cursor: pointer;">
+            </div>
+            <div class="filter-chips">
+                <button class="chip active">All</button>
+            </div>
+        </div>
+        
+        <div class="contacts-list" id="contactsListContainer"></div>
+
+        <button class="bottom-left-search-action" id="searchAccountbtn" title="Search Accounts">
+            <i data-lucide="message-square-plus" style="width: 22px; height: 22px;"></i>
+        </button>
+
+        <div class="search-overlay-view" id="searchOverlayPage">
+            <div class="search-overlay-header">
+                <button class="icon-btn" id="closeSearchBtn">
+                    <i data-lucide="arrow-left" style="width: 20px; height: 20px; color: var(--teal);"></i>
+                </button>
+                <div class="search-overlay-wrapper">
+                    <input type="text" id="globalSearchInput" class="search-overlay-input" placeholder="Search names or messages..." autocomplete="off">
+                </div>
+            </div>
+            <div class="search-results-container" id="searchResultsContainer">
+                <div class="search-empty-state">
+                    <p>Search for global threads and records.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="chats">
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <button class="icon-btn mobile-back-btn" id="mobileBackBtn">
+                    <i data-lucide="arrow-left" style="width: 22px; height: 22px;"></i>
+                </button>
+                <div class="avatar-placeholder">
+                    <i data-lucide="user-round" style="width: 20px; height: 20px; color: var(--text-placeholder)"></i>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4 style="color: var(--text-main); font-size: 16px; font-weight: 400;" id="contactName">Select a Contact</h4>
+                    
+                    <button class="icon-btn" id="updatemsgbtn" style="display: none; width:30px; height:30px;">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </button>
+                    <button class="icon-btn" id="deletemsgbtn" style="display: none; width:30px; height:30px;">
+                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-header-right"></div>
+        </div>
+
+        <div id="chatbox"></div>
+        
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input id="chatinp" type="text" placeholder="Type a message">
+            </div>
+            <button id="sendbtn">
+                <i data-lucide="send-horizontal" style="width: 22px; height: 22px;"></i>
+            </button>
+        </div>
+    </div>
+  </div>
+
+  <div class="full-page-search-view" id="globalAccountSearchPage">
+      <div class="fps-header">
+          <div class="fps-header-content">
+              <button class="icon-btn" id="closeGlobalSearchBtn">
+                  <i data-lucide="arrow-left" style="width: 22px; height: 22px;"></i>
+              </button>
+              <div class="fps-search-wrapper">
+                  <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted);"></i>
+                  <input type="text" id="globalAccountSearchInput" class="fps-input" placeholder="Search users by email address..." autocomplete="off">
+              </div>
+          </div>
+      </div>
+      <div class="fps-results-container">
+          <div class="fps-results-content" id="globalAccountResultsContainer">
+              <div class="search-empty-state">
+                  <p>Type a profile email to look up global accounts.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <script type="module" src="./chat.js"></script>
+  <script>
+      // Live Runtime Layout and Theme Management Switching Logic
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const rootHtml = document.documentElement;
+      
+      themeToggleBtn.addEventListener('click', () => {
+          const currentTheme = rootHtml.getAttribute('data-theme');
+          const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+          rootHtml.setAttribute('data-theme', nextTheme);
+      });
+
+      window.addEventListener('DOMContentLoaded', () => {
+          if(window.lucide) window.lucide.createIcons();
+      });
+  </script>
+</body>
+</html>
