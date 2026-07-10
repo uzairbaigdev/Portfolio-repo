@@ -255,7 +255,7 @@ function renderMessages() {
         msgElm.onclick = function () {
             if (isOutgoing) {
                 selectedMessageID = msg.ID;
-                selectedMessageText = msg.text;
+                selectedMessageText = msg.text || "";
                 sendbtn.style.display = "none";
                 chatinp.value = selectedMessageText;
                 deletemsgbtn.style.display = "inline";
@@ -268,7 +268,16 @@ function renderMessages() {
             }
         };
 
-        msgElm.innerHTML = "<p>" + msg.text + "</p>";
+        // --- UPDATED: Generate content depending on whether it's an image or text ---
+        let innerHTMLContent = "";
+        if (msg.imageUrl) {
+            innerHTMLContent += `<img src="${msg.imageUrl}" style="max-width: 100%; max-height: 250px; display: block; border-radius: 6px; margin-bottom: 4px; object-fit: cover;" alt="Shared Image">`;
+        }
+        if (msg.text) {
+            innerHTMLContent += "<p>" + msg.text + "</p>";
+        }
+        
+        msgElm.innerHTML = innerHTMLContent;
         ChatBoxdiv.appendChild(msgElm);
     }
 
@@ -628,21 +637,25 @@ function injectGlobalRequestsOverlayDOM() {
         overlay.classList.remove("active");
     });
 
-    document.getElementById("requestOptionBtn").addEventListener("click", function (e) {
-        e.preventDefault();
-        overlay.classList.add("active");
+    // --- FIXED: Changed "requestOptionBtn" to "openRequestsOverlayBtn" ---
+    const openRequestsBtn = document.getElementById("openRequestsOverlayBtn");
+    if (openRequestsBtn) {
+        openRequestsBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            overlay.classList.add("active");
 
-        const dropdownContent = document.querySelector(".dropdown-content");
-        if (dropdownContent) {
-            dropdownContent.style.opacity = "0";
-            dropdownContent.style.visibility = "hidden";
+            const dropdownContent = document.querySelector(".dropdown-content");
+            if (dropdownContent) {
+                dropdownContent.style.opacity = "0";
+                dropdownContent.style.visibility = "hidden";
 
-            setTimeout(() => {
-                dropdownContent.style.opacity = "";
-                dropdownContent.style.visibility = "";
-            }, 200);
-        }
-    });
+                setTimeout(() => {
+                    dropdownContent.style.opacity = "";
+                    dropdownContent.style.visibility = "";
+                }, 200);
+            }
+        });
+    }
 }
 
 function renderRequestsPageUI() {
@@ -720,3 +733,97 @@ async function handleRequestAction(requestId, nextStatus, buttonElm) {
         buttonElm.innerHTML = originalContent;
     }
 }
+//working on image upload and sending it as a message
+async function sendImageMessage(base64Data) {
+    if (!activeChatUserId) {
+        alert("Please select a contact to message first!");
+        return;
+    }
+
+    const isFriend = Users.some((u) => u.uid === activeChatUserId);
+    if (!isFriend) {
+        alert("Security Lock: You can only send messages to accepted friends!");
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, "messages"), {
+            text: "",
+            imageUrl: base64Data, // Stores base64 binary directly inside message document
+            To: activeChatUserId,
+            from: userid,
+            timestamp: serverTimestamp(),
+        });
+    } catch (error) {
+        console.error("Error uploading image message: ", error);
+        alert("Failed to send image message.");
+    }
+}
+
+// ================= DOM Initialization Setup & Event Hooks =================
+document.addEventListener("DOMContentLoaded", function () {
+    const contactsContainer = document.getElementById("contacts");
+    const triggerBox = document.getElementById("searchTriggerBox");
+    const closeSearchBtn = document.getElementById("closeSearchBtn");
+    const currentSearchInput = document.getElementById("globalSearchInput");
+    const searchResultsContainer = document.getElementById("searchResultsContainer");
+
+    if (triggerBox && contactsContainer && closeSearchBtn && currentSearchInput) {
+        triggerBox.addEventListener("click", function () {
+            contactsContainer.classList.add("search-mode-active");
+            setTimeout(() => currentSearchInput.focus(), 50);
+        });
+
+        closeSearchBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            contactsContainer.classList.remove("search-mode-active");
+            currentSearchInput.value = "";
+
+            if (searchResultsContainer) {
+                searchResultsContainer.innerHTML =
+                    '<div class="search-empty-state">' +
+                        '<i data-lucide="search" style="width: 32px; height: 32px; color: var(--wa-text-muted);"></i>' +
+                        '<p>Search for global threads, channels, and records.</p>' +
+                    '</div>';
+                lucide.createIcons();
+            }
+
+            renderData();
+        });
+
+        currentSearchInput.addEventListener("input", filterContacts);
+    }
+
+    // --- Native Attachment Hardware Device Hooks ---
+    const attachBtn = document.getElementById('attachBtn');
+    const imageUploadInp = document.getElementById('imageUploadInp');
+
+    if (attachBtn && imageUploadInp) {
+        attachBtn.addEventListener('click', () => {
+            imageUploadInp.click();
+        });
+
+        imageUploadInp.addEventListener('change', (e) => {
+            const selectedFile = e.target.files[0];
+            if (selectedFile) {
+                if (!selectedFile.type.startsWith('image/')) {
+                    alert('Please select a valid image file.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    sendImageMessage(event.target.result);
+                };
+                reader.readAsDataURL(selectedFile);
+                
+                // Clear state so same image can be sent sequentially if desired
+                imageUploadInp.value = "";
+            }
+        });
+    }
+
+    injectGlobalRequestsOverlayDOM();
+    trackFriendsList();
+    trackIncomingRequests();
+});

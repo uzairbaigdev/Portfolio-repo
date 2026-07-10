@@ -463,14 +463,11 @@
             width: 70%;
             background-color: var(--chat-bg);
             background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            opacity: var(--chat-pattern-opacity);
+            opacity: 1;
             display: flex;
             flex-direction: column;
             position: relative;
         }
-
-        /* Re-enabling explicit flex layout logic independently of layout rules */
-        #chats { opacity: 1; } 
 
         .chat-header {
             height: 60px;
@@ -536,7 +533,9 @@
             display: none;
         }
 
-        #logoutbtn:hover { color: var(--danger); }
+        #logoutbtn:hover {
+            color: var(--danger);
+        }
 
         #chatbox {
             flex: 1;
@@ -544,7 +543,7 @@
             padding: 20px 7%;
             display: flex;
             flex-direction: column;
-            gap: 2px; /* Traditional stacked text spacing */
+            gap: 2px;
         }
 
         /* --- Real WhatsApp Message Bubbles Tail Design --- */
@@ -565,7 +564,7 @@
             align-self: flex-start;
             border-radius: 0px 7.5px 7.5px 7.5px;
         }
-        
+
         .incoming.tail::before {
             content: "";
             position: absolute;
@@ -598,11 +597,11 @@
 
         /* --- Input Action Command Bar --- */
         .input-area {
-            padding: 5px 10px;
+            padding: 5px 16px;
             background-color: var(--panel-bg);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             height: 62px;
         }
 
@@ -635,209 +634,134 @@
             color: var(--text-muted);
             cursor: pointer;
             width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: rgba(11, 20, 26, 0.2);
-        }
-
-        /* Loading Spinner Animation styles */
-        .btn-spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            display: inline-block;
-        }
-        .btn-spinner-light {
-            border-top-color: #ffffff;
-            border-right-color: #ffffff;
-        }
-        .btn-spinner-dark {
-            border-top-color: var(--text-main);
-            border-right-color: var(--text-main);
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* --- Adaptive Mobile Real-World Layout System --- */
-        @media (max-width: 768px) {
-            body { padding: 0; }
-            body::before { display: none; }
-
-            .main {
-                height: 100vh;
-                height: 100dvh;
-                border-radius: 0;
-            }
-
-            #contacts {
-                width: 100%;
-                min-width: 100%;
-                max-width: 100%;
-                border-right: none;
-                transition: transform 0.22s ease-in-out;
-            }
-
-            #chats {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 30;
-                transform: translateX(100%);
-                transition: transform 0.22s ease-in-out;
-            }
-
-            .main.view-chat #contacts {
-                transform: translateX(-100%);
-            }
-
-            .main.view-chat #chats {
-                transform: translateX(0);
-            }
-
-            .mobile-back-btn {
-                display: flex;
-            }
-            
-            #chatbox {
-                padding: 12px 14px;
-            }
-
-            .message {
-                max-width: 85%;
-            }
         }
     </style>
 </head>
 <body>
-    
+
   <div class="main" id="appShell">
-    
-    <div id="contacts">
-        <div class="contacts-header">
-            <div class="profile-container">
-                <div class="avatar-placeholder">
-                    <i data-lucide="user"></i>
-                </div>
-                <h3 id="userProfile" style="display: block;">Profile Reference</h3>
-            </div>
-            
-            <div class="header-actions">
-                <button class="icon-btn" id="themeToggleBtn" title="Toggle Theme">
-                    <i data-lucide="sun-moon" style="width: 20px; height: 20px;"></i>
-                </button>
-                <div class="dropdown-menu-container">
-                    <button class="icon-btn" id="menuActionsBtn">
-                        <i data-lucide="more-vertical" style="width: 20px; height: 20px;"></i>
-                    </button>
-                    <div class="dropdown-content">
-                        <a href="#" id="requestOptionBtn">Request</a>
-                    </div>
-                </div>
-                <button class="icon-btn" id="logoutbtn">
-                    <i data-lucide="log-out" style="width: 20px; height: 20px;"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div class="search-container">
-            <div class="search-wrapper" id="searchTriggerBox" style="cursor: pointer;">
-                <i data-lucide="search" style="width: 16px; height: 16px;"></i>
-                <input type="text" class="search-box" placeholder="Search or start new chat" readonly style="cursor: pointer;">
-            </div>
-            <div class="filter-chips">
-                <button class="chip active">All</button>
-            </div>
-        </div>
-        
-        <div class="contacts-list" id="contactsListContainer"></div>
+      
+      <div id="contacts">
+          <div class="contacts-header">
+              <div class="profile-container">
+                  <div class="avatar-placeholder">
+                      <i data-lucide="user-round"></i>
+                  </div>
+                  <h5 id="userProfile" style="color: var(--text-main); font-weight: 500;">Loading Profile...</h5>
+              </div>
+              <div class="header-actions">
+                  <button class="icon-btn" id="themeToggleBtn" title="Toggle Theme">
+                      <i data-lucide="sun-moon" style="width: 22px; height: 22px;"></i>
+                  </button>
+                  <div class="dropdown-menu-container">
+                      <button class="icon-btn" id="menuActionsBtn">
+                          <i data-lucide="more-vertical" style="width: 22px; height: 22px;"></i>
+                      </button>
+                      <div class="dropdown-content">
+                          <a href="#" id="openRequestsOverlayBtn">Connection Requests</a>
+                          <a href="#" id="logoutbtn">Log out</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
-        <button class="bottom-left-search-action" id="searchAccountbtn" title="Search Accounts">
-            <i data-lucide="message-square-plus" style="width: 22px; height: 22px;"></i>
-        </button>
+          <div class="search-container">
+              <div class="search-wrapper" id="searchTriggerBox" style="cursor: pointer;">
+                  <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+                  <input type="text" class="search-box" placeholder="Search or start new chat" disabled style="cursor: pointer;">
+              </div>
+              <div class="filter-chips">
+                  <button class="chip active">All</button>
+                  <button class="chip">Unread</button>
+                  <button class="chip">Groups</button>
+              </div>
+          </div>
 
-        <div class="search-overlay-view" id="searchOverlayPage">
-            <div class="search-overlay-header">
-                <button class="icon-btn" id="closeSearchBtn">
-                    <i data-lucide="arrow-left" style="width: 20px; height: 20px; color: var(--teal);"></i>
-                </button>
-                <div class="search-overlay-wrapper">
-                    <input type="text" id="globalSearchInput" class="search-overlay-input" placeholder="Search names or messages..." autocomplete="off">
-                </div>
-            </div>
-            <div class="search-results-container" id="searchResultsContainer">
-                <div class="search-empty-state">
-                    <p>Search for global threads and records.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div id="chats">
-        <div class="chat-header">
-            <div class="chat-header-left">
-                <button class="icon-btn mobile-back-btn" id="mobileBackBtn">
-                    <i data-lucide="arrow-left" style="width: 22px; height: 22px;"></i>
-                </button>
-                <div class="avatar-placeholder">
-                    <i data-lucide="user-round" style="width: 20px; height: 20px; color: var(--text-placeholder)"></i>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <h4 style="color: var(--text-main); font-size: 16px; font-weight: 400;" id="contactName">Select a Contact</h4>
-                    
-                    <button class="icon-btn" id="updatemsgbtn" style="display: none; width:30px; height:30px;">
-                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
-                    </button>
-                    <button class="icon-btn" id="deletemsgbtn" style="display: none; width:30px; height:30px;">
-                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                    </button>
-                </div>
-            </div>
+          <div class="contacts-list" id="contactsListContainer"></div>
 
-            <div class="chat-header-right"></div>
-        </div>
+          <button class="bottom-left-search-action" id="searchAccountbtn" title="Search Global Directory">
+              <i data-lucide="message-square-plus" style="width: 24px; height: 24px;"></i>
+          </button>
 
-        <div id="chatbox"></div>
-        
-        <div class="input-area">
-            <div class="input-wrapper">
-                <input id="chatinp" type="text" placeholder="Type a message">
-            </div>
-            <button id="sendbtn">
-                <i data-lucide="send-horizontal" style="width: 22px; height: 22px;"></i>
-            </button>
-        </div>
-    </div>
+          <div class="search-overlay-view" id="localSidebarSearchView">
+              <div class="search-overlay-header">
+                  <button class="icon-btn" id="closeSearchBtn">
+                      <i data-lucide="arrow-left" style="width: 22px; height: 22px; color: var(--teal);"></i>
+                  </button>
+                  <div class="search-overlay-wrapper">
+                      <input type="text" id="globalSearchInput" class="search-overlay-input" placeholder="Search friends list...">
+                  </div>
+              </div>
+              <div class="search-results-container" id="searchResultsContainer">
+                  <div class="search-empty-state">
+                      <i data-lucide="search" style="width: 32px; height: 32px; color: var(--wa-text-muted);"></i>
+                      <p>Search for global threads, channels, and records.</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="chats">
+          <div class="chat-header">
+              <div class="chat-header-left">
+                  <button class="icon-btn mobile-back-btn" id="mobileBackBtn">
+                      <i data-lucide="arrow-left" style="width: 22px; height: 22px;"></i>
+                  </button>
+                  <div class="avatar-placeholder" style="width: 40px; height: 40px;">
+                      <i data-lucide="user-round" style="width: 22px; height: 22px;"></i>
+                  </div>
+                  <div>
+                      <h4 id="contactName" style="color: var(--text-main); font-size: 16px; font-weight: 500;">Select a chat contact</h4>
+                      <p style="color: var(--text-muted); font-size: 12px;">click to establish connection stream</p>
+                  </div>
+              </div>
+              <div class="chat-header-right">
+                  <button class="icon-btn" id="updatemsgbtn" style="display: none; color: var(--teal);" title="Update Message">
+                      <i data-lucide="check-square" style="width: 22px; height: 22px;"></i>
+                  </button>
+                  <button class="icon-btn" id="deletemsgbtn" style="display: none; color: var(--danger);" title="Delete Message">
+                      <i data-lucide="trash-2" style="width: 22px; height: 22px;"></i>
+                  </button>
+                  <button class="icon-btn"><i data-lucide="search" style="width: 20px; height: 20px;"></i></button>
+              </div>
+          </div>
+
+          <div id="chatbox"></div>
+
+          <div class="input-area">
+              <input type="file" id="imageUploadInp" accept="image/*" style="display: none;">
+              
+              <button class="icon-btn" id="attachBtn" type="button" title="Attach Image">
+                  <i data-lucide="paperclip" style="width: 22px; height: 22px;"></i>
+              </button>
+
+              <div class="input-wrapper">
+                  <input id="chatinp" type="text" placeholder="Type a message">
+              </div>
+              <button id="sendbtn">
+                  <i data-lucide="send-horizontal" style="width: 22px; height: 22px;"></i>
+              </button>
+          </div>
+      </div>
   </div>
 
   <div class="full-page-search-view" id="globalAccountSearchPage">
       <div class="fps-header">
           <div class="fps-header-content">
               <button class="icon-btn" id="closeGlobalSearchBtn">
-                  <i data-lucide="arrow-left" style="width: 22px; height: 22px;"></i>
+                  <i data-lucide="arrow-left" style="width: 24px; height: 24px; color: var(--text-main);"></i>
               </button>
               <div class="fps-search-wrapper">
-                  <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted);"></i>
-                  <input type="text" id="globalAccountSearchInput" class="fps-input" placeholder="Search users by email address..." autocomplete="off">
+                  <i data-lucide="search" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                  <input type="text" id="globalAccountSearchInput" class="fps-input" placeholder="Search accounts directory by email...">
               </div>
           </div>
       </div>
       <div class="fps-results-container">
           <div class="fps-results-content" id="globalAccountResultsContainer">
               <div class="search-empty-state">
-                  <p>Type a profile email to look up global accounts.</p>
+                  <i data-lucide="users" style="width: 48px; height: 48px; color: var(--wa-text-muted); margin-bottom: 8px;"></i>
+                  <p>Type a profile email to look up global network accounts.</p>
               </div>
           </div>
       </div>
@@ -859,8 +783,7 @@
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
       applyTheme(savedTheme ? savedTheme : (prefersDarkQuery.matches ? 'dark' : 'light'));
 
-      // If the device theme changes while the app is open, follow it automatically —
-      // but only as long as the user hasn't manually chosen a theme via the toggle button
+      // If the device theme changes while the app is open, follow it automatically
       prefersDarkQuery.addEventListener('change', (e) => {
           if (!localStorage.getItem(THEME_STORAGE_KEY)) {
               applyTheme(e.matches ? 'dark' : 'light');
@@ -871,7 +794,6 @@
           const currentTheme = rootHtml.getAttribute('data-theme');
           const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
           applyTheme(nextTheme);
-          // Manual toggle overrides device preference from now on
           localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
       });
 
