@@ -15,6 +15,8 @@ let unsubscribeFriends = null;
 let unsubscribeRequests = null;
 let selectedMessageID = null;
 let selectedMessageText = null;
+let unreadCountsBySender = {};
+let unsubscribeUnreadListener = null;
 
 // ================= DOM Elements =================
 const contactName = document.getElementById("contactName");
@@ -47,14 +49,29 @@ function contactRowHTML(email) {
 function makeContactRow(user, onClickFunction) {
     let userelm = document.createElement("div");
     userelm.className = "userelm";
-    userelm.innerHTML = contactRowHTML(user.email);
+    
+    // Check if this specific user has unread messages for us
+    const hasUnread = unreadCountsBySender[user.uid] > 0;
+    
+    let html = '<div class="contact-avatar"><i data-lucide="user-round"></i></div>' +
+               '<div class="contact-info" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%;">' +
+                   '<h5>' + (user.email || "Unknown") + '</h5>';
+    
+    if (hasUnread) {
+        // Professional WhatsApp-style green dot
+        html += '<span class="unread-green-dot" style="width: 9px; height: 9px; background-color: #00a884; border-radius: 50%; display: inline-block; margin-right: 4px; flex-shrink: 0;"></span>';
+    }
+    
+    html += '</div>';
+    
+    userelm.innerHTML = html;
     userelm.addEventListener("click", onClickFunction);
     return userelm;
 }
 
 // Switches the UI into a chat with the given user and loads their messages.
 // closeOverlayId is optional - used when opening a chat from the global search page.
-function openChat(user, closeOverlayId) {
+async function openChat(user, closeOverlayId) {
     activeChatUserId = user.uid;
 
     if (user.name) {
@@ -70,7 +87,29 @@ function openChat(user, closeOverlayId) {
     }
 
     appShell.classList.add("view-chat");
+    
+    // Clear unread indicator instantly by marking them seen in DB
+    await markMessagesAsRead(user.uid);
+
     getMessages();
+}
+
+async function markMessagesAsRead(senderUid) {
+    if (!userid || !senderUid) return;
+    try {
+        const q = query(
+            collection(db, "messages"),
+            where("from", "==", senderUid),
+            where("To", "==", userid),
+            where("seen", "==", false)
+        );
+        const snapshot = await getDocs(q);
+        snapshot.forEach(async (docSnap) => {
+            await updateDoc(doc(db, "messages", docSnap.id), { seen: true });
+        });
+    } catch (error) {
+        console.error("Error marking messages as read: ", error);
+    }
 }
 
 // ================= Current User Profile =================
@@ -227,8 +266,17 @@ function getMessages() {
 
     unsubscribeMessages = onSnapshot(q, (querySnapshot) => {
         messages = [];
-        querySnapshot.forEach((doc) => {
-            messages.push({ ID: doc.id, ...doc.data() });
+        querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            messages.push({ ID: docSnap.id, ...data });
+
+            // --- FIX FOR LIVE CONVERSATIONS ---
+            // If an incoming message arrives while we actively have this chat open, mark it seen right away
+            if (data.from === activeChatUserId && data.To === userid && data.seen === false) {
+                updateDoc(doc(db, "messages", docSnap.id), { seen: true }).catch((err) => {
+                    console.error("Error setting live message to seen:", err);
+                });
+            }
         });
 
         messages.sort((a, b) => (a.timestamp?.toDate?.() || 0) - (b.timestamp?.toDate?.() || 0));
@@ -307,6 +355,7 @@ async function addMessage() {
             To: activeChatUserId,
             from: userid,
             timestamp: serverTimestamp(),
+            seen: false
         });
         chatinp.value = "";
     } catch (error) {
@@ -733,6 +782,7 @@ async function handleRequestAction(requestId, nextStatus, buttonElm) {
         buttonElm.innerHTML = originalContent;
     }
 }
+
 //working on image upload and sending it as a message
 async function sendImageMessage(base64Data) {
     if (!activeChatUserId) {
@@ -753,6 +803,7 @@ async function sendImageMessage(base64Data) {
             To: activeChatUserId,
             from: userid,
             timestamp: serverTimestamp(),
+            seen: false
         });
     } catch (error) {
         console.error("Error uploading image message: ", error);
@@ -827,3 +878,34 @@ document.addEventListener("DOMContentLoaded", function () {
     trackFriendsList();
     trackIncomingRequests();
 });
+
+//working on unread message count and notification badge
+function trackUnreadMessages() {
+    if (!userid) return;
+    if (unsubscribeUnreadListener) unsubscribeUnreadListener();
+
+    const q = query(
+        collection(db, "messages"),
+        where("To", "==", userid),
+        where("seen", "==", false)
+    );
+
+    unsubscribeUnreadListener = onSnapshot(q, (snapshot) => {
+        unreadCountsBySender = {};
+        snapshot.forEach((docSnap) => {
+            const msg = docSnap.data();
+            const sender = msg.from;
+            unreadCountsBySender[sender] = (unreadCountsBySender[sender] || 0) + 1;
+        });
+        // Rerender the contacts sidebar to show/hide the green dots
+        renderData();
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {    
+    injectGlobalRequestsOverlayDOM();
+    trackFriendsList();
+    trackIncomingRequests();
+    trackUnreadMessages(); 
+});  
+
