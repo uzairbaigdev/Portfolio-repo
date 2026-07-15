@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Portal - Dashboard</title>
+    <style>
+        :root {
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-600: #475569;
+            --slate-400: #94a3b8;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+            --brand-primary: #0284c7;
+            --brand-primary-dark: #0369a1;
+            --error-50: #fef2f2;
+            --error-200: #fecaca;
+            --error-600: #dc2626;
+            --error-700: #b91c1c;
+            --success-50: #f0fdf4;
+            --success-200: #bbf7d0;
+            --success-700: #15803d;
+            --success-800: #166534;
+            --warning-50: #fffbeb;
+            --warning-200: #fde68a;
+            --warning-800: #92400e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--slate-50);
+            color: var(--slate-900);
+            min-height: 100vh;
+        }
+
+        /* ===== Top bar ===== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 32px;
+            background-color: var(--slate-900);
+            background-image: radial-gradient(circle at 0% 0%, #1e293b 0%, #0f172a 100%);
+            color: white;
+        }
+
+        .topbar .logo {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--brand-primary);
+            border-radius: 50%;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .role-pill {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background-color: rgba(2, 132, 199, 0.18);
+            color: #7dd3fc;
+            border: 1px solid rgba(2, 132, 199, 0.35);
+        }
+
+        .user-name-label {
+            font-size: 14px;
+            color: var(--slate-200);
+        }
+
+        .btn-logout {
+            padding: 8px 14px;
+            background-color: transparent;
+            border: 1px solid var(--slate-600);
+            color: var(--slate-200);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: var(--slate-800);
+            border-color: var(--slate-400);
+        }
+
+        /* ===== Main layout ===== */
+        .main-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .page-header { margin-bottom: 28px; }
+
+        .page-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            color: var(--slate-600);
+            font-size: 14.5px;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 10px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .count-badge {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--slate-600);
+            background-color: var(--slate-100);
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+
+        .center-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px;
+            text-align: center;
+            color: var(--slate-600);
+        }
+
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid var(--slate-200);
+            border-top-color: var(--brand-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .empty-note {
+            font-size: 13.5px;
+            color: var(--slate-400);
+            padding: 18px 0;
+            text-align: center;
+        }
+
+        /* ===== Radio option cards ===== */
+        .option-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 18px;
+            border: 1.5px solid var(--slate-200);
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.15s ease;
+        }
+
+        .option-card:hover {
+            border-color: var(--slate-400);
+            background-color: var(--slate-50);
+        }
+
+        .option-card.selected {
+            border-color: var(--brand-primary);
+            background-color: rgba(2, 132, 199, 0.06);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+        }
+
+        .option-card input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--brand-primary);
+            flex-shrink: 0;
+        }
+
+        .option-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background-color: var(--slate-100);
+            color: var(--slate-700);
+            transition: all 0.15s ease;
+        }
+
+        .option-card.selected .option-icon {
+            background-color: var(--brand-primary);
+            color: white;
+        }
+
+        .option-text-title {
+            font-size: 14.5px;
+            font-weight: 600;
+        }
+
+        .option-text-sub {
+            font-size: 12.5px;
+            color: var(--slate-600);
+        }
+
+        /* ===== Step indicator ===== */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .step-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            background-color: var(--slate-100);
+            color: var(--slate-400);
+            border: 1.5px solid var(--slate-200);
+        }
+
+        .step-dot.done {
+            background-color: var(--brand-primary);
+            color: white;
+            border-color: var(--brand-primary);
+        }
+
+        .step-dot.current {
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+        }
+
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background-color: var(--slate-200);
+        }
+
+        .wizard-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-primary {
+            padding: 11px 20px;
+            background-color: var(--slate-900);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover { background-color: var(--slate-800); }
+
+        .btn-primary:disabled {
+            background-color: var(--slate-200);
+            color: var(--slate-400);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            padding: 11px 20px;
+            background-color: white;
+            color: var(--slate-700);
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover { background-color: var(--slate-50); border-color: #cbd5e1; }
+
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            background-color: white;
+            color: var(--slate-900);
+            font-size: 14.5px;
+            outline: none;
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        textarea::placeholder { color: #94a3b8; }
+
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--slate-800);
+        }
+
+        /* ===== Request / job card ===== */
+        .req-card {
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+        }
+
+        .req-card:last-child { margin-bottom: 0; }
+
+        .req-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .req-category {
+            font-size: 14.5px;
+            font-weight: 700;
+        }
+
+        .req-meta {
+            font-size: 12.5px;
+            color: var(--slate-600);
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .status-pending { background-color: var(--warning-50); color: var(--warning-800); border: 1px solid var(--warning-200); }
+        .status-accepted { background-color: rgba(2, 132, 199, 0.08); color: var(--brand-primary-dark); border: 1px solid rgba(2, 132, 199, 0.25); }
+        .status-done { background-color: var(--success-50); color: var(--success-800); border: 1px solid var(--success-200); }
+        .status-rejected { background-color: var(--error-50); color: var(--error-700); border: 1px solid var(--error-200); }
+        .status-argued { background-color: var(--error-50); color: var(--error-700); border: 1px solid var(--error-200); }
+        .status-argued-accepted { background-color: rgba(2, 132, 199, 0.08); color: var(--brand-primary-dark); border: 1px solid rgba(2, 132, 199, 0.25); }
+
+        .req-problem {
+            font-size: 13.5px;
+            color: var(--slate-700);
+            line-height: 1.5;
+            background-color: var(--slate-50);
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-top: 8px;
+        }
+
+        .req-solution {
+            font-size: 13.5px;
+            color: var(--success-800);
+            line-height: 1.5;
+            background-color: var(--success-50);
+            border: 1px solid var(--success-200);
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-top: 8px;
+        }
+
+        .req-solution-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--success-700);
+            margin-bottom: 4px;
+        }
+
+        .req-dispute {
+            font-size: 13.5px;
+            color: var(--error-700);
+            line-height: 1.5;
+            background-color: var(--error-50);
+            border: 1px solid var(--error-200);
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-top: 8px;
+        }
+
+        .req-dispute-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--error-700);
+            margin-bottom: 4px;
+        }
+
+        .req-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn-accept {
+            padding: 8px 16px;
+            background-color: var(--brand-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-accept:hover { background-color: var(--brand-primary-dark); }
+
+        .btn-reject {
+            padding: 8px 16px;
+            background-color: white;
+            color: var(--error-700);
+            border: 1px solid var(--error-200);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-reject:hover { background-color: var(--error-50); }
+
+        .btn-argue {
+            padding: 8px 16px;
+            background-color: white;
+            color: var(--warning-800);
+            border: 1px solid var(--warning-200);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-argue:hover { background-color: var(--warning-50); }
+
+        .btn-done {
+            padding: 8px 16px;
+            background-color: var(--slate-900);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-done:hover { background-color: var(--slate-800); }
+
+        .btn-cancel-inline {
+            padding: 8px 16px;
+            background-color: white;
+            color: var(--slate-600);
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .done-form {
+            display: none;
+            margin-top: 14px;
+            border-top: 1px dashed var(--slate-200);
+            padding-top: 14px;
+        }
+
+        .done-form.active { display: block; }
+
+        .done-form textarea { min-height: 90px; margin-bottom: 10px; }
+
+        .inline-error {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--error-700);
+            background-color: var(--error-50);
+            border: 1px solid var(--error-200);
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+        }
+
+        .inline-error.show-error { display: flex; }
+
+        .no-role-box { text-align: center; padding: 60px 24px; }
+
+        .no-role-box a.btn-primary {
+            display: inline-block;
+            text-decoration: none;
+            margin-top: 16px;
+        }
+
+        /* ===== Simple Professional Popup Modal CSS ===== */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .popup-box {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 440px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--slate-200);
+            overflow: hidden;
+        }
+        .popup-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--slate-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .popup-header h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+        .popup-close-btn {
+            background: none;
+            border: none;
+            color: var(--slate-400);
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+            padding: 4px;
+        }
+        .popup-close-btn:hover {
+            color: var(--slate-700);
+        }
+        .popup-body {
+            padding: 20px 24px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        .popup-footer {
+            padding: 16px 24px;
+            background-color: var(--slate-50);
+            border-top: 1px solid var(--slate-100);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* ===== Admin dashboard ===== */
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background-color: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 10px;
+            padding: 16px 18px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--slate-900);
+        }
+
+        .stat-label {
+            font-size: 12.5px;
+            color: var(--slate-600);
+            margin-top: 2px;
+        }
+
+        select.admin-select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            background-color: white;
+            color: var(--slate-900);
+            font-size: 14.5px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select.admin-select:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .admin-filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .admin-filter-bar input[type="text"] {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            background-color: white;
+            color: var(--slate-900);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .admin-filter-bar input[type="text"]:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .admin-filter-bar select {
+            padding: 10px 14px;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            background-color: white;
+            color: var(--slate-900);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            min-width: 170px;
+        }
+
+        .admin-filter-bar select:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        @media (max-width: 560px) {
+            .admin-filter-bar { flex-direction: column; }
+            .admin-filter-bar select { min-width: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <div class="logo">
+            <div class="logo-dot"></div>
+            <span>Maintain IQ</span>
+        </div>
+        <div class="topbar-right">
+            <span class="user-name-label" id="userNameLabel"></span>
+            <span class="role-pill" id="rolePill">user</span>
+            <button class="btn-logout" id="logoutBtn">Log out</button>
+        </div>
+    </div>
+
+    <div class="main-wrap">
+
+        <div class="view" id="loadingView">
+            <div class="center-state">
+                <div class="spinner"></div>
+                <p>Loading your dashboard&hellip;</p>
+            </div>
+        </div>
+
+        <div class="view" id="noRoleView">
+            <div class="card no-role-box">
+                <div class="page-header">
+                    <h1>One more step</h1>
+                    <p>You haven't selected an access tier yet.</p>
+                </div>
+                <a class="btn-primary" href="./continue.html">Select access tier</a>
+            </div>
+        </div>
+
+        <div class="view active" id="userView">
+            <div class="page-header">
+                <h1>Submit a request</h1>
+                <p>Tell us what's wrong and we'll route it to the right technician.</p>
+            </div>
+
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step-dot current" id="stepDot1">1</div>
+                    <div class="step-line"></div>
+                    <div class="step-dot" id="stepDot2">2</div>
+                    <div class="step-line"></div>
+                    <div class="step-dot" id="stepDot3">3</div>
+                </div>
+
+                <div class="inline-error" id="wizardError">
+                    <span id="wizardErrorText">Please make a selection to continue.</span>
+                </div>
+
+                <div class="wizard-step" id="wizardStep1">
+                    <div class="section-title">What's the problem with?</div>
+                    <div class="option-list" id="categoryList">
+                        <label class="option-card selected" data-category="AC">
+                            <input type="radio" name="category" value="AC" checked>
+                            <div class="option-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"></path></svg>
+                            </div>
+                            <div>
+                                <div class="option-text-title">AC</div>
+                                <div class="option-text-sub">Air conditioning and cooling issues</div>
+                            </div>
+                        </label>
+                        <label class="option-card" data-category="Projector">
+                            <input type="radio" name="category" value="Projector">
+                            <div class="option-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="14" height="10" rx="2"></rect><circle cx="18.5" cy="12" r="2.5"></circle></svg>
+                            </div>
+                            <div>
+                                <div class="option-text-title">Projector</div>
+                                <div class="option-text-sub">Display, lamp, or connection issues</div>
+                            </div>
+                        </label>
+                        <label class="option-card" data-category="Computer">
+                            <input type="radio" name="category" value="Computer">
+                            <div class="option-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg>
+                            </div>
+                            <div>
+                                <div class="option-text-title">Computer</div>
+                                <div class="option-text-sub">Hardware or software issues</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wizard-actions">
+                        <button class="btn-primary" id="toStep2Btn">Next</button>
+                    </div>
+                </div>
+
+                <div class="wizard-step" id="wizardStep2" style="display:none;">
+                    <div class="section-title">Select your technician</div>
+                    <div class="option-list" id="technicianList"></div>
+                    <div class="wizard-actions">
+                        <button class="btn-secondary" id="backToStep1Btn">Back</button>
+                        <button class="btn-primary" id="toStep3Btn">Next</button>
+                    </div>
+                </div>
+
+                <div class="wizard-step" id="wizardStep3" style="display:none;">
+                    <div class="section-title">Describe the problem</div>
+                    <label class="field-label" for="problemDescInput">What's happening?</label>
+                    <textarea id="problemDescInput" placeholder="e.g. The AC in Room 204 is blowing warm air and making a rattling noise."></textarea>
+                    <div class="wizard-actions">
+                        <button class="btn-secondary" id="backToStep2Btn">Back</button>
+                        <button class="btn-primary" id="sendRequestBtn">Send request</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span>My requests</span>
+                    <span class="count-badge" id="userHistoryCount">0</span>
+                </div>
+                <div id="userHistoryList"></div>
+                <div class="empty-note" id="userHistoryEmpty">You haven't submitted any requests yet.</div>
+            </div>
+        </div>
+
+        <div class="view" id="technicianView">
+            <div class="page-header">
+                <h1>Technician dashboard</h1>
+                <p>Review incoming requests and manage your active jobs.</p>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span>Incoming requests</span>
+                    <span class="count-badge" id="pendingCount">0</span>
+                </div>
+                <div id="pendingList"></div>
+                <div class="empty-note" id="pendingEmpty">No pending requests right now.</div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span>Disputed requests</span>
+                    <span class="count-badge" id="disputedCount">0</span>
+                </div>
+                <div id="disputedList"></div>
+                <div class="empty-note" id="disputedEmpty">No disputed requests right now.</div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span>Active jobs</span>
+                    <span class="count-badge" id="activeCount">0</span>
+                </div>
+                <div id="activeList"></div>
+                <div class="empty-note" id="activeEmpty">No active jobs right now.</div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span>History</span>
+                    <span class="count-badge" id="techHistoryCount">0</span>
+                </div>
+                <div id="techHistoryList"></div>
+                <div class="empty-note" id="techHistoryEmpty">Completed and rejected jobs will show up here.</div>
+            </div>
+        </div>
+
+        <div class="view" id="adminView">
+            <div class="page-header">
+                <h1>Admin control center</h1>
+                <p>Full visibility across every request, with the ability to submit, assign, and resolve on behalf of the organization.</p>
+            </div>
+
+            <div class="admin-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">Total requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statPending">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statDisputed">0</div>
+                    <div class="stat-label">Disputed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statActive">0</div>
+                    <div class="stat-label">Active jobs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statDone">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statRejected">0</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span>Submit a new request</span>
+                </div>
+                <div class="inline-error" id="adminWizardError">
+                    <span id="adminWizardErrorText">Please make a selection to continue.</span>
+                </div>
+                <label class="field-label" for="adminTechnicianSelect">Assign to technician</label>
+                <select class="admin-select" id="adminTechnicianSelect">
+                    <option value="">Loading technicians&hellip;</option>
+                </select>
+                <label class="field-label" for="adminProblemDescInput" style="margin-top:16px;">Describe the problem</label>
+                <textarea id="adminProblemDescInput" placeholder="e.g. The projector in Room 101 won't power on."></textarea>
+                <div class="wizard-actions">
+                    <button class="btn-primary" id="adminSendRequestBtn">Send request</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span>All requests</span>
+                    <span class="count-badge" id="adminCount">0</span>
+                </div>
+
+                <div class="admin-filter-bar">
+                    <input type="text" id="adminSearchInput" placeholder="Search by requester, technician, or email&hellip;">
+                    <select id="adminStatusFilter">
+                        <option value="all">All statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="argued">Disputed</option>
+                        <option value="accepted">Accepted / active</option>
+                        <option value="argued-accepted">Argued accepted</option>
+                        <option value="done">Done</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div id="adminList"></div>
+                <div class="empty-note" id="adminEmpty">No requests have been submitted yet.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="popup-overlay" id="techPopup">
+        <div class="popup-box">
+            <div class="popup-header">
+                <h3>Choose a Technician</h3>
+                <button class="popup-close-btn" id="closePopupBtn">&times;</button>
+            </div>
+            <div class="popup-body">
+                <div class="option-list" id="popupTechList">
+                    </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn-secondary" id="cancelPopupBtn">Cancel</button>
+                <button class="btn-primary" id="confirmPopupBtn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="doneWorkPopup">
+        <div class="popup-box">
+            <div class="popup-header">
+                <h3>Complete this job</h3>
+                <button class="popup-close-btn" id="closeDonePopupBtn">&times;</button>
+            </div>
+            <div class="popup-body">
+                <label class="field-label" for="doneDescInput">Describe the problem and how you solved it</label>
+                <textarea id="doneDescInput" placeholder="e.g. The AC compressor capacitor was faulty. Replaced the capacitor and tested the unit; it's now cooling normally."></textarea>
+                <div class="inline-error" id="doneDescError">
+                    <span>Please describe the problem and the solution before continuing.</span>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn-secondary" id="cancelDonePopupBtn">Cancel</button>
+                <button class="btn-primary" id="confirmDoneBtn">Mark project done</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="arguePopup">
+        <div class="popup-box">
+            <div class="popup-header">
+                <h3>Dispute this resolution</h3>
+                <button class="popup-close-btn" id="closeArguePopupBtn">&times;</button>
+            </div>
+            <div class="popup-body">
+                <label class="field-label" for="argueDescInput">Tell us what's still wrong</label>
+                <textarea id="argueDescInput" placeholder="e.g. The AC is still blowing warm air after the technician's visit."></textarea>
+                <div class="inline-error" id="argueDescError">
+                    <span>Please describe the issue before continuing.</span>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn-secondary" id="cancelArguePopupBtn">Cancel</button>
+                <button class="btn-primary" id="confirmArgueBtn">Send dispute</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to handle clicking option card wrappers
+            const handleCardSelection = (event) => {
+                const card = event.target.closest('.option-card');
+                if (!card) return;
+
+                // Find the parent list containing this option card
+                const list = card.closest('.option-list');
+                if (!list) return;
+
+                // Remove selected styling from all sibling cards in this list
+                list.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+
+                // Add selection styling to clicked card
+                card.classList.add('selected');
+
+                // Sync inner radio button status
+                const radio = card.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                    // Trigger native event so existing scripts in dashboard.js catch the selection change
+                    radio.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            };
+
+            // Event delegation to capture card clicks inside categories and technician lists
+            document.body.addEventListener('click', handleCardSelection);
+        });
+    </script>
+
+    <script type="module" src="./dashboard.js"></script>
+</body>
+</html>
