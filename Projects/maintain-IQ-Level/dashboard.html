@@ -621,97 +621,8 @@
             gap: 12px;
         }
 
-        /* ===== Admin dashboard ===== */
-        .admin-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background-color: white;
-            border: 1px solid var(--slate-200);
-            border-radius: 10px;
-            padding: 16px 18px;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--slate-900);
-        }
-
-        .stat-label {
-            font-size: 12.5px;
-            color: var(--slate-600);
-            margin-top: 2px;
-        }
-
-        select.admin-select {
-            width: 100%;
-            padding: 11px 14px;
-            border: 1px solid var(--slate-200);
-            border-radius: 6px;
-            background-color: white;
-            color: var(--slate-900);
-            font-size: 14.5px;
-            font-family: inherit;
-            outline: none;
-            cursor: pointer;
-        }
-
-        select.admin-select:focus {
-            border-color: var(--brand-primary);
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-        }
-
-        .admin-filter-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .admin-filter-bar input[type="text"] {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1px solid var(--slate-200);
-            border-radius: 6px;
-            background-color: white;
-            color: var(--slate-900);
-            font-size: 14px;
-            font-family: inherit;
-            outline: none;
-        }
-
-        .admin-filter-bar input[type="text"]:focus {
-            border-color: var(--brand-primary);
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-        }
-
-        .admin-filter-bar select {
-            padding: 10px 14px;
-            border: 1px solid var(--slate-200);
-            border-radius: 6px;
-            background-color: white;
-            color: var(--slate-900);
-            font-size: 14px;
-            font-family: inherit;
-            outline: none;
-            cursor: pointer;
-            min-width: 170px;
-        }
-
-        .admin-filter-bar select:focus {
-            border-color: var(--brand-primary);
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-        }
-
-        @media (max-width: 560px) {
-            .admin-filter-bar { flex-direction: column; }
-            .admin-filter-bar select { min-width: 0; }
-        }
+        /* Hidden until dashboard.js confirms a logged-in session with a chosen role */
+        body { visibility: hidden; }
     </style>
 </head>
 <body>
@@ -730,7 +641,7 @@
 
     <div class="main-wrap">
 
-        <div class="view" id="loadingView">
+        <div class="view active" id="loadingView">
             <div class="center-state">
                 <div class="spinner"></div>
                 <p>Loading your dashboard&hellip;</p>
@@ -747,7 +658,7 @@
             </div>
         </div>
 
-        <div class="view active" id="userView">
+        <div class="view" id="userView">
             <div class="page-header">
                 <h1>Submit a request</h1>
                 <p>Tell us what's wrong and we'll route it to the right technician.</p>
@@ -878,79 +789,6 @@
             </div>
         </div>
 
-        <div class="view" id="adminView">
-            <div class="page-header">
-                <h1>Admin control center</h1>
-                <p>Full visibility across every request, with the ability to submit, assign, and resolve on behalf of the organization.</p>
-            </div>
-
-            <div class="admin-stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="statTotal">0</div>
-                    <div class="stat-label">Total requests</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statPending">0</div>
-                    <div class="stat-label">Pending</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statDisputed">0</div>
-                    <div class="stat-label">Disputed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statActive">0</div>
-                    <div class="stat-label">Active jobs</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statDone">0</div>
-                    <div class="stat-label">Completed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statRejected">0</div>
-                    <div class="stat-label">Rejected</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="section-title">
-                    <span>Submit a new request</span>
-                </div>
-                <div class="inline-error" id="adminWizardError">
-                    <span id="adminWizardErrorText">Please make a selection to continue.</span>
-                </div>
-                <label class="field-label" for="adminTechnicianSelect">Assign to technician</label>
-                <select class="admin-select" id="adminTechnicianSelect">
-                    <option value="">Loading technicians&hellip;</option>
-                </select>
-                <label class="field-label" for="adminProblemDescInput" style="margin-top:16px;">Describe the problem</label>
-                <textarea id="adminProblemDescInput" placeholder="e.g. The projector in Room 101 won't power on."></textarea>
-                <div class="wizard-actions">
-                    <button class="btn-primary" id="adminSendRequestBtn">Send request</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="section-title">
-                    <span>All requests</span>
-                    <span class="count-badge" id="adminCount">0</span>
-                </div>
-
-                <div class="admin-filter-bar">
-                    <input type="text" id="adminSearchInput" placeholder="Search by requester, technician, or email&hellip;">
-                    <select id="adminStatusFilter">
-                        <option value="all">All statuses</option>
-                        <option value="pending">Pending</option>
-                        <option value="argued">Disputed</option>
-                        <option value="accepted">Accepted / active</option>
-                        <option value="argued-accepted">Argued accepted</option>
-                        <option value="done">Done</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                </div>
-
-                <div id="adminList"></div>
-                <div class="empty-note" id="adminEmpty">No requests have been submitted yet.</div>
-            </div>
         </div>
 
     </div>

@@ -1,6 +1,6 @@
 import {
   auth, db, collection, addDoc, updateDoc, doc, getDocs,
-  query, where,serverTimestamp, getAuth, signOut, onSnapshot
+  query, where,serverTimestamp, getAuth, signOut, onSnapshot,onAuthStateChanged
 } from "./firebaseConfig.js";
 
 let currentUID = null;
@@ -31,7 +31,6 @@ const loadingView = document.getElementById("loadingView");
 const noRoleView = document.getElementById("noRoleView");
 const userView = document.getElementById("userView");
 const technicianView = document.getElementById("technicianView");
-const adminView = document.getElementById("adminView");
 
 const pendingList = document.getElementById("pendingList");
 const pendingCount = document.getElementById("pendingCount");
@@ -48,26 +47,6 @@ const activeEmpty = document.getElementById("activeEmpty");
 const techHistoryList = document.getElementById("techHistoryList");
 const techHistoryCount = document.getElementById("techHistoryCount");
 const techHistoryEmpty = document.getElementById("techHistoryEmpty");
-
-// --- Admin dashboard elements ---
-const statTotal = document.getElementById("statTotal");
-const statPending = document.getElementById("statPending");
-const statDisputed = document.getElementById("statDisputed");
-const statActive = document.getElementById("statActive");
-const statDone = document.getElementById("statDone");
-const statRejected = document.getElementById("statRejected");
-
-const adminTechnicianSelect = document.getElementById("adminTechnicianSelect");
-const adminProblemDescInput = document.getElementById("adminProblemDescInput");
-const adminSendRequestBtn = document.getElementById("adminSendRequestBtn");
-const adminWizardError = document.getElementById("adminWizardError");
-const adminWizardErrorText = document.getElementById("adminWizardErrorText");
-
-const adminSearchInput = document.getElementById("adminSearchInput");
-const adminStatusFilter = document.getElementById("adminStatusFilter");
-const adminList = document.getElementById("adminList");
-const adminCount = document.getElementById("adminCount");
-const adminEmpty = document.getElementById("adminEmpty");
 
 const doneWorkPopup = document.getElementById("doneWorkPopup");
 const doneDescInput = document.getElementById("doneDescInput");
@@ -96,18 +75,10 @@ let currentUserEmail = null;
 // Keep a handle on the live database listeners so we never attach duplicates
 let unsubscribeUserRequests = null;
 let unsubscribeTechnicianRequests = null;
-let unsubscribeAdminRequests = null;
-
-// Holds the latest full set of requests the admin listener has received, so search/filter
-// changes can re-render instantly without re-querying Firestore.
-let adminRequestsCache = [];
-
-// Maps technician uid -> name for the admin's "submit a new request" form
-let adminTechniciansMap = {};
 
 // Shows the correct dashboard section for the user's role
 const showView = (view) => {
-    [loadingView, noRoleView, userView, technicianView, adminView].forEach((v) => v.classList.remove("active"));
+    [loadingView, noRoleView, userView, technicianView].forEach((v) => v.classList.remove("active"));
     view.classList.add("active");
 };
 
@@ -123,13 +94,20 @@ const getUserFromLocalStorage = () => {
     console.log("current user document ID =>",currentDocID);
     return currentUID; 
 };
-getUserFromLocalStorage();
 
 //working on getting user from Database 
 const getUserFromDatabase = async()=> {
     try {
 const q = query(collection(db, "Users"), where("uid", "==", currentUID));
 const querySnapshot = await getDocs(q);
+
+if (querySnapshot.empty) {
+    // No profile document exists for this session at all — nothing to run a
+    // dashboard on, so send them back through sign-up/role selection.
+    window.location.replace("continue.html");
+    return;
+}
+
 querySnapshot.forEach((doc) => {
   console.log(doc.id, " => ", doc.data());
   const data = doc.data();
@@ -142,24 +120,37 @@ querySnapshot.forEach((doc) => {
       rolePill.innerText = "technician";
       showView(technicianView);
       loadTechnicianRequests();
-  } else if (role === "admin") {
-      rolePill.innerText = "admin";
-      showView(adminView);
-      loadAdminRequests();
-      loadAdminTechnicianOptions();
   } else if (role) {
       rolePill.innerText = role;
       showView(userView);
       loadUserRequests();
   } else {
-      showView(noRoleView);
+      // No role chosen yet — force them through role selection instead of
+      // leaving them stranded on an empty dashboard.
+      window.location.replace("continue.html");
   }
 });
     } catch (error) {
         console.error(error);
     }
 }
-getUserFromDatabase();
+
+// ---------------- Auth guard ----------------
+// Blocks direct/unauthenticated access to this page. Nobody reaches the
+// dashboard without a real, currently-valid Firebase login session, and
+// getUserFromDatabase() above further redirects anyone without a chosen role.
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        // No logged-in session — bounce straight back to login, page stays hidden
+        window.location.replace("login.html");
+        return;
+    }
+
+    // Authenticated: reveal the page and continue the normal flow
+    document.body.style.visibility = "visible";
+    getUserFromLocalStorage();
+    getUserFromDatabase();
+});
 
 //working on log out 
 const logout = ()=> {
@@ -349,88 +340,6 @@ sendRequestBtn.addEventListener("click", async () => {
         sendRequestBtn.disabled = false;
     }
 });
-
-// Populates the admin's "assign to technician" dropdown and keeps a uid -> name lookup
-// so the admin's own request-submission form can attach a readable technician name.
-const loadAdminTechnicianOptions = async () => {
-    if (!adminTechnicianSelect) return;
-    try {
-        adminTechnicianSelect.innerHTML = '<option value="">Loading technicians...</option>';
-
-        const q = query(collection(db, "Users"), where("Role", "==", "technician"));
-        const querySnapshot = await getDocs(q);
-
-        adminTechniciansMap = {};
-
-        if (querySnapshot.empty) {
-            adminTechnicianSelect.innerHTML = '<option value="">No technicians found</option>';
-            return;
-        }
-
-        adminTechnicianSelect.innerHTML = '<option value="">Select a technician&hellip;</option>';
-        querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            adminTechniciansMap[data.uid] = data.name || "Unnamed technician";
-
-            const option = document.createElement("option");
-            option.value = data.uid;
-            option.textContent = data.name || "Unnamed technician";
-            adminTechnicianSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error("Error loading technicians for admin:", error);
-        adminTechnicianSelect.innerHTML = '<option value="">Error loading technicians</option>';
-    }
-};
-
-// Lets the admin raise a new request on the organization's behalf, just like a regular
-// user can, so the admin never has to log in as someone else to get a job started.
-if (adminSendRequestBtn) {
-    adminSendRequestBtn.addEventListener("click", async () => {
-        const problemText = (adminProblemDescInput.value || "").trim();
-        const selectedTechUid = adminTechnicianSelect.value;
-        const selectedTechName = adminTechniciansMap[selectedTechUid];
-
-        adminWizardError.classList.remove("show-error");
-
-        if (!selectedTechUid) {
-            adminWizardErrorText.innerText = "Please select a technician to proceed!";
-            adminWizardError.classList.add("show-error");
-            return;
-        }
-        if (!problemText) {
-            adminWizardErrorText.innerText = "Please describe the problem to proceed!";
-            adminWizardError.classList.add("show-error");
-            return;
-        }
-
-        try {
-            adminSendRequestBtn.disabled = true;
-            await addDoc(collection(db, "Requests"), {
-                userUid: currentUID,
-                userDocId: currentDocID,
-                userName: currentUserName || "Admin",
-                userEmail: currentUserEmail || "",
-                technicianUid: selectedTechUid,
-                technicianName: selectedTechName || "Technician",
-                problem: problemText,
-                status: "pending",
-                createdAt: serverTimestamp()
-            });
-
-            adminProblemDescInput.value = "";
-            adminTechnicianSelect.value = "";
-            // No manual reload needed: the live listener on "All requests" picks up
-            // this new request automatically.
-        } catch (error) {
-            console.error("Error sending admin request:", error);
-            adminWizardErrorText.innerText = "Something went wrong while sending the request. Please try again.";
-            adminWizardError.classList.add("show-error");
-        } finally {
-            adminSendRequestBtn.disabled = false;
-        }
-    });
-}
 
 // Turns a raw status value into the label shown on screen. The "argued" state reads
 // as "argued pending" on the user's side (they're waiting) and "argued" on the
@@ -797,133 +706,6 @@ const handleTechnicianAction = async (event) => {
 pendingList.addEventListener("click", handleTechnicianAction);
 disputedList.addEventListener("click", handleTechnicianAction);
 activeList.addEventListener("click", handleTechnicianAction);
-
-// Recomputes the summary counters shown at the top of the admin dashboard
-const updateAdminStats = (items) => {
-    let pendingItems = 0;
-    let disputedItems = 0;
-    let activeItems = 0;
-    let doneItems = 0;
-    let rejectedItems = 0;
-
-    items.forEach(({ data }) => {
-        const status = data.status || "pending";
-        if (status === "pending") pendingItems++;
-        else if (status === "argued") disputedItems++;
-        else if (status === "accepted" || status === "argued-accepted") activeItems++;
-        else if (status === "done") doneItems++;
-        else if (status === "rejected") rejectedItems++;
-    });
-
-    if (statTotal) statTotal.innerText = String(items.length);
-    if (statPending) statPending.innerText = String(pendingItems);
-    if (statDisputed) statDisputed.innerText = String(disputedItems);
-    if (statActive) statActive.innerText = String(activeItems);
-    if (statDone) statDone.innerText = String(doneItems);
-    if (statRejected) statRejected.innerText = String(rejectedItems);
-};
-
-// Re-renders the admin's "All requests" list from the cached data, applying whatever
-// search text and status filter are currently set. Runs on every snapshot update and
-// every time the admin types in the search box or changes the filter dropdown.
-const renderAdminList = () => {
-    if (!adminList) return;
-
-    const searchTerm = (adminSearchInput && adminSearchInput.value ? adminSearchInput.value : "").trim().toLowerCase();
-    const statusFilter = adminStatusFilter && adminStatusFilter.value ? adminStatusFilter.value : "all";
-
-    const filtered = adminRequestsCache.filter(({ data }) => {
-        const status = data.status || "pending";
-        if (statusFilter !== "all" && status !== statusFilter) return false;
-        if (!searchTerm) return true;
-
-        const haystack = [data.userName, data.userEmail, data.technicianName, data.problem]
-            .map((value) => String(value || "").toLowerCase())
-            .join(" ");
-        return haystack.includes(searchTerm);
-    });
-
-    adminList.innerHTML = "";
-    adminCount.innerText = String(adminRequestsCache.length);
-    adminEmpty.style.display = filtered.length === 0 ? "block" : "none";
-    adminEmpty.innerText = adminRequestsCache.length === 0
-        ? "No requests have been submitted yet."
-        : "No requests match your search or filter.";
-
-    filtered.forEach(({ id: reqId, data }) => {
-        const status = data.status || "pending";
-        const statusLabel = getStatusLabel(status, "technician");
-        const requesterName = escapeHtml(data.userName || "Unknown user");
-        const requesterEmail = escapeHtml(data.userEmail || "No email on file");
-        const technicianName = escapeHtml(data.technicianName || "Unassigned");
-        const problemText = escapeHtml(data.problem || "");
-        const requestDate = formatRequestDate(data.createdAt);
-
-        const canAccept = status === "pending";
-        const canReject = status === "pending";
-        const canAcceptDispute = status === "argued";
-        const canMarkDone = status === "accepted" || status === "argued-accepted";
-        const hasActions = canAccept || canReject || canAcceptDispute || canMarkDone;
-
-        const card = document.createElement("div");
-        card.className = "req-card";
-        card.innerHTML = `
-            <div class="req-card-top">
-                <div>
-                    <div class="req-category">${requesterName}</div>
-                    <div class="req-meta">${requesterEmail} &middot; Assigned to ${technicianName}</div>
-                </div>
-                <span class="status-badge status-${status}">${statusLabel}</span>
-            </div>
-            <div class="req-date">${requestDate}</div>
-            <div class="req-problem">${problemText}</div>
-            ${data.solution ? `
-            <div class="req-solution">
-                <div class="req-solution-label">Resolution</div>
-                ${escapeHtml(data.solution)}
-            </div>` : ""}
-            ${data.disputeReason ? `
-            <div class="req-dispute">
-                <div class="req-dispute-label">Dispute</div>
-                ${escapeHtml(data.disputeReason)}
-            </div>` : ""}
-            ${hasActions ? `
-            <div class="req-actions">
-                ${canAccept ? `<button class="btn-accept" data-id="${reqId}" data-action="accept">Accept request</button>` : ""}
-                ${canReject ? `<button class="btn-reject" data-id="${reqId}" data-action="reject">Reject</button>` : ""}
-                ${canAcceptDispute ? `<button class="btn-accept" data-id="${reqId}" data-action="accept-dispute">Accept dispute</button>` : ""}
-                ${canMarkDone ? `<button class="btn-done" data-id="${reqId}" data-action="done">Done</button>` : ""}
-            </div>` : ""}
-        `;
-        adminList.appendChild(card);
-    });
-};
-
-// Loads every request in the system (regardless of technician) so the admin has full,
-// organization-wide visibility. Uses a live listener so new requests, disputes, and
-// status changes appear instantly without a page refresh.
-const loadAdminRequests = () => {
-    if (unsubscribeAdminRequests) return; // already listening, avoid duplicate subscriptions
-
-    unsubscribeAdminRequests = onSnapshot(collection(db, "Requests"), (querySnapshot) => {
-        adminRequestsCache = sortDocsByNewest(querySnapshot).map((docSnap) => ({
-            id: docSnap.id,
-            data: docSnap.data()
-        }));
-
-        updateAdminStats(adminRequestsCache);
-        renderAdminList();
-    }, (error) => {
-        console.error("Error loading all requests for admin:", error);
-    });
-};
-
-// The admin's request cards use the exact same data-action buttons (accept / reject /
-// accept-dispute / done) as the technician's, so the same handler and "mark done" popup
-// can be reused here instead of duplicating that logic.
-if (adminList) adminList.addEventListener("click", handleTechnicianAction);
-if (adminSearchInput) adminSearchInput.addEventListener("input", renderAdminList);
-if (adminStatusFilter) adminStatusFilter.addEventListener("change", renderAdminList);
 
 // Helper to open/close the "mark done" popup
 const toggleDonePopup = (show) => {
