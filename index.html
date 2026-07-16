@@ -1,18 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <script>
-    // Apply saved theme before first paint to avoid flash
-    (function () {
-      try {
-        const saved = localStorage.getItem('portfolio-theme');
-        if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
-      } catch (e) {}
-    })();
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mirza Uzair Baig | Frontend Developer & Space Tech Explorer</title>
+  <title>Mirza Uzair Baig | Frontend Developer</title>
   <meta name="description" content="Mirza Uzair Baig — Self-taught Frontend Developer from Karachi building modern web apps with JavaScript, Firebase & stunning UI. Open for freelance & collaboration.">
   <meta name="author" content="Mirza Uzair Baig">
   <meta name="theme-color" content="#07080c">
@@ -21,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="./Images/uzairbaig.jpg.jpeg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mirza Uzair Baig | Frontend Developer & Space Tech Explorer">
+  <meta name="twitter:title" content="Mirza Uzair Baig | Frontend Developer">
   <meta name="twitter:description" content="Self-taught Frontend Developer from Karachi building modern web apps with JavaScript, Firebase & stunning UI.">
   <meta name="twitter:image" content="./Images/uzairbaig.jpg.jpeg">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23060910' width='100' height='100' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='52' font-family='sans-serif' font-weight='bold' fill='%2338bdf8'>U</text></svg>">
@@ -71,6 +62,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <style>
     html { overflow-x: hidden; max-width: 100%; }
@@ -276,21 +268,6 @@
       /* About section image */
       #about img { max-width: 200px; margin: 0 auto; }
 
-      /* Space section cards single column */
-      #space .grid { gap: 1rem; }
-      #space .sm\\:grid-cols-2 { grid-template-columns: 1fr !important; }
-      #space .sm\\:grid-cols-3 { grid-template-columns: 1fr !important; }
-
-      /* Progress bars label text wrap */
-      #spaceProgressBars .flex.justify-between span:first-child {
-        max-width: 70%;
-        white-space: normal;
-        line-height: 1.3;
-      }
-
-      /* Wormhole banner emoji don't overflow */
-      #space .absolute { max-width: 40vw !important; font-size: 6rem !important; }
-
       /* New advanced elements: mobile fit */
       #backToTop { bottom: 1rem !important; right: 1rem !important; width: 40px !important; height: 40px !important; }
       #commandPalette { padding-top: 4vh !important; }
@@ -303,65 +280,6 @@
       .ambient-blob { display: none; }
       #home .text-5xl, #home .text-6xl, #home .text-7xl { font-size: 2rem !important; line-height: 1.2 !important; }
       #portfolioFilters button { font-size: 0.55rem; padding: 0.3rem 0.5rem; }
-    }
-
-    /* ── Space Science Section ── */
-    .space-section { position: relative; overflow: hidden; }
-    .space-section::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79,141,253,0.06) 0%, transparent 70%),
-                  radial-gradient(ellipse 60% 40% at 80% 100%, rgba(155,140,250,0.07) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    @keyframes orbit {
-      0% { transform: rotate(0deg) translateX(38px) rotate(0deg); }
-      100% { transform: rotate(360deg) translateX(38px) rotate(-360deg); }
-    }
-    @keyframes orbitSlow {
-      0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
-      100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
-    }
-    .orbit-dot { animation: orbit 4s linear infinite; }
-    .orbit-dot-slow { animation: orbitSlow 7s linear infinite; }
-
-    @keyframes twinkle {
-      0%,100% { opacity: 0.2; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.4); }
-    }
-    .star { animation: twinkle var(--dur, 3s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
-
-    @keyframes rocket-fly {
-      0%,100% { transform: translateY(0) rotate(-45deg); }
-      50% { transform: translateY(-8px) rotate(-45deg); }
-    }
-    .rocket-float { animation: rocket-fly 3s ease-in-out infinite; }
-
-    .space-card {
-      background: rgba(13,17,23,0.7);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(79,141,253,0.12);
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .space-card:hover {
-      border-color: rgba(79,141,253,0.3);
-      box-shadow: 0 0 30px rgba(79,141,253,0.08);
-    }
-
-    .progress-bar-animated {
-      animation: growBar 1.4s ease forwards;
-      width: 0;
-    }
-    @keyframes growBar {
-      to { width: var(--target-width); }
-    }
-    .progress-animated { animation-play-state: paused; }
-    .progress-animated.run { animation-play-state: running; }
-
-    @media (max-width: 640px) {
-      .space-grid { grid-template-columns: 1fr !important; }
-      .space-topics { grid-template-columns: 1fr 1fr !important; }
     }
 
     /* ── Premium Enhancements ── */
@@ -522,6 +440,22 @@
       mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
     }
 
+    /* ── Hero 3D scene (Three.js) ── */
+    #hero3D {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      width: 100%; height: 100%; display: block;
+      opacity: 0; transition: opacity 1.4s ease;
+      -webkit-mask-image: radial-gradient(ellipse 68% 62% at 64% 46%, black 35%, transparent 76%);
+      mask-image: radial-gradient(ellipse 68% 62% at 64% 46%, black 35%, transparent 76%);
+    }
+    #hero3D.is-ready { opacity: 1; }
+    @media (max-width: 1023px) {
+      #hero3D {
+        -webkit-mask-image: radial-gradient(ellipse 90% 55% at 50% 30%, black 30%, transparent 78%);
+        mask-image: radial-gradient(ellipse 90% 55% at 50% 30%, black 30%, transparent 78%);
+      }
+    }
+
     .reveal-stagger > * {
       opacity: 0; transform: translateY(20px);
       transition: opacity 0.55s ease, transform 0.55s ease;
@@ -534,7 +468,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .gradient-text-animated, .animate-marquee, .float-avatar, .pulse-glow { animation: none !important; }
-      #particleCanvas { display: none; }
+      #particleCanvas, #hero3D { display: none; }
     }
 
     /* ── Command Palette ── */
@@ -606,139 +540,6 @@
     .value-card { transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
     .value-card:hover { transform: translateY(-5px); border-color: rgba(79,141,253,0.3); box-shadow: 0 12px 30px -10px rgba(79,141,253,0.15); }
 
-    /* ════════════════════════════════════════════════════
-       THEME TOGGLE — Light Mode (White + Blue)
-       Default html has no [data-theme] attr = Dark (Black + Gray)
-    ════════════════════════════════════════════════════ */
-    html, body { transition: background-color 0.4s ease, color 0.4s ease; }
-    * { transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease; }
-
-    #themeToggle {
-      width: 42px; height: 42px; border-radius: 12px;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-      color: #94a3b8; position: relative; overflow: hidden; flex-shrink: 0;
-    }
-    #themeToggle:hover { border-color: rgba(79,141,253,0.3); color: #4f8dfd; }
-    #themeToggle .icon-sun, #themeToggle .icon-moon {
-      position: absolute; transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
-    }
-    #themeToggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
-    #themeToggle .icon-sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
-    [data-theme="light"] #themeToggle .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
-    [data-theme="light"] #themeToggle .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
-
-    [data-theme="light"] body { background-color: #f4f5f7; color: #1f2429; }
-    [data-theme="light"] .bg-obsidian { background-color: #f4f5f7 !important; }
-    [data-theme="light"] .bg-midnight { background-color: #ffffff !important; }
-    [data-theme="light"] .bg-midnight\/30 { background-color: rgba(244,245,247,0.75) !important; }
-    [data-theme="light"] .text-obsidian { color: #181b20 !important; }
-    [data-theme="light"] .text-midnight { color: #181b20 !important; }
-
-    [data-theme="light"] .text-white { color: #181b20 !important; }
-    [data-theme="light"] .text-slate-100 { color: #21262d !important; }
-    [data-theme="light"] .text-slate-200 { color: #3a4047 !important; }
-    [data-theme="light"] .text-slate-300 { color: #525a63 !important; }
-    [data-theme="light"] .text-slate-400 { color: #6b7280 !important; }
-    [data-theme="light"] .text-slate-500 { color: #818892 !important; }
-    [data-theme="light"] .text-slate-600 { color: #9aa0a8 !important; }
-    [data-theme="light"] .placeholder\:text-slate-600::placeholder { color: #9aa0a8 !important; }
-
-    [data-theme="light"] .bg-slate-900 { background-color: #f0f1f3 !important; }
-    [data-theme="light"] .bg-slate-950 { background-color: #ffffff !important; }
-    [data-theme="light"] .bg-slate-800 { background-color: #e8e9ec !important; }
-    [data-theme="light"] .hover\:bg-slate-800:hover { background-color: #e1e3e6 !important; }
-    [data-theme="light"] .hover\:bg-slate-900:hover { background-color: #eceeef !important; }
-    [data-theme="light"] .hover\:text-white:hover { color: #181b20 !important; }
-
-    [data-theme="light"] .border-slate-800,
-    [data-theme="light"] .border-slate-900,
-    [data-theme="light"] .border-slate-700,
-    [data-theme="light"] .border-slate-600 { border-color: #e3e5e8 !important; }
-    [data-theme="light"] .hover\:border-slate-700:hover,
-    [data-theme="light"] .hover\:border-slate-600:hover { border-color: #c8ccd1 !important; }
-
-    [data-theme="light"] .glass-card {
-      background: #ffffff !important;
-      border-color: #e7e9ec !important;
-      box-shadow: 0 1px 2px rgba(20,20,25,0.04), 0 8px 24px -12px rgba(20,20,25,0.08) !important;
-      backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-    }
-    [data-theme="light"] .glow-hover:hover, [data-theme="light"] .glass-card:hover { box-shadow: 0 1px 2px rgba(20,20,25,0.04), 0 14px 32px -14px rgba(20,20,25,0.12) !important; }
-    [data-theme="light"] .glass-nav { background: rgba(255,255,255,0.92) !important; backdrop-filter: blur(10px) !important; }
-    [data-theme="light"] #mainHeader.bg-obsidian\/95 { background: rgba(255,255,255,0.96) !important; }
-    [data-theme="light"] #mobileMenu { background: rgba(255,255,255,0.98) !important; }
-
-    [data-theme="light"] .space-card { background: #ffffff !important; border-color: #e7e9ec !important; }
-    [data-theme="light"] .space-card:hover { border-color: rgba(2,132,199,0.3) !important; box-shadow: 0 14px 32px -14px rgba(2,132,199,0.12); }
-    [data-theme="light"] .hero-stat { background: #ffffff !important; border-color: #e7e9ec !important; box-shadow: 0 1px 2px rgba(20,20,25,0.04); }
-    [data-theme="light"] .hero-grid-bg { background-image: linear-gradient(rgba(31,36,41,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(31,36,41,0.04) 1px, transparent 1px) !important; }
-    [data-theme="light"] .ambient-blob { opacity: 0.07 !important; }
-    [data-theme="light"] body::before { opacity: 0.01 !important; }
-    [data-theme="light"] #particleCanvas { opacity: 0.12 !important; }
-
-    [data-theme="light"] ::-webkit-scrollbar-track { background: #eef0f2; }
-    [data-theme="light"] ::-webkit-scrollbar-thumb { background: #c8ccd1; }
-    [data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #9aa0a8; }
-    [data-theme="light"] ::selection { background: #0284c7; color: #ffffff; }
-
-    [data-theme="light"] .text-sky { color: #0369a1 !important; }
-    [data-theme="light"] .text-violet { color: #5b21b6 !important; }
-    [data-theme="light"] .nav-link-underline.active { color: #0369a1 !important; }
-    [data-theme="light"] .gradient-text-animated {
-      background-image: linear-gradient(135deg, #0c4a6e 0%, #0369a1 35%, #475569 70%, #0c4a6e 100%) !important;
-      -webkit-background-clip: text !important; background-clip: text !important;
-      color: transparent !important; -webkit-text-fill-color: transparent !important;
-    }
-
-    [data-theme="light"] .text-cyan-400 { color: #0e7490 !important; }
-    [data-theme="light"] .text-emerald-400 { color: #047857 !important; }
-    [data-theme="light"] .text-purple-400 { color: #7e22ce !important; }
-    [data-theme="light"] .text-pink-400 { color: #be185d !important; }
-    [data-theme="light"] .text-orange-400 { color: #c2410c !important; }
-    [data-theme="light"] .text-teal-400 { color: #0f766e !important; }
-    [data-theme="light"] .text-amber-400 { color: #b45309 !important; }
-    [data-theme="light"] .text-amber-300 { color: #b45309 !important; }
-    [data-theme="light"] .text-red-400 { color: #b91c1c !important; }
-
-    [data-theme="light"] #cmdInput { color: #181b20; }
-    [data-theme="light"] #commandPalette { background: rgba(31,36,41,0.35) !important; }
-    [data-theme="light"] kbd.kbd-key { background: #f0f1f3; border-color: #dde0e3; color: #6b7280; }
-    [data-theme="light"] #cursorGlow { border-color: rgba(3,105,161,0.55); mix-blend-mode: normal; }
-    [data-theme="light"] #cursorDot { background: #0369a1; }
-    [data-theme="light"] #preloader { background: #f4f5f7 !important; }
-    [data-theme="light"] .preloader-u { color: #0369a1; }
-    [data-theme="light"] #preloaderRingProgress { stroke: #0369a1; }
-    [data-theme="light"] .preloader-ring-svg circle:first-child { stroke: rgba(3,105,161,0.15); }
-    [data-theme="light"] .loader-text { color: #9aa0a8 !important; }
-
-    [data-theme="light"] #themeToggle { background: #f0f1f3; border-color: #e3e5e8; color: #6b7280; }
-    [data-theme="light"] #themeToggle:hover { border-color: rgba(3,105,161,0.35); color: #0369a1; }
-    [data-theme="light"] #dotNav .dot { background: rgba(107,114,128,0.3); }
-    [data-theme="light"] #dotNav .dot.active { background: #0369a1; box-shadow: 0 0 10px rgba(3,105,161,0.5); }
-    [data-theme="light"] #dotNav .dot .dot-label { background: #ffffff; border-color: #e3e5e8; color: #525a63; box-shadow: 0 4px 12px rgba(20,20,25,0.08); }
-    [data-theme="light"] #backToTop { background: #181b20 !important; box-shadow: 0 4px 16px rgba(20,20,25,0.18); }
-    [data-theme="light"] .value-card:hover { border-color: rgba(3,105,161,0.25) !important; box-shadow: 0 14px 32px -14px rgba(3,105,161,0.12) !important; }
-    [data-theme="light"] .gh-stat { background: #f7f8f9 !important; border-color: #e7e9ec !important; }
-
-    /* Opacity-modifier utility classes Tailwind generates separately from base classes */
-    [data-theme="light"] .bg-slate-900\/40 { background-color: rgba(240,241,243,0.75) !important; }
-    [data-theme="light"] .bg-slate-900\/80 { background-color: rgba(240,241,243,0.94) !important; }
-    [data-theme="light"] .bg-slate-900\/95 { background-color: rgba(255,255,255,0.97) !important; }
-    [data-theme="light"] .bg-obsidian\/95 { background-color: rgba(255,255,255,0.96) !important; }
-    [data-theme="light"] .bg-obsidian\/80 { background-color: rgba(255,255,255,0.88) !important; }
-    [data-theme="light"] .bg-midnight\/95 { background-color: rgba(255,255,255,0.97) !important; }
-    [data-theme="light"] .bg-midnight\/40 { background-color: rgba(240,241,243,0.8) !important; }
-    [data-theme="light"] .bg-midnight\/30 { background-color: rgba(240,241,243,0.75) !important; }
-    [data-theme="light"] .bg-white\/5 { background-color: rgba(31,36,41,0.04) !important; }
-    [data-theme="light"] .bg-white\/30,
-    [data-theme="light"] .bg-white\/40,
-    [data-theme="light"] .bg-white\/50 { background-color: rgba(3,105,161,0.35) !important; }
-    [data-theme="light"] .border-white\/5 { border-color: #e7e9ec !important; }
-    [data-theme="light"] .group:hover .group-hover\:bg-white { background-color: #181b20 !important; }
-    [data-theme="light"] .group:hover .group-hover\:text-obsidian,
-    [data-theme="light"] .group:hover .group-hover\:text-midnight { color: #ffffff !important; }
-    [data-theme="light"] .preloader-dark-only { display: none; }
   </style>
 </head>
 <body class="text-slate-100 antialiased selection:bg-sky selection:text-obsidian">
@@ -775,7 +576,6 @@
       <div class="dot" data-target="about"><span class="dot-label">About</span></div>
       <div class="dot" data-target="skills"><span class="dot-label">Skills</span></div>
       <div class="dot" data-target="projects"><span class="dot-label">Projects</span></div>
-      <div class="dot" data-target="space"><span class="dot-label">Space</span></div>
       <div class="dot" data-target="contact"><span class="dot-label">Contact</span></div>
     </div>
   </nav>
@@ -810,15 +610,10 @@
         <a href="#about"    data-nav="about"    class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">About</a>
         <a href="#skills"   data-nav="skills"   class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">Skills</a>
         <a href="#projects" data-nav="projects" class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">Projects</a>
-        <a href="#space"    data-nav="space"    class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline flex items-center space-x-1"><span>🚀</span><span>Space</span></a>
         <a href="#contact"  data-nav="contact"  class="text-sm font-medium text-slate-300 hover:text-sky transition-colors nav-link-underline">Contact</a>
       </nav>
 
       <div class="flex items-center space-x-3">
-        <button id="themeToggle" aria-label="Toggle light and dark theme">
-          <i class="fa-solid fa-moon icon-moon"></i>
-          <i class="fa-solid fa-sun icon-sun"></i>
-        </button>
         <button id="cmdTrigger" aria-label="Open quick navigation" class="hidden sm:flex items-center space-x-2 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-all text-xs font-mono">
           <i class="fa-solid fa-magnifying-glass text-[11px]"></i>
           <span class="text-slate-500">Quick Nav</span>
@@ -840,12 +635,8 @@
         <a href="#about"    class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-user text-slate-500 w-5 text-sm"></i><span>About Me</span></a>
         <a href="#skills"   class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-gears text-slate-500 w-5 text-sm"></i><span>Skills & Tools</span></a>
         <a href="#projects" class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-laptop-code text-slate-500 w-5 text-sm"></i><span>Projects</span></a>
-        <a href="#space"    class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><span class="w-5 text-center text-sm">🚀</span><span>Space Science</span></a>
         <a href="#contact"  class="text-base font-semibold text-slate-200 hover:text-sky flex items-center space-x-3 transition-colors mobile-link"><i class="fa-solid fa-paper-plane text-slate-500 w-5 text-sm"></i><span>Get In Touch</span></a>
         <div class="pt-4 border-t border-slate-800 flex flex-col space-y-4">
-          <button id="themeToggleMobile" class="w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-mono uppercase tracking-wider">
-            <i class="fa-solid fa-moon"></i><span>Switch to Light Mode</span>
-          </button>
           <div class="flex space-x-3 justify-center">
             <a href="https://github.com/uzairbaigdev" target="_blank" class="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 text-slate-400 hover:text-white"><i class="fa-brands fa-github"></i></a>
             <a href="https://www.linkedin.com/in/uzair-baig-1699563ab/" target="_blank" class="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 text-slate-400 hover:text-white"><i class="fa-brands fa-linkedin-in"></i></a>
@@ -866,6 +657,7 @@
       </div>
     </div>
     <div class="hero-grid-bg"></div>
+    <canvas id="hero3D" aria-hidden="true"></canvas>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
@@ -894,7 +686,7 @@
           </div>
 
           <p class="text-slate-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
-            Self-taught developer from <span class="text-white font-semibold">Karachi</span> building modern, responsive web apps with <span class="text-white font-semibold">JavaScript & Firebase</span> — with a deep, ongoing interest in space-tech systems.
+            Self-taught developer from <span class="text-white font-semibold">Karachi</span> building modern, responsive web apps with <span class="text-white font-semibold">JavaScript & Firebase</span> — currently expanding into full-stack development.
           </p>
 
           <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4 reveal-stagger">
@@ -950,11 +742,11 @@
               <div class="flex-grow flex flex-col justify-center space-y-3 font-mono text-[11px] sm:text-sm text-slate-300 py-4 sm:py-6 overflow-hidden">
                 <p class="text-slate-500"><span class="text-violet">const</span> developer = {</p>
                 <p class="pl-3 sm:pl-4"><span class="text-sky">name</span>: <span class="text-amber-300 break-all">"Mirza Uzair Baig"</span>,</p>
-                <p class="pl-3 sm:pl-4"><span class="text-sky">passion</span>: <span class="text-amber-300 break-all">"Space_Science_Tech"</span>,</p>
+                <p class="pl-3 sm:pl-4"><span class="text-sky">passion</span>: <span class="text-amber-300 break-all">"Building_Real_Time_Apps"</span>,</p>
                 <p class="pl-3 sm:pl-4"><span class="text-sky">skills</span>: [<br>
                   <span class="pl-3 sm:pl-4 text-purple-400">"JavaScript"</span>, <br>
                   <span class="pl-3 sm:pl-4 text-purple-400">"Firebase"</span>, <br>
-                  <span class="pl-3 sm:pl-4 text-purple-400 break-all">"Astrodynamics"</span><br>
+                  <span class="pl-3 sm:pl-4 text-purple-400 break-all">"Full-Stack (Learning)"</span><br>
                 ],</p>
                 <p class="pl-3 sm:pl-4"><span class="text-sky">origin</span>: <span class="text-amber-300">"Karachi, PK"</span>,</p>
                 <p class="pl-3 sm:pl-4"><span class="text-sky">status</span>: <span class="text-emerald-400 break-all">"Continuously_Exploring"</span></p>
@@ -962,17 +754,17 @@
               </div>
               <div class="border-t border-slate-800 pt-4 flex items-center justify-between text-slate-500 text-[10px] font-mono">
                 <span>UTF-8</span>
-                <span class="text-sky">🚀 Space Nerd</span>
+                <span class="text-sky">⚡ Code Enthusiast</span>
               </div>
             </div>
           </div>
           <div class="absolute bottom-0 left-2 sm:-left-10 glass-card rounded-2xl p-3 sm:p-3.5 flex items-center space-x-2 sm:space-x-3 shadow-xl border border-slate-800 z-10 max-w-[calc(100%-1rem)]" style="animation: floatAvatar 6s ease-in-out infinite;">
             <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-sky/10 flex items-center justify-center text-sky text-base sm:text-lg shrink-0">
-              <i class="fa-solid fa-user-astronaut"></i>
+              <i class="fa-solid fa-code"></i>
             </div>
             <div class="flex flex-col min-w-0">
-              <span class="text-[9px] sm:text-[10px] text-slate-400 font-mono uppercase tracking-wider">Deep Learning</span>
-              <span class="text-xs sm:text-sm font-bold text-white font-display truncate">Space & Tech Genius</span>
+              <span class="text-[9px] sm:text-[10px] text-slate-400 font-mono uppercase tracking-wider">Currently Learning</span>
+              <span class="text-xs sm:text-sm font-bold text-white font-display truncate">Full-Stack Development</span>
             </div>
           </div>
         </div>
@@ -983,16 +775,16 @@
 
   <div class="w-full bg-slate-900/40 border-y border-slate-900 py-5 overflow-hidden marquee-wrap" style="max-width:100vw">
     <div class="animate-marquee whitespace-nowrap text-slate-300 font-display text-lg font-bold uppercase tracking-wider flex items-center space-x-10">
-      <span>⚡ SPACE SCIENCE TECHNOLOGY</span> <span class="text-sky">&bull;</span>
+      <span>⚡ FULL-STACK DEVELOPMENT</span> <span class="text-sky">&bull;</span>
       <span>⚡ FIREBASE & FIRESTORE</span> <span class="text-sky">&bull;</span>
       <span>⚡ RESPONSIVE UI DESIGN</span> <span class="text-sky">&bull;</span>
-      <span>⚡ DEEP SPACE EXPLORATION</span> <span class="text-sky">&bull;</span>
+      <span>⚡ REAL-TIME WEB APPS</span> <span class="text-sky">&bull;</span>
       <span>⚡ JAVASCRIPT DEVELOPMENT</span> <span class="text-sky">&bull;</span>
       <span>⚡ GIT & GITHUB</span> <span class="text-sky">&bull;</span>
-      <span>⚡ SPACE SCIENCE TECHNOLOGY</span> <span class="text-sky">&bull;</span>
+      <span>⚡ FULL-STACK DEVELOPMENT</span> <span class="text-sky">&bull;</span>
       <span>⚡ FIREBASE & FIRESTORE</span> <span class="text-sky">&bull;</span>
       <span>⚡ RESPONSIVE UI DESIGN</span> <span class="text-sky">&bull;</span>
-      <span>⚡ DEEP SPACE EXPLORATION</span> <span class="text-sky">&bull;</span>
+      <span>⚡ REAL-TIME WEB APPS</span> <span class="text-sky">&bull;</span>
       <span>⚡ JAVASCRIPT DEVELOPMENT</span> <span class="text-sky">&bull;</span>
       <span>⚡ GIT & GITHUB</span> <span class="text-sky">&bull;</span>
     </div>
@@ -1003,7 +795,7 @@
       <div class="text-center max-w-3xl mx-auto mb-16">
         <span class="eyebrow center">Behind the Screen</span>
         <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">My Story & Journey</h2>
-        <p class="mt-4 text-slate-400 text-base sm:text-lg">Self-taught, driven, and combining computational code loops with cosmic interests.</p>
+        <p class="mt-4 text-slate-400 text-base sm:text-lg">Self-taught, driven, and focused on building real, working products.</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -1021,13 +813,13 @@
 
           <div class="p-6 rounded-2xl border border-sky/20 bg-gradient-to-r from-sky/5 via-violet/5 to-transparent relative overflow-hidden group">
             <div class="absolute top-0 right-0 p-4 text-sky/20 group-hover:text-sky/40 transition-colors text-4xl font-display">
-              <i class="fa-solid fa-shuttle-space pulse-glow"></i>
+              <i class="fa-solid fa-layer-group pulse-glow"></i>
             </div>
             <h4 class="text-sm font-mono text-sky font-bold uppercase tracking-wider mb-2 flex items-center space-x-2">
-              <i class="fa-solid fa-star text-xs"></i> <span>Space Science Tech Genius</span>
+              <i class="fa-solid fa-star text-xs"></i> <span>Currently Leveling Up</span>
             </h4>
             <p class="text-xs text-slate-300 leading-relaxed font-light">
-              Beyond my core coding modules, I am a dedicated researcher of space science technology. I continuously and deeply learn orbital mechanics, rocket propulsion systems, and astronomy. I love investigating how frontend dashboards can optimize and display data streams from outer space!
+              Alongside my frontend work, I'm currently studying full-stack development to round out my skill set with proper backend architecture — so I can take a product from database to interface, not just the parts users see.
             </p>
           </div>
 
@@ -1060,7 +852,7 @@
             <h4 class="text-base font-bold text-white font-display mb-4">Deep Exploring Tracks</h4>
             <div class="space-y-3">
               <div>
-                <div class="flex justify-between text-xs font-mono mb-1.5"><span class="text-slate-300">Space Technology Frameworks</span><span class="text-sky">90%</span></div>
+                <div class="flex justify-between text-xs font-mono mb-1.5"><span class="text-slate-300">JavaScript (ES6+)</span><span class="text-sky">90%</span></div>
                 <div class="h-1.5 bg-slate-900 rounded-full"><div class="h-full bg-gradient-to-r from-sky to-cyan-400 rounded-full" style="width:90%"></div></div>
               </div>
               <div>
@@ -1141,7 +933,7 @@
           <span class="eyebrow">Capabilities</span>
           <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display">Technical Arsenal & Tools</h2>
           <p class="text-slate-400 text-sm sm:text-base leading-relaxed font-light">
-            Core frontend systems paired with cloud computing databases and space data mapping endpoints.
+            Core frontend systems paired with cloud databases and modern tooling for building fast, reliable web apps.
           </p>
           <div class="pt-4">
             <a href="#contact" class="inline-flex items-center space-x-2 text-sm text-sky font-bold tracking-wide hover:underline font-mono">
@@ -1195,15 +987,15 @@
 
           <div class="p-6 rounded-2xl glass-card border border-slate-800 glow-hover">
             <div class="flex items-center justify-between mb-4">
-              <div class="w-10 h-10 rounded-xl bg-violet/10 flex items-center justify-center text-violet text-lg"><i class="fa-solid fa-atom"></i></div>
-              <span class="text-[10px] font-mono text-slate-500">Analytics</span>
+              <div class="w-10 h-10 rounded-xl bg-violet/10 flex items-center justify-center text-violet text-lg"><i class="fa-brands fa-git-alt"></i></div>
+              <span class="text-[10px] font-mono text-slate-500">Workflow</span>
             </div>
-            <h4 class="text-base font-bold text-white font-display">Space Tech Workflow</h4>
-            <p class="text-xs text-slate-400 font-light mt-1.5 leading-relaxed">Deep scientific tracking tools, code diagnostics metrics, version branches control, and GitHub ecosystems.</p>
+            <h4 class="text-base font-bold text-white font-display">Git & Dev Tools</h4>
+            <p class="text-xs text-slate-400 font-light mt-1.5 leading-relaxed">Version control, browser DevTools debugging, and a clean, organized commit history for every project.</p>
             <div class="mt-4 pt-3 border-t border-slate-900 flex flex-wrap gap-1.5">
               <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Git / GitHub</span>
               <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">DevTools</span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Research</span>
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Debugging</span>
             </div>
           </div>
         </div>
@@ -1607,220 +1399,6 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       SPACE SCIENCE EXPLORER SECTION
-  ══════════════════════════════════════════ -->
-  <section id="space" class="py-24 md:py-32 relative fade-in-up space-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-      <!-- Starfield bg -->
-      <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div class="star absolute w-1 h-1 rounded-full bg-sky"    style="top:8%;left:6%;--dur:2.2s;--delay:0s"></div>
-        <div class="star absolute w-1.5 h-1.5 rounded-full bg-white/50" style="top:18%;left:22%;--dur:3.4s;--delay:0.6s"></div>
-        <div class="star absolute w-1 h-1 rounded-full bg-violet" style="top:12%;right:15%;--dur:2.7s;--delay:1.1s"></div>
-        <div class="star absolute w-1 h-1 rounded-full bg-sky"    style="top:55%;left:4%;--dur:4.1s;--delay:0.4s"></div>
-        <div class="star absolute w-1.5 h-1.5 rounded-full bg-white/30" style="top:72%;right:8%;--dur:2.5s;--delay:1.5s"></div>
-        <div class="star absolute w-1 h-1 rounded-full bg-cyan-400" style="bottom:18%;left:42%;--dur:3.2s;--delay:0.9s"></div>
-        <div class="star absolute w-1 h-1 rounded-full bg-violet" style="bottom:28%;right:28%;--dur:2.8s;--delay:1.9s"></div>
-        <div class="star absolute w-1 h-1 rounded-full bg-white/40" style="top:38%;right:42%;--dur:3.7s;--delay:0.2s"></div>
-      </div>
-
-      <!-- Header -->
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-violet/10 border border-violet/20 mb-5">
-          <span class="text-base" style="display:inline-block;animation:floatAvatar 3s ease-in-out infinite">&#x1F30C;</span>
-          <span class="eyebrow">Beyond The Observable Universe</span>
-        </div>
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
-          My Mission: <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet via-sky to-cyan-300">Multi-Planetary</span><br class="hidden sm:block"> Humanity
-        </h2>
-        <p class="mt-5 text-slate-400 text-base sm:text-lg leading-relaxed font-light max-w-2xl mx-auto">
-          My dream is to make humanity a <strong class="text-white">multi-level species</strong> &#8212; not bound to one planet, one dimension, or one understanding of reality. I go deep into the most fundamental questions the universe has ever posed.
-        </p>
-      </div>
-
-      <!-- Wormhole Goal Banner -->
-      <div class="mb-10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-sky/20" style="background:linear-gradient(135deg,rgba(79,141,253,.07) 0%,rgba(155,140,250,.10) 50%,rgba(6,9,16,.9) 100%)">
-        <div class="absolute top-0 right-0 opacity-5 text-[9rem] sm:text-[12rem] select-none pointer-events-none leading-none" style="line-height:1">&#x1F573;</div>
-        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center gap-5">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky to-violet flex items-center justify-center text-2xl shrink-0">&#x1F573;</div>
-          <div>
-            <div class="text-[10px] font-mono uppercase tracking-widest text-sky font-bold mb-1">Ultimate Research Goal</div>
-            <h3 class="text-xl sm:text-2xl font-extrabold text-white font-display mb-2">Discover &amp; Engineer Wormholes</h3>
-            <p class="text-sm text-slate-300 font-light leading-relaxed max-w-2xl">
-              A wormhole &#8212; the Einstein&#8211;Rosen bridge &#8212; is a theoretical tunnel through the spacetime fabric connecting two distant points in the universe, or even two separate universes. Predicted by general relativity, a <em>traversable</em> wormhole would require exotic matter with negative energy density to hold it open. I deeply study Kip Thorne&#8217;s traversable wormhole models, the energy conditions that permit or forbid them, and how quantum field theory near a wormhole throat might stabilise the structure. This physics is the foundation of true interstellar travel for humanity.
-            </p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-sky/10 border border-sky/20 text-sky">Einstein&#8211;Rosen Bridge</span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-violet/10 border border-violet/20 text-violet">Exotic Matter</span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-sky/10 border border-sky/20 text-sky">Traversable Wormholes</span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">Kip Thorne</span>
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-violet/10 border border-violet/20 text-violet">Negative Energy</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Progress Bars -->
-      <div class="space-card rounded-2xl p-6 mb-8">
-        <div class="flex items-center space-x-2 mb-6">
-          <i class="fa-solid fa-brain text-violet text-sm"></i>
-          <h3 class="text-sm font-mono uppercase tracking-widest text-violet font-bold">Deep Exploration Progress</h3>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5" id="spaceProgressBars">
-          <div>
-            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Wormhole Theory &amp; Physics</span><span class="text-sky font-bold">85%</span></div>
-            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-sky to-cyan-300 rounded-full progress-animated progress-bar-animated" style="--target-width:85%"></div></div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Spacetime &amp; Special/General Relativity</span><span class="text-violet font-bold">92%</span></div>
-            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-violet to-purple-400 rounded-full progress-animated progress-bar-animated" style="--target-width:92%"></div></div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Gravity &amp; Curved Spacetime Geometry</span><span class="text-sky font-bold">88%</span></div>
-            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-sky to-cyan-300 rounded-full progress-animated progress-bar-animated" style="--target-width:88%"></div></div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Multiverse &amp; Many-Worlds Theory</span><span class="text-cyan-400 font-bold">78%</span></div>
-            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-cyan-400 to-sky rounded-full progress-animated progress-bar-animated" style="--target-width:78%"></div></div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Higher Dimensions &amp; String Theory</span><span class="text-violet font-bold">74%</span></div>
-            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-violet to-purple-400 rounded-full progress-animated progress-bar-animated" style="--target-width:74%"></div></div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-mono mb-2"><span class="text-slate-200">Quantum Gravity &amp; Planck Scale Physics</span><span class="text-sky font-bold">70%</span></div>
-            <div class="h-2 bg-slate-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-sky to-cyan-300 rounded-full progress-animated progress-bar-animated" style="--target-width:70%"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4 Topic Deep-Dive Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-
-        <!-- Spacetime -->
-        <div class="space-card rounded-2xl p-5 sm:p-6">
-          <div class="flex items-start space-x-4 mb-4">
-            <div class="w-11 h-11 rounded-xl bg-sky/10 flex items-center justify-center text-2xl shrink-0">&#x23F3;</div>
-            <div>
-              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #1</div>
-              <h4 class="text-base font-bold text-white font-display">How Spacetime Works</h4>
-            </div>
-          </div>
-          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
-            Spacetime is the four-dimensional fabric of reality &#8212; three dimensions of space fused inseparably with time, as Einstein revealed in Special Relativity (1905) and General Relativity (1915). Mass and energy don&#8217;t simply exist <em>inside</em> spacetime &#8212; they <strong class="text-slate-200">warp and curve it</strong>. That curvature is gravity itself. Time is not absolute: a clock on Earth ticks measurably slower than one orbiting in weak gravity (gravitational time dilation, confirmed by GPS satellites every day). I study spacetime geodesics &#8212; the curved paths objects follow through warped spacetime &#8212; the light cone structure that defines causality, and the extreme spacetime topology near singularities where wormhole geometry becomes possible.
-          </p>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">4D Continuum</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Time Dilation</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Geodesics</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Lorentz Transform</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Light Cones</span>
-          </div>
-        </div>
-
-        <!-- Gravity -->
-        <div class="space-card rounded-2xl p-5 sm:p-6">
-          <div class="flex items-start space-x-4 mb-4">
-            <div class="w-11 h-11 rounded-xl bg-violet/10 flex items-center justify-center text-2xl shrink-0">&#x1F300;</div>
-            <div>
-              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #2</div>
-              <h4 class="text-base font-bold text-white font-display">How Gravity Really Works</h4>
-            </div>
-          </div>
-          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
-            Gravity is not a force being transmitted through space &#8212; it is the <strong class="text-slate-200">shape of spacetime itself</strong>. Massive objects create curvature, and other objects simply follow the straightest possible path (geodesic) through that curved geometry, which <em>looks</em> like attraction. I deeply explore gravitational waves &#8212; ripples in spacetime fabric detected by LIGO in 2015, confirming Einstein&#8217;s 100-year-old prediction &#8212; the Kerr metric describing rotating black holes and their frame-dragging effect, and the deepest open problem in physics: reconciling gravity with quantum mechanics. Theories like loop quantum gravity and string theory attempt this unification, and the answer likely holds the key to stable wormholes.
-          </p>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">General Relativity</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Gravitational Waves</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Kerr Metric</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Loop Quantum Gravity</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">LIGO</span>
-          </div>
-        </div>
-
-        <!-- Multiverse -->
-        <div class="space-card rounded-2xl p-5 sm:p-6">
-          <div class="flex items-start space-x-4 mb-4">
-            <div class="w-11 h-11 rounded-xl bg-cyan-500/10 flex items-center justify-center text-2xl shrink-0">&#x1F52E;</div>
-            <div>
-              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #3</div>
-              <h4 class="text-base font-bold text-white font-display">Is the Multiverse Real?</h4>
-            </div>
-          </div>
-          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
-            The multiverse is not science fiction &#8212; it emerges independently from several serious physics frameworks. <strong class="text-slate-200">Eternal Inflation</strong> theory predicts our Big Bang was one bubble nucleating in an endless inflationary sea, producing countless causally disconnected universes. Hugh Everett&#8217;s Many-Worlds Interpretation of quantum mechanics says every quantum event branches reality into parallel histories &#8212; every outcome happens, in a different branch. String theory&#8217;s landscape predicts ~10<sup>500</sup> possible universes each with different physical constants. I study CMB anomalies that could be signatures of bubble universe collisions, the fine-tuning problem (why are physical constants so perfectly set for life?), and whether wormholes could theoretically serve as bridges between branches of the multiverse.
-          </p>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Many-Worlds (Everett)</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Eternal Inflation</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">String Landscape</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">CMB Anomalies</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Fine-Tuning Problem</span>
-          </div>
-        </div>
-
-        <!-- Dimensions -->
-        <div class="space-card rounded-2xl p-5 sm:p-6">
-          <div class="flex items-start space-x-4 mb-4">
-            <div class="w-11 h-11 rounded-xl bg-sky/10 flex items-center justify-center text-2xl shrink-0">&#x1F9CA;</div>
-            <div>
-              <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Deep Study #4</div>
-              <h4 class="text-base font-bold text-white font-display">How Dimensions Work</h4>
-            </div>
-          </div>
-          <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
-            We experience three spatial dimensions, but theoretical physics is certain more exist. In 1921, Kaluza proposed a 5th dimension to unify gravity and electromagnetism &#8212; it worked mathematically. Modern <strong class="text-slate-200">String Theory demands 10 dimensions</strong>; M-Theory requires 11. The extra dimensions are compactified at the Planck length (~10&#8315;&#179;&#8309; m), curled so tightly they are undetectable with current instruments. These hidden dimensions aren&#8217;t empty &#8212; they determine the physical constants of our universe. I study the Randall&#8211;Sundrum braneworld model, where our universe is a 4D membrane floating in a higher-dimensional bulk, and how extra dimensions could stabilise traversable wormhole geometry &#8212; directly connecting dimensional physics to my wormhole engineering goal.
-          </p>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Kaluza&#8211;Klein</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">String Theory (10D)</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">M-Theory (11D)</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Braneworld</span>
-            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">Compactification</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Thinkers -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div class="space-card rounded-2xl p-5 text-center">
-          <div class="text-2xl mb-2">&#x1F9E0;</div>
-          <div class="text-sm font-bold text-white font-display mb-1">Albert Einstein</div>
-          <div class="text-[9px] font-mono text-slate-500 leading-relaxed">General Relativity &middot; Spacetime Curvature &middot; Einstein&#8211;Rosen Bridge</div>
-        </div>
-        <div class="space-card rounded-2xl p-5 text-center">
-          <div class="text-2xl mb-2">&#x1F52D;</div>
-          <div class="text-sm font-bold text-white font-display mb-1">Kip Thorne</div>
-          <div class="text-[9px] font-mono text-slate-500 leading-relaxed">Traversable Wormholes &middot; Gravitational Waves &middot; Nobel Prize 2017</div>
-        </div>
-        <div class="space-card rounded-2xl p-5 text-center">
-          <div class="text-2xl mb-2">&#x1F4D0;</div>
-          <div class="text-sm font-bold text-white font-display mb-1">Stephen Hawking</div>
-          <div class="text-[9px] font-mono text-slate-500 leading-relaxed">Black Hole Radiation &middot; Imaginary Time &middot; Chronology Protection</div>
-        </div>
-      </div>
-
-      <!-- Manifesto -->
-      <div class="rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-violet/20 relative overflow-hidden" style="background:linear-gradient(135deg,rgba(155,140,250,.08) 0%,rgba(79,141,253,.05) 60%,transparent 100%)">
-        <div class="absolute -bottom-8 -right-8 text-[8rem] opacity-5 select-none pointer-events-none">&#x1F30C;</div>
-        <div class="relative z-10 flex flex-col sm:flex-row sm:items-start gap-5">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet to-sky flex items-center justify-center text-midnight font-extrabold text-lg shrink-0 font-display">&#x221E;</div>
-          <div>
-            <h4 class="text-base sm:text-lg font-extrabold text-white font-display mb-2">A Multi-Planetary, Multi-Dimensional Future</h4>
-            <p class="text-sm text-slate-300 font-light leading-relaxed">
-              I don&#8217;t believe in chains &#8212; not chains of one gravity well, not chains of one planet, not chains of three dimensions. My vision is a humanity that masters the <strong class="text-white">fundamental geometry of the cosmos</strong>, builds traversable wormholes, and becomes a civilisation spanning not just planets but dimensions of existence. Every line of code I write today, every concept I explore tonight, is one step closer to that future. <span class="text-violet font-semibold">This is not ambition. This is a responsibility to our species.</span>
-            </p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-  <!-- ══════════════════════════════════════════ -->
-
   <section id="contact" class="py-24 md:py-32 bg-midnight/40 border-t border-slate-900 relative fade-in-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       
@@ -2179,7 +1757,7 @@
     });
 
     // Typewriter String Array Engine
-    const phrases = ["Frontend Developer", "Space Science Explorer", "JavaScript Enthusiast", "Firebase Builder"];
+    const phrases = ["Frontend Developer", "Firebase Enthusiast", "JavaScript Developer", "Full-Stack Learner"];
     let phraseIdx = 0, charIdx = 0, isDeleting = false;
     const targetElement = document.getElementById('typedOutput');
 
@@ -2242,18 +1820,6 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-in-up').forEach(section => observer.observe(section));
-
-    // Space Science progress bar trigger
-    const spaceBars = document.querySelectorAll('#spaceProgressBars .progress-animated');
-    const spaceObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          spaceBars.forEach(bar => bar.classList.add('run'));
-        }
-      });
-    }, { threshold: 0.3 });
-    const spaceSection = document.getElementById('space');
-    if (spaceSection) spaceObserver.observe(spaceSection);
 
     // Portfolio Grid Sorter Filter Engine
     function filterProjects(category) {
@@ -2384,40 +1950,6 @@
        ADVANCED ENHANCEMENTS
     ════════════════════════════════════════ */
 
-    // ── Theme Toggle (Dark Black+Gray <-> Light White+Blue) ──
-    (function () {
-      const root = document.documentElement;
-      const toggleBtn = document.getElementById('themeToggle');
-      const toggleMobile = document.getElementById('themeToggleMobile');
-
-      function applyThemeUI() {
-        const isLight = root.getAttribute('data-theme') === 'light';
-        if (toggleMobile) {
-          toggleMobile.innerHTML = isLight
-            ? '<i class="fa-solid fa-sun"></i><span>Switch to Dark Mode</span>'
-            : '<i class="fa-solid fa-moon"></i><span>Switch to Light Mode</span>';
-        }
-        const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', isLight ? '#f4f5f7' : '#07080c');
-      }
-
-      function setTheme(theme) {
-        if (theme === 'light') root.setAttribute('data-theme', 'light');
-        else root.removeAttribute('data-theme');
-        try { localStorage.setItem('portfolio-theme', theme); } catch (e) {}
-        applyThemeUI();
-      }
-
-      function toggleTheme() {
-        const isLight = root.getAttribute('data-theme') === 'light';
-        setTheme(isLight ? 'dark' : 'light');
-      }
-
-      if (toggleBtn) toggleBtn.addEventListener('click', toggleTheme);
-      if (toggleMobile) toggleMobile.addEventListener('click', toggleTheme);
-      applyThemeUI();
-    })();
-
     // ── Live Karachi Clock Badge ──
     (function () {
       const el = document.getElementById('liveClock');
@@ -2465,7 +1997,7 @@
 
     // ── Scrollspy: active nav link + dot nav ──
     (function () {
-      const sections = ['home','about','skills','projects','space','contact']
+      const sections = ['home','about','skills','projects','contact']
         .map(id => document.getElementById(id)).filter(Boolean);
       const navLinks = document.querySelectorAll('.nav-link-underline[data-nav]');
       const dots = document.querySelectorAll('#dotNav .dot');
@@ -2575,7 +2107,6 @@
         { label: 'Why Work With Me', sub: 'Strengths & approach', icon: 'fa-circle-check', action: () => scrollToId('why') },
         { label: 'Skills & Tools', sub: 'Technical arsenal', icon: 'fa-gears', action: () => scrollToId('skills') },
         { label: 'Projects', sub: 'Featured work', icon: 'fa-laptop-code', action: () => scrollToId('projects') },
-        { label: 'Space Science', sub: 'My cosmic research', icon: 'fa-rocket', action: () => scrollToId('space') },
         { label: 'Contact', sub: 'Get in touch', icon: 'fa-paper-plane', action: () => scrollToId('contact') },
         { label: 'GitHub Profile', sub: 'github.com/uzairbaigdev', icon: 'fa-github', brand: true, action: () => window.open('https://github.com/uzairbaigdev', '_blank') },
         { label: 'LinkedIn Profile', sub: 'Connect professionally', icon: 'fa-linkedin-in', brand: true, action: () => window.open('https://www.linkedin.com/in/uzair-baig-1699563ab/', '_blank') },
@@ -2651,6 +2182,168 @@
       });
       input.addEventListener('input', () => renderResults(input.value));
       palette.addEventListener('click', (e) => { if (e.target === palette) closePalette(); });
+    })();
+
+    // ── Hero 3D Scene (Three.js) ──
+    (function () {
+      const canvas = document.getElementById('hero3D');
+      const heroSection = document.getElementById('home');
+      if (!canvas || !heroSection) return;
+      if (typeof THREE === 'undefined') return; // CDN failed to load — fail silently, CSS backdrop still shows
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      let renderer, scene, camera, rig, points, w, h;
+      let running = false;
+      let frameId = null;
+      const clock = new THREE.Clock();
+      const mouseTarget = { x: 0, y: 0 };
+      const mouseCurrent = { x: 0, y: 0 };
+      let scrollFade = 1;
+      let desktopOffset = window.innerWidth >= 1024;
+
+      function buildScene() {
+        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+        camera.position.z = 8;
+
+        rig = new THREE.Group();
+        scene.add(rig);
+
+        // Outer wireframe polyhedron — primary silhouette
+        const outerGeo = new THREE.IcosahedronGeometry(2.15, 1);
+        const outerEdges = new THREE.EdgesGeometry(outerGeo);
+        const outerMat = new THREE.LineBasicMaterial({ color: 0x4f8dfd, transparent: true, opacity: 0.55 });
+        const outer = new THREE.LineSegments(outerEdges, outerMat);
+        outer.name = 'outer';
+        rig.add(outer);
+
+        // Inner wireframe polyhedron — counter-rotating depth layer
+        const innerGeo = new THREE.OctahedronGeometry(1.2, 0);
+        const innerEdges = new THREE.EdgesGeometry(innerGeo);
+        const innerMat = new THREE.LineBasicMaterial({ color: 0x9b8cfa, transparent: true, opacity: 0.45 });
+        const inner = new THREE.LineSegments(innerEdges, innerMat);
+        inner.name = 'inner';
+        rig.add(inner);
+
+        // Particle shell — ambient depth
+        const count = window.innerWidth < 640 ? 90 : (window.innerWidth < 1024 ? 160 : 220);
+        const positions = new Float32Array(count * 3);
+        const colors = new Float32Array(count * 3);
+        const palette = [
+          [0x4f / 255, 0x8d / 255, 0xfd / 255],
+          [0x9b / 255, 0x8c / 255, 0xfa / 255],
+          [0xe8 / 255, 0xb9 / 255, 0x5f / 255],
+        ];
+        for (let i = 0; i < count; i++) {
+          const radius = 3.1 + Math.random() * 1.4;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos((Math.random() * 2) - 1);
+          positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+          positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+          positions[i * 3 + 2] = radius * Math.cos(phi);
+          const c = palette[i % palette.length];
+          colors[i * 3] = c[0]; colors[i * 3 + 1] = c[1]; colors[i * 3 + 2] = c[2];
+        }
+        const pointsGeo = new THREE.BufferGeometry();
+        pointsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        pointsGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        const pointsMat = new THREE.PointsMaterial({
+          size: 0.045, vertexColors: true, transparent: true, opacity: 0.85,
+          sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false,
+        });
+        points = new THREE.Points(pointsGeo, pointsMat);
+        rig.add(points);
+
+        positionRig();
+        resize();
+      }
+
+      function positionRig() {
+        desktopOffset = window.innerWidth >= 1024;
+        rig.position.x = desktopOffset ? 1.7 : 0;
+        rig.position.y = desktopOffset ? 0.1 : 0.4;
+      }
+
+      function resize() {
+        w = heroSection.clientWidth;
+        h = heroSection.clientHeight;
+        if (!w || !h) return;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h, false);
+        positionRig();
+      }
+
+      function onPointerMove(e) {
+        const nx = (e.clientX / window.innerWidth) - 0.5;
+        const ny = (e.clientY / window.innerHeight) - 0.5;
+        mouseTarget.x = ny * 0.5;
+        mouseTarget.y = nx * 0.6;
+      }
+
+      function updateScrollFade() {
+        const rect = heroSection.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
+        const visibleRatio = Math.max(0, Math.min(1, (rect.bottom) / (rect.height + vh * 0.4)));
+        scrollFade = Math.max(0, Math.min(1, visibleRatio));
+      }
+
+      function tick() {
+        if (!running) return;
+        const dt = Math.min(clock.getDelta(), 0.05);
+
+        const outer = rig.getObjectByName('outer');
+        const inner = rig.getObjectByName('inner');
+        if (outer) { outer.rotation.x += dt * 0.09; outer.rotation.y += dt * 0.14; }
+        if (inner) { inner.rotation.x -= dt * 0.13; inner.rotation.y -= dt * 0.1; }
+        if (points) { points.rotation.y += dt * 0.045; }
+
+        mouseCurrent.x += (mouseTarget.x - mouseCurrent.x) * 0.045;
+        mouseCurrent.y += (mouseTarget.y - mouseCurrent.y) * 0.045;
+        rig.rotation.x = mouseCurrent.x;
+        rig.rotation.y = mouseCurrent.y;
+
+        updateScrollFade();
+        renderer.domElement.style.opacity = String(0.9 * scrollFade);
+
+        renderer.render(scene, camera);
+        frameId = requestAnimationFrame(tick);
+      }
+
+      function start() {
+        if (running) return;
+        running = true;
+        clock.getDelta(); // reset delta so resume doesn't jump
+        frameId = requestAnimationFrame(tick);
+      }
+      function stop() {
+        running = false;
+        if (frameId) cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+
+      try {
+        buildScene();
+      } catch (err) {
+        return; // WebGL unavailable or blocked — leave the CSS grid backdrop as-is
+      }
+
+      canvas.classList.add('is-ready');
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => { entry.isIntersecting ? start() : stop(); });
+      }, { threshold: 0.05 });
+      io.observe(heroSection);
+
+      document.addEventListener('visibilitychange', () => {
+        document.hidden ? stop() : (heroSection.getBoundingClientRect().bottom > 0 && start());
+      });
+
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', onPointerMove, { passive: true });
     })();
 
     // ── Interactive Particle Network ──
