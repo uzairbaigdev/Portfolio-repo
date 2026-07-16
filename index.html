@@ -203,8 +203,16 @@
     .portfolio-item { transition: all 0.3s ease; }
 
     @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-    .fade-in-up { opacity:0; transform:translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade-in-up.visible { opacity:1; transform:translateY(0); }
+    .fade-in-up {
+      opacity:0; transform: translateY(36px) rotateX(-10deg) scale(0.98);
+      transform-origin: 50% 100%;
+      transition: opacity 0.85s cubic-bezier(.16,1,.3,1), transform 0.85s cubic-bezier(.16,1,.3,1);
+    }
+    .fade-in-up.visible { opacity:1; transform: translateY(0) rotateX(0deg) scale(1); }
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in-up { transform: translateY(16px); transition: opacity 0.4s ease, transform 0.4s ease; }
+      .fade-in-up.visible { transform: translateY(0); }
+    }
 
     #toastNotification { transition: transform 0.4s ease, opacity 0.4s ease; }
     #projectModal { animation: fadeIn 0.25s forwards; }
@@ -299,9 +307,10 @@
 
     #preloader {
       position: fixed; inset: 0; z-index: 9999;
-      background: #07080c;
+      background: rgba(7,8,12,0.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       transition: opacity 0.6s ease, visibility 0.6s ease;
+      perspective: 600px;
     }
     #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     #preloader .loader-ring {
@@ -314,6 +323,15 @@
     .preloader-logo {
       position: relative; width: 116px; height: 116px;
       display: flex; align-items: center; justify-content: center; margin-bottom: 0.25rem;
+      transform-style: preserve-3d;
+      animation: preloaderTilt3D 4.5s ease-in-out infinite;
+    }
+    @keyframes preloaderTilt3D {
+      0%, 100% { transform: rotateY(-16deg) rotateX(4deg); }
+      50% { transform: rotateY(16deg) rotateX(-4deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .preloader-logo { animation: none; }
     }
     .preloader-ring-svg {
       position: absolute; inset: 0; width: 100%; height: 100%;
@@ -440,35 +458,92 @@
       mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
     }
 
-    /* ── Hero 3D scene (Three.js) ── */
-    #hero3D {
-      position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      width: 100%; height: 100%; display: block;
+    /* ── Persistent 3D world (Three.js) — single canvas, fixed to viewport, spans the whole page ── */
+    #webgl3D {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      width: 100vw; height: 100vh; display: block;
       opacity: 0; transition: opacity 1.4s ease;
-      -webkit-mask-image: radial-gradient(ellipse 68% 62% at 64% 46%, black 35%, transparent 76%);
-      mask-image: radial-gradient(ellipse 68% 62% at 64% 46%, black 35%, transparent 76%);
     }
-    #hero3D.is-ready { opacity: 1; }
-    @media (max-width: 1023px) {
-      #hero3D {
-        -webkit-mask-image: radial-gradient(ellipse 90% 55% at 50% 30%, black 30%, transparent 78%);
-        mask-image: radial-gradient(ellipse 90% 55% at 50% 30%, black 30%, transparent 78%);
+    #webgl3D.is-ready { opacity: 1; }
+
+    /* ── Skills orbit badges (DOM elements, positioned each frame from 3D projection) ── */
+    #skillsOrbit {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      overflow: hidden; display: none;
+    }
+    #skillsOrbit.is-active { display: block; }
+    .orbit-badge {
+      position: absolute; top: 0; left: 0; will-change: transform, opacity;
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 11px; border-radius: 999px;
+      background: rgba(13,17,23,0.85); backdrop-filter: blur(8px);
+      border: 1px solid rgba(148,163,184,0.18);
+      font-family: 'Fira Code', monospace; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.04em; color: #cbd5e1; white-space: nowrap;
+      opacity: 0; transition: border-color 0.3s ease;
+    }
+    .orbit-badge i { font-size: 11px; }
+
+    /* ── Project card 3D tilt ── */
+    @media (pointer: fine) {
+      .portfolio-item {
+        will-change: transform; position: relative;
+        transform: perspective(900px) rotateX(0deg) rotateY(0deg);
       }
+      .portfolio-item::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+        opacity: 0; transition: opacity 0.35s ease;
+        background: radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.10), transparent 62%);
+      }
+      .portfolio-item.tilting::after { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .portfolio-item { transform: none !important; }
+      .portfolio-item::after { display: none !important; }
+    }
+
+    /* ── Universal 3D tilt-card system: applied via JS to glass/premium/value cards site-wide ── */
+    @media (pointer: fine) {
+      .tilt-card {
+        position: relative; isolation: isolate;
+        will-change: transform;
+        transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0);
+      }
+      .tilt-card::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+        z-index: 5; opacity: 0; transition: opacity 0.4s ease;
+        background: radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.12), transparent 65%);
+      }
+      .tilt-card.tilting {
+        transition: transform 0.08s linear;
+        box-shadow: 0 26px 50px -20px rgba(79,141,253,0.28);
+      }
+      .tilt-card.tilting::after { opacity: 1; }
+      .tilt-card .tilt-inner { transform: translateZ(18px); transform-style: preserve-3d; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tilt-card { transform: none !important; }
+      .tilt-card::after { display: none !important; }
     }
 
     .reveal-stagger > * {
-      opacity: 0; transform: translateY(20px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
+      opacity: 0; transform: translateY(22px) rotateX(-14deg) scale(0.95);
+      transform-origin: 50% 100%;
+      transition: opacity 0.6s cubic-bezier(.16,1,.3,1), transform 0.6s cubic-bezier(.16,1,.3,1);
     }
     .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.05s; }
     .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.12s; }
     .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.19s; }
     .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.26s; }
-    .reveal-stagger.visible > * { opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > * { opacity: 1; transform: translateY(0) rotateX(0deg) scale(1); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-stagger > * { transform: translateY(10px); }
+      .reveal-stagger.visible > * { transform: translateY(0); }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       .gradient-text-animated, .animate-marquee, .float-avatar, .pulse-glow { animation: none !important; }
-      #particleCanvas, #hero3D { display: none; }
+      #particleCanvas, #webgl3D, #skillsOrbit { display: none; }
     }
 
     /* ── Command Palette ── */
@@ -565,6 +640,9 @@
   <!-- Particle Network -->
   <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none opacity-30" aria-hidden="true"></canvas>
 
+  <!-- Persistent 3D World -->
+  <canvas id="webgl3D" aria-hidden="true"></canvas>
+
   <!-- Custom Cursor -->
   <div id="cursorGlow" aria-hidden="true"></div>
   <div id="cursorDot" aria-hidden="true"></div>
@@ -585,7 +663,7 @@
     <i class="fa-solid fa-arrow-up text-sm"></i>
   </button>
 
-  <div style="overflow-x:hidden;max-width:100vw;position:relative">
+  <div style="overflow-x:hidden;max-width:100vw;position:relative;perspective:1600px;perspective-origin:50% 20%">
   <div class="ambient-blob bg-sky w-[320px] h-[320px] top-[-80px] left-[-80px]" style="pointer-events:none"></div>
   <div class="ambient-blob bg-violet w-[400px] h-[400px] top-[900px] right-[-120px]" style="pointer-events:none"></div>
   <div class="ambient-blob bg-cyan-500 w-[320px] h-[320px] bottom-[1400px] left-[-120px]" style="pointer-events:none"></div>
@@ -657,7 +735,6 @@
       </div>
     </div>
     <div class="hero-grid-bg"></div>
-    <canvas id="hero3D" aria-hidden="true"></canvas>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
@@ -836,10 +913,10 @@
         </div>
 
         <div class="lg:col-span-6 flex flex-col items-center space-y-6">
-          <div class="relative w-full max-w-[280px] sm:max-w-[320px] mx-auto">
+          <div class="relative w-full max-w-[280px] sm:max-w-[320px] mx-auto" id="aboutAvatarWrap">
             <div class="w-full aspect-square rounded-3xl bg-gradient-to-tr from-violet/40 to-sky/40 p-[2px] shadow-2xl shadow-sky/20">
               <div class="w-full h-full bg-midnight rounded-[22px] overflow-hidden">
-                <img src="./Images/uzairbaig.jpg.jpeg" alt="Mirza Uzair Baig" class="w-full h-full object-cover object-top float-avatar">
+                <img src="./Images/uzairbaig.jpg.jpeg" alt="Mirza Uzair Baig" class="w-full h-full object-cover object-top float-avatar" loading="lazy" decoding="async" width="320" height="320">
               </div>
             </div>
             <div class="absolute -top-3 -right-3 bg-sky text-midnight text-[10px] font-mono font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-lg">
@@ -929,7 +1006,15 @@
   <section id="skills" class="py-24 md:py-32 bg-midnight/30 border-y border-slate-900 relative fade-in-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div class="lg:col-span-4 flex flex-col space-y-4">
+        <div class="lg:col-span-4 flex flex-col space-y-4 relative" id="skillsColumn">
+          <div id="skillsOrbit" aria-hidden="true">
+            <div class="orbit-badge" data-orbit="0"><i class="fa-brands fa-js text-sky"></i><span>JavaScript</span></div>
+            <div class="orbit-badge" data-orbit="1"><i class="fa-solid fa-satellite text-violet"></i><span>Firebase</span></div>
+            <div class="orbit-badge" data-orbit="2"><i class="fa-brands fa-html5 text-sky"></i><span>HTML5</span></div>
+            <div class="orbit-badge" data-orbit="3"><i class="fa-brands fa-css3-alt text-violet"></i><span>CSS3</span></div>
+            <div class="orbit-badge" data-orbit="4"><i class="fa-brands fa-git-alt text-sky"></i><span>Git</span></div>
+            <div class="orbit-badge" data-orbit="5"><i class="fa-solid fa-bolt text-violet"></i><span>REST APIs</span></div>
+          </div>
           <span class="eyebrow">Capabilities</span>
           <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display">Technical Arsenal & Tools</h2>
           <p class="text-slate-400 text-sm sm:text-base leading-relaxed font-light">
@@ -1157,7 +1242,7 @@
               </button>
             </div>
             <div class="grid grid-cols-2 gap-2 pt-1">
-              <a href=" https://github.com/uzairbaigdev/Portfolio-repo/tree/main/Projects/nascom-website" target="_blank" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-center text-xs font-mono font-medium text-slate-300 hover:text-white transition-all flex items-center justify-center space-x-1.5"><i class="fa-brands fa-github"></i> <span>View Code</span></a>
+              <a href="https://github.com/uzairbaigdev/Portfolio-repo/tree/main/Projects/nascom-website" target="_blank" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-center text-xs font-mono font-medium text-slate-300 hover:text-white transition-all flex items-center justify-center space-x-1.5"><i class="fa-brands fa-github"></i> <span>View Code</span></a>
               <a href="./Projects/nascom-website/index.html" target="_blank" class="px-3 py-2 bg-sky/10 hover:bg-sky/20 border border-sky/20 hover:border-sky/30 rounded-xl text-center text-xs font-mono font-medium text-sky transition-all flex items-center justify-center space-x-1.5"><i class="fa-solid fa-bolt"></i> <span>Live Demo</span></a>
             </div>
           </div>
@@ -2184,59 +2269,73 @@
       palette.addEventListener('click', (e) => { if (e.target === palette) closePalette(); });
     })();
 
-    // ── Hero 3D Scene (Three.js) ──
+    // ── Persistent 3D World (Three.js) — one shared renderer, spans the whole page ──
     (function () {
-      const canvas = document.getElementById('hero3D');
-      const heroSection = document.getElementById('home');
-      if (!canvas || !heroSection) return;
-      if (typeof THREE === 'undefined') return; // CDN failed to load — fail silently, CSS backdrop still shows
+      const canvas = document.getElementById('webgl3D');
+      if (!canvas) return;
+      if (typeof THREE === 'undefined') return; // CDN failed to load — fail silently, page still works
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      let renderer, scene, camera, rig, points, w, h;
+      const REDUCED = false;
+      let renderer, scene, camera, rig, outer, inner, points, glow;
       let running = false;
       let frameId = null;
+      let downgraded = false;
+      let slowFrames = 0;
       const clock = new THREE.Clock();
       const mouseTarget = { x: 0, y: 0 };
       const mouseCurrent = { x: 0, y: 0 };
-      let scrollFade = 1;
-      let desktopOffset = window.innerWidth >= 1024;
+      let currentCalm = 1;
+
+      // Per-section "mood" the world eases toward: color pair, position, scale, presence.
+      const SECTION_IDS = ['home', 'about', 'why', 'skills', 'projects', 'contact'];
+      const SECTION_TARGETS = {
+        home:     { c1: 0x4f8dfd, c2: 0x9b8cfa, x: 1.7,  xm: 0,    y: 0.15, scale: 1.00, intensity: 0.85, calm: 1.0  },
+        about:    { c1: 0x4f8dfd, c2: 0x9b8cfa, x: -1.6, xm: 0,    y: -0.1, scale: 0.72, intensity: 0.32, calm: 0.85 },
+        why:      { c1: 0x9b8cfa, c2: 0x4f8dfd, x: 1.4,  xm: 0,    y: -0.2, scale: 0.68, intensity: 0.26, calm: 0.85 },
+        skills:   { c1: 0x9b8cfa, c2: 0xe8b95f, x: -2.2, xm: 0,    y: 0.3,  scale: 0.5,  intensity: 0.16, calm: 0.7  },
+        projects: { c1: 0xe8b95f, c2: 0x4f8dfd, x: 1.8,  xm: 0,    y: 0.1,  scale: 0.7,  intensity: 0.28, calm: 0.85 },
+        contact:  { c1: 0x34d399, c2: 0x4f8dfd, x: 0,    xm: 0,    y: 0,    scale: 0.8,  intensity: 0.42, calm: 0.45 },
+      };
+      Object.values(SECTION_TARGETS).forEach(t => { t.c1obj = new THREE.Color(t.c1); t.c2obj = new THREE.Color(t.c2); });
+      let activeTarget = SECTION_TARGETS.home;
+
+      // Skills orbit badges (real DOM elements, positioned each frame from a 3D projection)
+      const skillsColumn = document.getElementById('skillsColumn');
+      const skillsOrbitEl = document.getElementById('skillsOrbit');
+      const orbitBadges = skillsOrbitEl ? Array.from(skillsOrbitEl.querySelectorAll('.orbit-badge')) : [];
+      let skillsActive = false;
+
+      function unprojectToZ(ndcX, ndcY, z) {
+        const vec = new THREE.Vector3(ndcX, ndcY, 0.5).unproject(camera);
+        const dir = vec.sub(camera.position).normalize();
+        const dist = (z - camera.position.z) / dir.z;
+        return camera.position.clone().add(dir.multiplyScalar(dist));
+      }
 
       function buildScene() {
         renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
         camera.position.z = 8;
 
         rig = new THREE.Group();
         scene.add(rig);
 
-        // Outer wireframe polyhedron — primary silhouette
         const outerGeo = new THREE.IcosahedronGeometry(2.15, 1);
-        const outerEdges = new THREE.EdgesGeometry(outerGeo);
-        const outerMat = new THREE.LineBasicMaterial({ color: 0x4f8dfd, transparent: true, opacity: 0.55 });
-        const outer = new THREE.LineSegments(outerEdges, outerMat);
-        outer.name = 'outer';
+        outer = new THREE.LineSegments(new THREE.EdgesGeometry(outerGeo), new THREE.LineBasicMaterial({ color: 0x4f8dfd, transparent: true, opacity: 0.55 }));
         rig.add(outer);
 
-        // Inner wireframe polyhedron — counter-rotating depth layer
         const innerGeo = new THREE.OctahedronGeometry(1.2, 0);
-        const innerEdges = new THREE.EdgesGeometry(innerGeo);
-        const innerMat = new THREE.LineBasicMaterial({ color: 0x9b8cfa, transparent: true, opacity: 0.45 });
-        const inner = new THREE.LineSegments(innerEdges, innerMat);
-        inner.name = 'inner';
+        inner = new THREE.LineSegments(new THREE.EdgesGeometry(innerGeo), new THREE.LineBasicMaterial({ color: 0x9b8cfa, transparent: true, opacity: 0.45 }));
         rig.add(inner);
 
-        // Particle shell — ambient depth
         const count = window.innerWidth < 640 ? 90 : (window.innerWidth < 1024 ? 160 : 220);
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
-        const palette = [
-          [0x4f / 255, 0x8d / 255, 0xfd / 255],
-          [0x9b / 255, 0x8c / 255, 0xfa / 255],
-          [0xe8 / 255, 0xb9 / 255, 0x5f / 255],
-        ];
+        const palette = [[0x4f / 255, 0x8d / 255, 0xfd / 255], [0x9b / 255, 0x8c / 255, 0xfa / 255], [0xe8 / 255, 0xb9 / 255, 0x5f / 255]];
         for (let i = 0; i < count; i++) {
           const radius = 3.1 + Math.random() * 1.4;
           const theta = Math.random() * Math.PI * 2;
@@ -2250,64 +2349,121 @@
         const pointsGeo = new THREE.BufferGeometry();
         pointsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         pointsGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const pointsMat = new THREE.PointsMaterial({
+        points = new THREE.Points(pointsGeo, new THREE.PointsMaterial({
           size: 0.045, vertexColors: true, transparent: true, opacity: 0.85,
           sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false,
-        });
-        points = new THREE.Points(pointsGeo, pointsMat);
+        }));
         rig.add(points);
 
-        positionRig();
+        // Soft additive glow sprite behind the rig — cheap stand-in for bloom
+        // postprocessing that gives the wireframe a premium, luminous core.
+        const glowCanvas = document.createElement('canvas');
+        glowCanvas.width = glowCanvas.height = 256;
+        const gctx = glowCanvas.getContext('2d');
+        const grad = gctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+        grad.addColorStop(0, 'rgba(120,170,255,0.55)');
+        grad.addColorStop(0.4, 'rgba(120,170,255,0.22)');
+        grad.addColorStop(1, 'rgba(120,170,255,0)');
+        gctx.fillStyle = grad;
+        gctx.fillRect(0, 0, 256, 256);
+        const glowTexture = new THREE.CanvasTexture(glowCanvas);
+        glow = new THREE.Sprite(new THREE.SpriteMaterial({
+          map: glowTexture, transparent: true, opacity: 0.6,
+          blending: THREE.AdditiveBlending, depthWrite: false,
+        }));
+        glow.scale.set(6.5, 6.5, 1);
+        glow.position.z = -0.4;
+        rig.add(glow);
+
         resize();
       }
 
-      function positionRig() {
-        desktopOffset = window.innerWidth >= 1024;
-        rig.position.x = desktopOffset ? 1.7 : 0;
-        rig.position.y = desktopOffset ? 0.1 : 0.4;
-      }
-
       function resize() {
-        w = heroSection.clientWidth;
-        h = heroSection.clientHeight;
-        if (!w || !h) return;
-        camera.aspect = w / h;
+        if (!camera || !renderer) return;
+        camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(w, h, false);
-        positionRig();
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
       }
 
       function onPointerMove(e) {
-        const nx = (e.clientX / window.innerWidth) - 0.5;
-        const ny = (e.clientY / window.innerHeight) - 0.5;
-        mouseTarget.x = ny * 0.5;
-        mouseTarget.y = nx * 0.6;
+        mouseTarget.x = ((e.clientY / window.innerHeight) - 0.5) * 0.4;
+        mouseTarget.y = ((e.clientX / window.innerWidth) - 0.5) * 0.5;
       }
 
-      function updateScrollFade() {
-        const rect = heroSection.getBoundingClientRect();
-        const vh = window.innerHeight || 1;
-        const visibleRatio = Math.max(0, Math.min(1, (rect.bottom) / (rect.height + vh * 0.4)));
-        scrollFade = Math.max(0, Math.min(1, visibleRatio));
+      function updateSkillsOrbit() {
+        if (!skillsActive || !skillsColumn || !orbitBadges.length) return;
+        const rect = skillsColumn.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const ndcX = ((rect.left + rect.width * 0.5) / window.innerWidth) * 2 - 1;
+        const ndcY = -((rect.top + rect.height * 0.42) / window.innerHeight) * 2 + 1;
+        const anchor = unprojectToZ(ndcX, ndcY, 0.3);
+        const t = clock.elapsedTime;
+        const rx = 1.15, ry = 0.6, rz = 0.55;
+
+        orbitBadges.forEach((el, i) => {
+          const angle = t * 0.35 + (i / orbitBadges.length) * Math.PI * 2;
+          const world = anchor.clone().add(new THREE.Vector3(
+            Math.cos(angle) * rx,
+            Math.sin(angle) * ry,
+            Math.sin(angle * 0.7 + i) * rz
+          ));
+          const proj = world.clone().project(camera);
+          const screenX = (proj.x * 0.5 + 0.5) * window.innerWidth;
+          const screenY = (-proj.y * 0.5 + 0.5) * window.innerHeight;
+          const depth = Math.min(1, Math.max(0, (Math.sin(angle * 0.7 + i) * rz + rz) / (rz * 2)));
+          const scale = 0.72 + depth * 0.5;
+          el.style.transform = `translate3d(${(screenX - rect.left).toFixed(1)}px, ${(screenY - rect.top).toFixed(1)}px, 0) translate(-50%, -50%) scale(${scale.toFixed(2)})`;
+          el.style.opacity = String((0.45 + depth * 0.5).toFixed(2));
+        });
       }
 
       function tick() {
         if (!running) return;
         const dt = Math.min(clock.getDelta(), 0.05);
 
-        const outer = rig.getObjectByName('outer');
-        const inner = rig.getObjectByName('inner');
-        if (outer) { outer.rotation.x += dt * 0.09; outer.rotation.y += dt * 0.14; }
-        if (inner) { inner.rotation.x -= dt * 0.13; inner.rotation.y -= dt * 0.1; }
-        if (points) { points.rotation.y += dt * 0.045; }
+        currentCalm += (activeTarget.calm - currentCalm) * 0.03;
+        outer.rotation.x += dt * 0.09 * currentCalm; outer.rotation.y += dt * 0.14 * currentCalm;
+        inner.rotation.x -= dt * 0.13 * currentCalm; inner.rotation.y -= dt * 0.1 * currentCalm;
+        points.rotation.y += dt * 0.045 * currentCalm;
 
         mouseCurrent.x += (mouseTarget.x - mouseCurrent.x) * 0.045;
         mouseCurrent.y += (mouseTarget.y - mouseCurrent.y) * 0.045;
         rig.rotation.x = mouseCurrent.x;
         rig.rotation.y = mouseCurrent.y;
 
-        updateScrollFade();
-        renderer.domElement.style.opacity = String(0.9 * scrollFade);
+        const desktop = window.innerWidth >= 1024;
+        const targetX = desktop ? activeTarget.x : activeTarget.xm;
+        rig.position.x += (targetX - rig.position.x) * 0.025;
+        rig.position.y += (activeTarget.y - rig.position.y) * 0.025;
+        const targetScale = activeTarget.scale;
+        rig.scale.x += (targetScale - rig.scale.x) * 0.025;
+        rig.scale.y = rig.scale.z = rig.scale.x;
+
+        outer.material.color.lerp(activeTarget.c1obj, 0.02);
+        inner.material.color.lerp(activeTarget.c2obj, 0.02);
+        if (glow) {
+          glow.material.color.lerp(activeTarget.c1obj, 0.02);
+          glow.material.opacity = 0.45 + Math.sin(clock.elapsedTime * 0.6) * 0.12;
+        }
+
+        const el = renderer.domElement;
+        const currentOpacity = parseFloat(el.dataset.intensity || '0.85');
+        const nextOpacity = currentOpacity + (activeTarget.intensity - currentOpacity) * 0.03;
+        el.dataset.intensity = String(nextOpacity);
+        el.style.opacity = String(nextOpacity);
+
+        updateSkillsOrbit();
+
+        // Lightweight adaptive-quality watchdog: sustained low FPS quietly trims cost once.
+        if (!downgraded) {
+          if (dt > 0.033) { slowFrames++; } else if (slowFrames > 0) { slowFrames--; }
+          if (slowFrames > 90) {
+            downgraded = true;
+            renderer.setPixelRatio(1);
+            points.visible = false;
+            if (glow) glow.visible = false;
+          }
+        }
 
         renderer.render(scene, camera);
         frameId = requestAnimationFrame(tick);
@@ -2316,7 +2472,7 @@
       function start() {
         if (running) return;
         running = true;
-        clock.getDelta(); // reset delta so resume doesn't jump
+        clock.getDelta();
         frameId = requestAnimationFrame(tick);
       }
       function stop() {
@@ -2328,22 +2484,105 @@
       try {
         buildScene();
       } catch (err) {
-        return; // WebGL unavailable or blocked — leave the CSS grid backdrop as-is
+        return; // WebGL unavailable or blocked — page still fully works without it
       }
 
       canvas.classList.add('is-ready');
+      start();
 
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => { entry.isIntersecting ? start() : stop(); });
-      }, { threshold: 0.05 });
-      io.observe(heroSection);
+      // Which section is currently "dominant" drives color / position / presence.
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && SECTION_TARGETS[entry.target.id]) {
+            activeTarget = SECTION_TARGETS[entry.target.id];
+          }
+        });
+      }, { rootMargin: '-42% 0px -42% 0px', threshold: 0 });
+      SECTION_IDS.forEach((id) => { const el = document.getElementById(id); if (el) sectionObserver.observe(el); });
 
-      document.addEventListener('visibilitychange', () => {
-        document.hidden ? stop() : (heroSection.getBoundingClientRect().bottom > 0 && start());
-      });
+      if (skillsOrbitEl) {
+        const skillsSection = document.getElementById('skills');
+        if (skillsSection) {
+          const orbitObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              skillsActive = entry.isIntersecting;
+              skillsOrbitEl.classList.toggle('is-active', skillsActive);
+              orbitBadges.forEach((el) => { if (!skillsActive) el.style.opacity = '0'; });
+            });
+          }, { threshold: 0.2 });
+          orbitObserver.observe(skillsSection);
+        }
+      }
 
+      document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
       window.addEventListener('resize', resize);
       window.addEventListener('mousemove', onPointerMove, { passive: true });
+    })();
+
+    // ── Universal 3D Tilt (portfolio cards + every glass/premium/value card site-wide) ──
+    (function () {
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      // Tag every card-like element with the shared tilt-card class so it gets
+      // the same glare + depth treatment as the project cards.
+      const genericCards = document.querySelectorAll(
+        '.glass-card, .premium-card, .value-card, #skillsColumn .glass-card, .gh-stat'
+      );
+      genericCards.forEach((el) => el.classList.add('tilt-card'));
+
+      const portfolioCards = document.querySelectorAll('.portfolio-item');
+      const tiltCards = document.querySelectorAll('.tilt-card');
+
+      function wireTilt(card, { maxRot = 9, lift = 6, perspective = 1000 } = {}) {
+        card.style.transition = 'transform 0.35s cubic-bezier(.16,1,.3,1)';
+        card.addEventListener('mouseenter', () => {
+          card.classList.add('tilting');
+          card.style.transition = 'transform 0.08s linear';
+        });
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+          const px = (e.clientX - rect.left) / rect.width;
+          const py = (e.clientY - rect.top) / rect.height;
+          const rotY = (px - 0.5) * maxRot;
+          const rotX = (0.5 - py) * (maxRot * 0.8);
+          card.style.transform = `perspective(${perspective}px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(${lift}px)`;
+          card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+          card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.classList.remove('tilting');
+          card.style.transition = 'transform 0.6s cubic-bezier(.16,1,.3,1)';
+          card.style.transform = `perspective(${perspective}px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+        });
+      }
+
+      portfolioCards.forEach((card) => wireTilt(card, { maxRot: 10, lift: 4, perspective: 900 }));
+      tiltCards.forEach((card) => wireTilt(card, { maxRot: 7, lift: 8, perspective: 1000 }));
+    })();
+
+    // ── Hero Parallax Depth (mouse-driven layered 3D on the hero mock-up & avatar) ──
+    (function () {
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const layers = document.querySelectorAll('#home .lg\\:col-span-5, #aboutAvatarWrap');
+      if (!layers.length) return;
+      let tx = 0, ty = 0, cx = 0, cy = 0;
+      window.addEventListener('mousemove', (e) => {
+        tx = (e.clientX / window.innerWidth - 0.5) * 2;
+        ty = (e.clientY / window.innerHeight - 0.5) * 2;
+      }, { passive: true });
+      function raf() {
+        cx += (tx - cx) * 0.06;
+        cy += (ty - cy) * 0.06;
+        layers.forEach((el, i) => {
+          const depth = i === 0 ? 14 : 8;
+          el.style.transform = `translate3d(${(cx * depth).toFixed(2)}px, ${(cy * depth * 0.6).toFixed(2)}px, 0)`;
+        });
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
     })();
 
     // ── Interactive Particle Network ──
